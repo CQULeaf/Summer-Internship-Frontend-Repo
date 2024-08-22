@@ -38,7 +38,7 @@
 			},
 			register(){
 				uni.navigateTo({
-					url:"/pages/me/register"
+					url:"/pages/register"
 				})
 			}
 		}
