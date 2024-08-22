@@ -4,6 +4,13 @@
        },
 	"pages": [
 		{
+			"path" : "pages/me/me",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的"
+			}
+		},
+		{
 			"path" : "pages/me/setting/setting",
 			"style" : 
 			{
@@ -45,20 +52,40 @@
 			}
 		},
 		{
-			"path" : "pages/me/setting/login",
-			"style" : 
-			{
-				"navigationBarTitleText" : "登录"
-			}
-		},
-		{
 			"path" : "pages/me/setting/change_password",
 			"style" : 
 			{
 				"navigationBarTitleText" : "修改密码"
 			}
+		},
+		{
+			"path": "pages/me/concern",
+			"style": {
+				"navigationBarTitleText" : "我的关注"
 		}
-		],
+		},
+		{
+			"path": "pages/me/setting",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		},
+		{
+			"path" : "pages/me/login",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/me/register",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}
+		}
+	],
+
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "言聚",
