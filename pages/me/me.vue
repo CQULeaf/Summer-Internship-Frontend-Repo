@@ -3,7 +3,7 @@
 	<view v-if="logined">
 		<view>
 			<view class="u-m-r-10 u-avatar-wrap">
-				<image class="u-avatar-demo" :src="this.user.avatar"></image>
+				<image @tap="preAvatar" class="u-avatar-demo" :src="this.user.avatar"></image>
 			</view>
 		</view>
 		
@@ -51,6 +51,7 @@
 			</u-cell-group>
 		</view>
 	  </view>
+	  <u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
 	</view>
 </template>
 
@@ -66,11 +67,52 @@
 				pic: 'https://uviewui.com/common/logo.png',
 				show: true,
 				// 定义一个变量
-				logined:true
+				logined:true,
+				list: '',
+				current: 4
 			}
 		},
 		onLoad() {
-
+			this.list = [{
+					iconPath: "/static/newhomeg.png",
+					selectedIconPath: "/static/newhomep.png",
+					text: '家',
+					isDot: true,
+					customIcon: false,
+					pagePath:'/pages/tabbar'
+				},
+				{
+					iconPath:  "/static/happygrey.png",
+					selectedIconPath:"/static/happierp.png",
+					text: '聚',
+					isDot: true,
+					customIcon: false,
+					pagePath:'/pages/tabbar'
+				},
+				{
+					iconPath: "/static/yanblack.png",
+					selectedIconPath: "/static/yanpink.png",
+					text: '言',
+					midButton: true,
+					customIcon: false,
+					pagePath:'/pages/tabbar'
+				},
+				{
+					iconPath:  "/static/messagegrey.png",
+					selectedIconPath:"/static/messagep.png",
+					text: '讯',
+					customIcon: false,
+					pagePath:'/pages/tabbar'
+				},
+				{
+					iconPath:  "/static/megrey.png",
+					selectedIconPath:"/static/mep.png",
+					text: '我',
+					isDot: false,
+					customIcon: false,
+					pagePath:'/pages/me/me'
+				},
+			]
 		},
 		methods: {
 			fetchUser() {
@@ -125,12 +167,18 @@
 			quit(){
 				console.log("退出")
 				this.logined=false
+			preAvatar() {
+				wx.previewImage({
+					current: '', // 当前显示图片的 http 链接
+					urls: [this.user.avatar] // 需要预览的图片 http 链接列表
+				})
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
+	
 	.myinfo {
 		display: flex;
 		align-items: center;
