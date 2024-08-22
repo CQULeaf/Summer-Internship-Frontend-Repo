@@ -42,7 +42,7 @@
 		
 		<view class="u-m-t-20">
 			<u-cell-group>
-				<u-cell-item icon="setting" title="设置"></u-cell-item>
+				<u-cell-item icon="setting" title="退出" @click="quit()"></u-cell-item>
 			</u-cell-group>
 		</view>
 	</view>
@@ -101,6 +101,10 @@
 				uni.navigateTo({
 					url:"/pages/me/login"
 				})
+			},
+			quit(){
+				console.log("退出")
+				this.logined=false
 			}
 		}
 	}

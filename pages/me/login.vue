@@ -6,7 +6,7 @@
 					<div class="header">登录</div>
 					<div class="form-wrapper">
 						<input type="text" name="username" placeholder="请输入用户名" class="input-item" v-model="user.name">
-						<input type="password" name="password" placeholder="请输入密码" class="input-item" v-model="user.password"">
+						<input type="password" name="password" placeholder="请输入密码" class="input-item" v-model="user.password">
 						<div class="btn" @click="login">登录</div>
 						<div class="btn" @click="register">注册</div>
 					</div>
@@ -37,6 +37,8 @@
 				
 			},
 			register(){
+				console.log("注册")
+				
 				uni.navigateTo({
 					url:"/pages/me/register"
 				})
