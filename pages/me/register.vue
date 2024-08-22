@@ -9,7 +9,7 @@
                     <div class="btn" @click="register">注册</div>
                 </div>
             </div>
-        </div>
+     </div>    
 </template>
     
 <script>
@@ -24,15 +24,11 @@
 </script>
  
 <style scoped>
-
-html {
-    height: 100%;
-}
-body {
+.body {
     height: 200%;
 }
 .container {
-    //margin-top: 5%; 
+    /* margin-top: 5%;  */
     height: 100vh;
     width: 100%;
     background-color: #fed6dc;
