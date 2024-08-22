@@ -1,3 +1,7 @@
+<style lang="scss">
+ /* 注意要写在第⼀⾏，同时给style标签加⼊lang="scss"属性 */
+ @import "uview-ui/index.scss";
+ </style>
 <script>
 	export default {
 		onLaunch: function() {
