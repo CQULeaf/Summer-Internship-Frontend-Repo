@@ -14,8 +14,8 @@
 		<u-icon name="arrow-right"></u-icon>
 	  </view>
 	  
-	  <view class="item"@click="goTologin">
-	    <text class="item-text">退出登录</text>
+	  <view class="item"@click="goTologin" >
+	    <text class="item-text" >退出登录</text>
 		<u-icon name="arrow-right"></u-icon>
 	  </view>
     </view>
@@ -32,7 +32,7 @@
       },
 	  goTologin() {
 	    uni.navigateTo({
-	      url: '/pages/me/setting/login'
+	      url: '/pages/login'
 	    });
 	  		
 	  },
@@ -48,7 +48,6 @@
 	    });
 	  		
 	  }
-	  
     }
   };
   </script>

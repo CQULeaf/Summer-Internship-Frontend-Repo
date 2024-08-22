@@ -1,10 +1,17 @@
 {
-       "easycom": {
-     "^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
-       },
+    "easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+    },
 	"pages": [
 		{
-			"path" : "pages/me/me",
+			"path" : "pages/me/mypage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的"
+			}
+		},
+		{
+			"path" : "pages/tabbar",
 			"style" : 
 			{
 				"navigationBarTitleText" : "我的"
@@ -59,10 +66,10 @@
 			}
 		},
 		{
-			"path": "pages/me/setting",
+			"path": "pages/me/concern",
 			"style": {
-				"navigationBarTitleText": "设置"
-			}
+				"navigationStyle": "custom"
+		}
 		},
 		{
 			"path" : "pages/login",
@@ -71,12 +78,7 @@
 				"navigationStyle": "custom"
 			}
 		},
-		{
-		"path": "pages/me/concern",
-		"style": {
-			 "navigationStyle": "custom"
-		}
-	},{
+	{
 		"path": "pages/info/info",
 		"style": {
 			"navigationStyle": "custom"
@@ -95,9 +97,16 @@
 				{
 					"navigationBarTitleText": "聚"
 				}
+			},
+		
+		
+		{
+			"path": "uview-ui/components/u-avatar-cropper/u-avatar-cropper",
+			"style": {
+				"navigationBarTitleText": "头像裁剪",
+				"navigationBarBackgroundColor": "#000000"
 			}
-		
-		
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -107,5 +116,42 @@
 		"app-plus": {
 			"background": "#efeff4"
 		}
+	},
+	"tabBar": {
+		"color": "#909399",
+		"selectedColor": "#303133",
+		"backgroundColor": "#FFFFFF",
+		"borderStyle": "black",
+		"list": [{
+				"pagePath": "pages/tabbar",
+				"iconPath": "/static/newhomeg.png",
+				"selectedIconPath": "/static/newhomep.png",
+				"text": "家"
+			},
+			{
+				"pagePath": "pages/tabbar",
+				"iconPath":  "/static/happygrey.png",
+				"selectedIconPath":"/static/happierp.png",
+				"text": "聚"
+			},
+			{
+				"pagePath": "pages/tabbar",
+				"iconPath": "/static/yanblack.png",
+				"selectedIconPath": "/static/yanpink.png",
+				"text": "言"
+			},
+			{
+				"pagePath": "pages/tabbar",
+				"iconPath":  "/static/messagegrey.png",
+				"selectedIconPath":"/static/messagep.png",
+				"text": "讯"
+			},
+			{
+				"pagePath": "pages/me/me",
+				"iconPath":  "/static/megrey.png",
+				"selectedIconPath":"/static/mep.png",
+				"text": "我"
+			}
+		]
 	}
 }

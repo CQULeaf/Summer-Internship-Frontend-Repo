@@ -9,8 +9,9 @@
 		<!-- 切换标签部分 -->
 		<view>
 
-			<u-tabs-swiper  font-size="40"ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false"
-				swiper-Width="100" height=100 :bold="false" bg-color="#ffc7cb" active-color="#ffa6af"></u-tabs-swiper>
+			<u-tabs-swiper font-size="40" ref="uTabs" :list="list" :current="current" @change="tabsChange"
+				:is-scroll="false" swiper-Width="100" height=100 :bold="false" bg-color="#ffc7cb"
+				active-color="#ffa6af"></u-tabs-swiper>
 
 
 		</view>
@@ -21,6 +22,9 @@
 				<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
 					<view class="list">
 						<!-- 用户列表 -->
+						<view class="like"></view>
+						<image class="likeimage" width=30 height=30 src='/static/like.png' shape="circle"></image>
+						<text class="liketext">点赞</text>
 						<view v-if="list[current].type === 'msg'">
 							<view class="list-item" v-for="(item, index) in currentItems" :key="index">
 								<image class="useravatar" :src="item.avatar"></image>
@@ -195,9 +199,9 @@
 		/* 占满视口高度 */
 	}
 
-	.slot-wrap {
-		padding: 0 50rpx;
-	}
+.likeimage{
+	display: block;
+}
 
 	.swiper {
 		flex: 1;
