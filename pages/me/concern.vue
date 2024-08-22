@@ -1,12 +1,5 @@
 <template>
 	<view class="container">
-		<!-- 用户信息部分 -->
-		<!-- <view class="myinfo">
-      <image class="myavatar" :src="user.avatar"></image>
-      <text class="mynickname">{{ user.nickname }}</text>
-	  <button size="default" style="background-color:#ffb9c0;color: #000000" @click="goToProfile">去设置</button>
-           </view> -->
-		<!-- 切换标签部分 -->
 		<view>
 			<u-navbar height=60 back-text="" title="" :background="background" is-back=false :customBack="gotopofile">
 				<view class="slot-wrap"><!-- 通过自定义slot传入的内容 -->

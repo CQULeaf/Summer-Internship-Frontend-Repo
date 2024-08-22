@@ -54,7 +54,6 @@ body {
     height: 200%;
 }
 .container {
-    //margin-top: 5%; 
     height: 100vh;
     width: 100%;
     background-color: #fed6dc;
