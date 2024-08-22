@@ -2,15 +2,66 @@
        "easycom": {
      "^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
        },
-	"pages": [{
-		"path": "pages/index/index",
-		"style": {
-			"navigationBarTitleText": "uni-app"
+	"pages": [
+		{
+			"path" : "pages/me/setting/setting",
+			"style" : 
+			{
+				"navigationBarTitleText" : "设置"
+			}
+		},
+		{
+			"path": "pages/me/myinfo/Information",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		},
+		{
+			"path" : "pages/me/myinfo/InformationChange",
+			"style" : 
+			{
+				"navigationBarTitleText" : "个人信息修改"
+			}
+		},
+		{
+			"path": "pages/index/index",
+			"style": 
+			{
+				"navigationBarTitleText": "uni-app"
+			}
+		},
+		{
+			"path": "uview-ui/components/u-avatar-cropper/u-avatar-cropper",
+			"style": {
+				"navigationBarTitleText": "头像裁剪",
+				"navigationBarBackgroundColor": "#000000"
+			}
+		},
+		{
+			"path" : "pages/me/setting/help",
+			"style" : 
+			{
+				"navigationBarTitleText" : "帮助与客服"
+			}
+		},
+		{
+			"path" : "pages/me/setting/login",
+			"style" : 
+			{
+				"navigationBarTitleText" : "登录"
+			}
+		},
+		{
+			"path" : "pages/me/setting/change_password",
+			"style" : 
+			{
+				"navigationBarTitleText" : "修改密码"
+			}
 		}
-	}],
+		],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "言聚",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8",
 		"app-plus": {
