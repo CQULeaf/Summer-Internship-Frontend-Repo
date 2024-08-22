@@ -7,7 +7,28 @@
 		"style": {
 			"navigationBarTitleText": "uni-app"
 		}
-	}],
+	},
+		{
+			"path" : "pages/me/me",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的"
+			}
+		},
+		{
+			"path" : "pages/me/login",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/me/register",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}
+		}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
