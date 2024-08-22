@@ -71,14 +71,14 @@
 			}
 		},
 		{
-			"path" : "pages/me/login",
+			"path" : "pages/login",
 			"style" : 
 			{
 				"navigationStyle": "custom"
 			}
 		},
 		{
-			"path" : "pages/me/register",
+			"path" : "pages/register",
 			"style" : 
 			{
 				"navigationStyle": "custom"

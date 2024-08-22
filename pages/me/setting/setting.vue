@@ -1,21 +1,22 @@
 <template>
     <view class="settings">
-      <view class="settings-header">
-        <text class="header-text">设置</text>
-      </view>
       <view class="item" @click="goToAccountSettings">
         <text class="item-text">修改密码</text>
+		<u-icon name="arrow-right"></u-icon>
       </view>
       
       <view class="item"@click="goToInfor">
         <text class="item-text">个人信息</text>
+		<u-icon name="arrow-right"></u-icon>
       </view>
 	  <view class="item" @click="goToHelp">
 	    <text class="item-text">帮助与客服</text>
+		<u-icon name="arrow-right"></u-icon>
 	  </view>
 	  
 	  <view class="item"@click="goTologin">
 	    <text class="item-text">退出登录</text>
+		<u-icon name="arrow-right"></u-icon>
 	  </view>
     </view>
   </template>
@@ -55,7 +56,8 @@
   <style>
     .settings {
       background-color: #fef1f4;
-      padding: 20px;
+	  margin-top: 15px;
+      padding: 25px;
       border-radius: 8px;
       min-height: 100vh; /* 确保至少与视口高度相同 */
     }
