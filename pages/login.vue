@@ -29,14 +29,10 @@
 		},
         name:"Login",
 		methods:{
-			login(){
-				uni.navigateBack()
-				
-				console.log(this.user)
-				
-				
-			},
+		
 			register(){
+				console.log("注册")
+				
 				uni.navigateTo({
 					url:"/pages/register"
 				})
