@@ -1,28 +1,52 @@
 <template>
-    <div class="container">
-            <div class="login-wrapper">
-                <div class="header">注册</div>
-                <div class="form-wrapper">
-                    <input type="text" name="username" placeholder="账户" class="input-item">
-                    <input type="password" name="password" placeholder="密码" class="input-item">
-                    <input type="password" name="repassword" placeholder="再次确认密码" class="input-item">
-                    <div class="btn" @click="register">注册</div>
-                </div>
-            </div>
-        </div>
+	<view>
+		<u-form :model="user">
+			<div class="container">
+				<div class="login-wrapper">
+					<div class="header">登录</div>
+					<div class="form-wrapper">
+						<input type="text" name="username" placeholder="请输入用户名" class="input-item" v-model="user.name">
+						<input type="password" name="password" placeholder="请输入密码" class="input-item" v-model="user.password">
+						<div class="btn" @click="login">登录</div>
+						<div class="btn" @click="register">注册</div>
+					</div>
+				</div>
+			</div>
+		</u-form>
+	</view>
 </template>
-    
+
 <script>
     export default {
-        name:"Reg",
+		data()
+		{
+			return{
+				user:{
+					name:"",
+					password:""
+				}
+			}
+		},
+        name:"Login",
 		methods:{
-			register(){
+			login(){
 				uni.navigateBack()
+				
+				console.log(this.user)
+				
+				
+			},
+			register(){
+				console.log("注册")
+				
+				uni.navigateTo({
+					url:"/pages/me/register"
+				})
 			}
 		}
     }
 </script>
- 
+
 <style scoped>
 
 html {
@@ -32,7 +56,6 @@ body {
     height: 200%;
 }
 .container {
-    //margin-top: 5%; 
     height: 100vh;
     width: 100%;
     background-color: #fed6dc;
@@ -40,7 +63,7 @@ body {
 .login-wrapper {
     background-color: #fff;
     width: 500rpx;
-    height: 1050rpx;
+    height: 1100rpx;
     border-radius: 15rpx;
     padding: 0 50px;
     position: absolute;
@@ -49,7 +72,7 @@ body {
     transform: translate(-50%, -50%);
 }
 .header {
-    font-size: 80rpx;
+    font-size: 85rpx;
     font-weight: normal;
     text-align: center;
     line-height: 200px;
@@ -74,6 +97,7 @@ body {
     margin: 0 auto;
     width: 90%;
     margin-top: 40px;
+	margin-bottom: -25px;
     background-color: #fecdd4;
     color: #fff;
 }
@@ -83,7 +107,7 @@ body {
 }
 a {
     text-decoration-line: none;
-    color: #eebec5;
+    color: #fed6dc;
 }
 
 </style>

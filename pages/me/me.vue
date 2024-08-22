@@ -1,50 +1,30 @@
 <template>
-	<!-- 我们根据某一个状态值进行不同界面切换 -->
 	<view>
 	<view v-if="logined">
-		<u-navbar :is-back="false" title="　" :border-bottom="false">
-			<view class="u-flex u-row-right" style="width: 100%;">
-				<view class="camera u-flex u-row-center">
-					<u-icon name="camera-fill" color="#000000" size="48"></u-icon>
-				</view>
-			</view>
-		</u-navbar>
-		<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
-			<view class="u-m-r-10">
-				<u-avatar :src="pic" size="140"></u-avatar>
-			</view>
-			<view class="u-flex-1">
-				<view class="u-font-18 u-p-b-20">uView ui</view>
-				<view class="u-font-14 u-tips-color">微信号:helang_uView</view>
-			</view>
-			<view class="u-m-l-10 u-p-10">
-				<u-icon name="scan" color="#969799" size="28"></u-icon>
-			</view>
-			<view class="u-m-l-10 u-p-10">
-				<u-icon name="arrow-right" color="#969799" size="28"></u-icon>
+		<view>
+			<view class="u-m-r-10 u-avatar-wrap">
+				<image class="u-avatar-demo" :src="this.user.avatar"></image>
 			</view>
 		</view>
 		
-		<view class="u-m-t-20">
-			<u-cell-group>
-				<u-cell-item icon="rmb-circle" title="支付"></u-cell-item>
-			</u-cell-group>
-		</view>
-		
-		<view class="u-m-t-20">
-			<u-cell-group>
-				<u-cell-item icon="star" title="收藏"></u-cell-item>
-				<u-cell-item icon="photo" title="相册"></u-cell-item>
-				<u-cell-item icon="coupon" title="卡券"></u-cell-item>
-				<u-cell-item icon="heart" title="关注"></u-cell-item>
-			</u-cell-group>
-		</view>
-		
-		<view class="u-m-t-20">
-			<u-cell-group>
-				<u-cell-item icon="setting" title="退出" @click="quit()"></u-cell-item>
-			</u-cell-group>
-		</view>
+		<u-grid :col="8" :border="false">
+			<u-grid-item @click="gotoconcern">
+				<view class="grid-text">朋友</view>
+			</u-grid-item>
+			<u-grid-item @click="gotoconcern">
+				<view class="grid-text">关注</view>
+			</u-grid-item>
+			<u-grid-item @click="gotoconcern">
+				<view class="grid-text">粉丝</view>
+			</u-grid-item>
+			<u-grid-item></u-grid-item>
+			<u-grid-item></u-grid-item>
+			<u-grid-item></u-grid-item>
+			<u-grid-item></u-grid-item>
+			<u-grid-item>
+				<u-icon name="setting" :size="50" @click="gotoSetting"></u-icon>
+			</u-grid-item>
+		</u-grid>
 	</view>
 	<view v-else>
 		<u-navbar :is-back="false" title="　" :border-bottom="false">
@@ -60,13 +40,6 @@
 			</view>
 			<view class="u-flex-1">
 				<view class="u-font-18 u-p-b-20">未登录</view>
-				<view class="u-font-14 u-tips-color"></view>
-			</view>
-			<view class="u-m-l-10 u-p-10">
-				<u-icon name="scan" color="#969799" size="28"></u-icon>
-			</view>
-			<view class="u-m-l-10 u-p-10">
-				<u-icon name="arrow-right" color="#969799" size="28"></u-icon>
 			</view>
 		</view>
 		
@@ -77,7 +50,7 @@
 				<u-cell-item icon="man-add" title="登录" @click="login()"></u-cell-item>
 			</u-cell-group>
 		</view>
-	</view>
+	  </view>
 	</view>
 </template>
 
@@ -85,21 +58,68 @@
 	export default {
 		data() {
 			return {
-				pic:'https://uviewui.com/common/logo.png',
-				show:true,
+				href: 'https://uniapp.dcloud.io/component/README?id=uniui',
+				user: {
+					avatar: '/static/logo.png',
+					nickname: '1111'
+				},
+				pic: 'https://uviewui.com/common/logo.png',
+				show: true,
 				// 定义一个变量
-				logined:false
+				logined:true
 			}
 		},
 		onLoad() {
-			
+
 		},
 		methods: {
-			login(){
+			fetchUser() {
+				uni.request({
+					url: "http://127.0.0.1:4523/m1/5010181-4669608-default/user/me", //在fetchUserList方法中的请求URL使用了'${apiEndpoint}?page=${page}'，这会导致字符串直接拼接而非动态生成变量。正确的做法应该是使用模板字符串的语法来动态替换变量
+					data:this.user,
+					method: 'GET',
+					success: (res) => {
+						if (res.statusCode === 200) {
+						  console.log(res)
+							}
+						else {
+							uni.showToast({
+								title: '获取数据失败',
+								icon: 'none'
+							});
+						}
+					},
+					fail: (err) => {
+						uni.showToast({
+							title: '请求失败',
+							icon: 'none'
+						});
+					},
+					complete: () => {
+						this.loading = false;
+					}
+				});
+			},
+			goToProfile() {
+				uni.navigateTo({
+					url: '/pages/me/setting'
+				});
+			},
+			login() {
 				console.log("登录")
 				//跳转到登录页面
 				uni.navigateTo({
-					url:"/pages/me/login"
+					url: "/pages/me/login"
+				})
+			},
+			gotoSetting(){
+				uni.navigateTo({
+					url:"/pages/me/setting/setting"
+				})
+			},
+			gotoconcern(){
+				uni.navigateTo({
+					url:"/pages/me/concern"
 				})
 			},
 			quit(){
@@ -111,9 +131,38 @@
 </script>
 
 <style lang="scss">
-page{
-	background-color: #ededed;
-}
+	.myinfo {
+		display: flex;
+		align-items: center;
+		padding: 50rpx;
+		background-image: linear-gradient(to top left, #ffcbcc, #ffe4e6);
+	}
+
+	.custom-style {
+			color: #606266;
+			width: 400rpx;
+	}
+		
+	.myavatar {
+		width: 150rpx;
+		height: 150rpx;
+		border-radius: 50%;
+		margin-right: 50rpx;
+	}
+	
+	.grid-text {
+			font-size: 32rpx;
+			margin-top: 4rpx;
+			color: $u-type-info;
+	}
+
+	.mynickname {
+		font-size: 28rpx;
+		color: #333;
+	}
+	page{
+		background-color: #ffffff;
+	}
 
 .camera{
 	width: 54px;
@@ -125,5 +174,18 @@ page{
 }
 .user-box{
 	background-color: #fff;
+}
+
+.u-avatar-demo {
+	width: 150rpx;
+	height: 150rpx;
+	border-radius: 100rpx;
+}
+
+.u-avatar-wrap {
+	margin-top: 80rpx;
+	overflow: hidden;
+	margin-bottom: 80rpx;
+	text-align: center;
 }
 </style>
