@@ -13,16 +13,33 @@
 			"navigationStyle": "custom"
 		}
 	},{
-		"path": "pages/me/me",
-		"style": {
-			"navigationStyle": "custom"
-		}
-	},{
 		"path": "pages/me/setting",
 		"style": {
 			"navigationBarTitleText": "设置"
 		}
-	}],
+	},
+	
+		{
+			"path" : "pages/me/me",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的"
+			}
+		},
+		{
+			"path" : "pages/me/login",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/me/register",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}
+		}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
