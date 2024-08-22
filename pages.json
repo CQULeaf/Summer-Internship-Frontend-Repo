@@ -79,6 +79,16 @@
 			}
 		},
 		{
+		"path": "pages/me/concern",
+		"style": {
+			 "navigationStyle": "custom"
+		}
+	},{
+		"path": "pages/info/info",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	},{
 			"path" : "pages/register",
 			"style" : 
 			{
@@ -93,7 +103,6 @@
 			}
 		}
 	],
-
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "言聚",

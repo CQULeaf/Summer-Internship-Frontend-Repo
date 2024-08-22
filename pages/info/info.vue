@@ -1,14 +1,19 @@
 <template>
 	<view class="container">
+		<!-- 用户信息部分 -->
+		<!-- <view class="myinfo">
+      <image class="myavatar" :src="user.avatar"></image>
+      <text class="mynickname">{{ user.nickname }}</text>
+	  <button size="default" style="background-color:#ffb9c0;color: #000000" @click="goToProfile">去设置</button>
+           </view> -->
+		<!-- 切换标签部分 -->
 		<view>
-			<u-navbar height=60 back-text="" title="" :background="background" is-back=false :customBack="gotopofile">
-				<view class="slot-wrap"><!-- 通过自定义slot传入的内容 -->
-					<u-tabs-swiper ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false"
-						swiper-Width="100"  :bold="false" bg-color="#ffc7cb"
-						active-color="#ffa6af"></u-tabs-swiper>
-				</view>
 
-			</u-navbar>
+			<u-tabs-swiper font-size="40" ref="uTabs" :list="list" :current="current" @change="tabsChange"
+				:is-scroll="false" swiper-Width="100" height=100 :bold="false" bg-color="#ffc7cb"
+				active-color="#ffa6af"></u-tabs-swiper>
+
+
 		</view>
 
 		<!-- 用户列表部分 -->
@@ -17,7 +22,10 @@
 				<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
 					<view class="list">
 						<!-- 用户列表 -->
-						<view v-if="list[current].type === 'users'">
+						<view class="like"></view>
+						<image class="likeimage" src='/static/like.png'></image>
+						<text class="liketext">点赞</text>
+						<view v-if="list[current].type === 'msg'">
 							<view class="list-item" v-for="(item, index) in currentItems" :key="index">
 								<image class="useravatar" :src="item.avatar"></image>
 								<text class="item-title">{{item.nickname}}</text>
@@ -25,7 +33,7 @@
 						</view>
 
 						<!-- 帖子列表 -->
-						<view v-if="list[current].type === 'posts'">
+						<view v-if="list[current].type === 'treehole'">
 							<view class="list-item" v-for="(post, index) in currentItems" :key="index">
 								<text class="post-title">{{post.title}}</text>
 							</view>
@@ -41,35 +49,20 @@
 	export default {
 		data() {
 			return { //专门写变量   在模板里面写 ：herf 表示herf是变量
-			background:{
-				backgroundColor: '#ffc7cb',
-			},//导航栏的颜色
+				background: {
+					backgroundColor: '#ffc7cb',
+				}, //导航栏的颜色
 				list: [
 					// 标签数据
 					{
-						name: '朋友',
+						name: '消息',
 						type: 'users',
 						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/user/friends'
 					},
 					{
-						name: '关注',
+						name: '树洞',
 						type: 'users',
 						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/user/follwing'
-					},
-					{
-						name: '粉丝',
-						type: 'users',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/user/fans'
-					},
-					{
-						name: '点赞',
-						type: 'posts',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/user/thumb'
-					},
-					{
-						name: '浏览记录',
-						type: 'posts',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/user/browse'
 					}
 				],
 				current: 0, //变量名：变量值
@@ -96,11 +89,11 @@
 			// 		url:'/'
 			// 	})
 			// },
-			gotopofile(){
-			      uni.navigateTo({
-			         url:'/pages/me/me'// 返回上一页面
-			      });
-			    },
+			gotopofile() {
+				uni.navigateTo({
+					url: '/pages/me/me' // 返回上一页面
+				});
+			},
 			onreachBottom() {
 				if (this.loading || !this.hasMore) return; // 正在加载中或没有更多数据则不执行
 				this.page++;
@@ -205,7 +198,8 @@
 		height: 100vh;
 		/* 占满视口高度 */
 	}
-	.slot-wrap{
+
+	.slot-wrap {
 		padding: 0 50rpx;
 	}
 
