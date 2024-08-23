@@ -79,7 +79,7 @@
 			}
 		},
 	{
-		"path": "pages/info/info",
+		"path": "pages/info/infopage",
 		"style": {
 			"navigationStyle": "custom"
 		}
