@@ -1,0 +1,85 @@
+<template>
+    <div class="container">
+            <div class="login-wrapper">
+                <div class="header">注册</div>
+                <div class="form-wrapper">
+                    <input type="text" name="username" placeholder="账户" class="input-item">
+                    <input type="password" name="password" placeholder="密码" class="input-item">
+                    <input type="password" name="repassword" placeholder="再次确认密码" class="input-item">
+                    <div class="btn" @click="register">注册</div>
+                </div>
+            </div>
+     </div>    
+</template>
+    
+<script>
+    export default {
+        name:"Reg",
+		methods:{
+			register(){
+				uni.navigateBack()
+			}
+		}
+    }
+</script>
+ 
+<style scoped>
+.body {
+    height: 200%;
+}
+.container {
+    /* margin-top: 5%;  */
+    height: 100vh;
+    width: 100%;
+    background-color: #fed6dc;
+}
+.login-wrapper {
+    background-color: #fff;
+    width: 500rpx;
+    height: 1050rpx;
+    border-radius: 15rpx;
+    padding: 0 50px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.header {
+    font-size: 80rpx;
+    font-weight: normal;
+    text-align: center;
+    line-height: 200px;
+	color: #adaba8;
+}
+.input-item {
+    display: block;
+    width: 90%;
+    margin-bottom: 20px;
+    border: 0;
+    padding: 10px;
+    border-bottom: 1px solid rgb(164, 165, 155);
+    font-size: 15px;
+    outline: none;
+}
+.input-item:placeholder {
+    text-transform: uppercase;
+}
+.btn {
+    text-align: center;
+    padding: 10px;
+    margin: 0 auto;
+    width: 90%;
+    margin-top: 40px;
+    background-color: #fecdd4;
+    color: #fff;
+}
+.msg {
+    text-align: center;
+    line-height: 88px;
+}
+a {
+    text-decoration-line: none;
+    color: #eebec5;
+}
+
+</style>
