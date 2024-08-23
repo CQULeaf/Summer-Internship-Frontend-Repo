@@ -77,7 +77,6 @@
 			}
 		},
 		{
-<<<<<<< HEAD
 			"path": "pages/info/infopage",
 			"style": {
 				"navigationStyle": "custom"
@@ -107,13 +106,8 @@
 			"navigationStyle": "custom"
 		}
 	},{
-			"path" : "pages/register",
-			"style" : 
-			{
-=======
 			"path": "pages/register",
 			"style": {
->>>>>>> ac9d70e389cdb7ced9938442d3bd8abce86da86f
 				"navigationStyle": "custom"
 			}
 		},
