@@ -1,27 +1,24 @@
 {
-    "easycom": {
+	"easycom": {
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
-    },
+	},
 	"pages": [
 		{
-			"path" : "pages/me/mypage",
-			"style" : 
-			{
-				"navigationBarTitleText" : "我的"
+			"path": "pages/me/mypage",
+			"style": {
+				"navigationBarTitleText": "我的"
 			}
 		},
 		{
-			"path" : "pages/tabbar",
-			"style" : 
-			{
-				"navigationBarTitleText" : "我的"
+			"path": "pages/tabbar",
+			"style": {
+				"navigationBarTitleText": "我的"
 			}
 		},
 		{
-			"path" : "pages/me/setting/setting",
-			"style" : 
-			{
-				"navigationBarTitleText" : "设置"
+			"path": "pages/me/setting/setting",
+			"style": {
+				"navigationBarTitleText": "设置"
 			}
 		},
 		{
@@ -31,16 +28,14 @@
 			}
 		},
 		{
-			"path" : "pages/me/myinfo/InformationChange",
-			"style" : 
-			{
-				"navigationBarTitleText" : "个人信息修改"
+			"path": "pages/me/myinfo/InformationChange",
+			"style": {
+				"navigationBarTitleText": "个人信息修改"
 			}
 		},
 		{
 			"path": "pages/index/index",
-			"style": 
-			{
+			"style": {
 				"navigationBarTitleText": "uni-app"
 			}
 		},
@@ -52,46 +47,38 @@
 			}
 		},
 		{
-			"path" : "pages/me/setting/help",
-			"style" : 
-			{
-				"navigationBarTitleText" : "帮助与客服"
+			"path": "pages/me/setting/help",
+			"style": {
+				"navigationBarTitleText": "帮助与客服"
 			}
 		},
 		{
-			"path" : "pages/me/setting/change_password",
-			"style" : 
-			{
-				"navigationBarTitleText" : "修改密码"
+			"path": "pages/me/setting/change_password",
+			"style": {
+				"navigationBarTitleText": "修改密码"
+			}
+		},
+		{
+			"path": "pages/login",
+			"style": {
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/me/concern",
 			"style": {
-				"navigationBarTitleText" : "我的关注"
-		}
-		},
-		{
-			"path" : "pages/login",
-			"style" : 
-			{
 				"navigationStyle": "custom"
 			}
 		},
 		{
-		"path": "pages/me/concern",
-		"style": {
-			 "navigationStyle": "custom"
-		}
-	},{
-		"path": "pages/info/info",
-		"style": {
-			"navigationStyle": "custom"
-		}
-	},{
-			"path" : "pages/register",
-			"style" : 
-			{
+			"path": "pages/info/infopage",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/register",
+			"style": {
 				"navigationStyle": "custom"
 			}
 		},
@@ -103,7 +90,7 @@
 			}
 		},
 		{
-			"path":"pages/info/like",
+			"path": "pages/info/like",
 			"style": {
 				"navigationStyle": "custom"
 			}
@@ -123,7 +110,8 @@
 		"selectedColor": "#303133",
 		"backgroundColor": "#FFFFFF",
 		"borderStyle": "black",
-		"list": [{
+		"list": [
+			{
 				"pagePath": "pages/tabbar",
 				"iconPath": "/static/newhomeg.png",
 				"selectedIconPath": "/static/newhomep.png",
@@ -131,8 +119,8 @@
 			},
 			{
 				"pagePath": "pages/tabbar",
-				"iconPath":  "/static/happygrey.png",
-				"selectedIconPath":"/static/happierp.png",
+				"iconPath": "/static/happygrey.png",
+				"selectedIconPath": "/static/happierp.png",
 				"text": "聚"
 			},
 			{
@@ -143,14 +131,14 @@
 			},
 			{
 				"pagePath": "pages/tabbar",
-				"iconPath":  "/static/messagegrey.png",
-				"selectedIconPath":"/static/messagep.png",
+				"iconPath": "/static/messagegrey.png",
+				"selectedIconPath": "/static/messagep.png",
 				"text": "讯"
 			},
 			{
 				"pagePath": "pages/me/me",
-				"iconPath":  "/static/megrey.png",
-				"selectedIconPath":"/static/mep.png",
+				"iconPath": "/static/megrey.png",
+				"selectedIconPath": "/static/mep.png",
 				"text": "我"
 			}
 		]
