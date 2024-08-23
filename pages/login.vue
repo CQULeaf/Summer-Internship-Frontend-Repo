@@ -5,7 +5,7 @@
 				<div class="login-wrapper">
 					<div class="header">登录</div>
 					<div class="form-wrapper">
-						<input type="text" name="username" placeholder="请输入用户名" class="input-item" v-model="user.name">
+						<input type="text" name="username" placeholder="请输入用户名" class="input-item" v-model="user.username">
 						<input type="password" name="password" placeholder="请输入密码" class="input-item" v-model="user.password">
 						<div class="btn" @click="login">登录</div>
 						<div class="btn" @click="register">注册</div>
@@ -22,14 +22,35 @@
 		{
 			return{
 				user:{
-					name:"",
+					username:"",
 					password:""
 				}
 			}
 		},
         name:"Login",
 		methods:{
-		
+			login:function(){
+				uni.request({
+					url:'http://localhost:1234/user/login',
+					data:this.user,
+					method:"GET",
+					success: (res) => {//成功返回之后
+					console.log(res,"1111****")
+						if(res.data.code*1==200){
+							try{
+								uni.setStorageSync("user",res.data.result)
+							}
+							catch(e){
+								this.$u.toast("存储用户信息异常")
+							}
+							uni.navigateBack()
+						}
+						else{
+							this.$u.toast("登录失败,用户名密码错误")
+						}
+					}
+				});
+			},
 			register(){
 				console.log("注册")
 				
