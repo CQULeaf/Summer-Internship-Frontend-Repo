@@ -19,12 +19,24 @@
 		<!-- 用户列表部分 -->
 		<swiper class="swiper" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 			<swiper-item v-for="(tab, tabindex) in list" :key="tabindex">
+				<scroll-view class="scroll-view" scroll-y>
+					<view class="action-section" @click="gotolike">
+						<image src='../../static/liked.png' class="action-icon"></image>
+						<text class="action-text">点赞</text>
+					</view>
+					<view class="action-section" @click="gotocomment">
+						<image src='../../static/comment.svg' class="action-icon"></image>
+						<text class="action-text">评论</text>
+					</view>
+					<view class="action-section" @click="gotobulletin">
+						<image src='../../static/announcement.svg' class="action-icon"></image>
+						<text class="action-text">公告</text>
+					</view>
+				</scroll-view>
 				<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
+
 					<view class="list">
 						<!-- 用户列表 -->
-						<view class="like"></view>
-						<image class="likeimage" width=30 height=30 src='/static/like.png' shape="circle"></image>
-						<text class="liketext">点赞</text>
 						<view v-if="list[current].type === 'msg'">
 							<view class="list-item" v-for="(item, index) in currentItems" :key="index">
 								<image class="useravatar" :src="item.avatar"></image>
@@ -33,11 +45,7 @@
 						</view>
 
 						<!-- 帖子列表 -->
-						<view v-if="list[current].type === 'treehole'">
-							<view class="list-item" v-for="(post, index) in currentItems" :key="index">
-								<text class="post-title">{{post.title}}</text>
-							</view>
-						</view>
+						<view v-if="list[current].type === 'treehole'" @click="treecave"></view>
 					</view>
 				</scroll-view>
 			</swiper-item>
@@ -61,17 +69,12 @@
 					},
 					{
 						name: '树洞',
-						type: 'users',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/user/follwing'
+						type: 'treehole'
 					}
 				],
 				current: 0, //变量名：变量值
 				swiperCurrent: 0,
 				currentItems: [], // 当前用户列表数据
-				user: {
-					avatar: '/static/image/1.png',
-					nickname: 'MyNickname'
-				},
 				dataCache: {},
 				loading: false,
 				page: 1, // 当前页码
@@ -89,6 +92,26 @@
 			// 		url:'/'
 			// 	})
 			// },
+			gotoLike() {
+				uni.navigateTo({
+					url: "/pages/info/like"
+				})
+			},
+			gotoComment() {
+				uni.navigateTo({
+					url: "/pages/info/bulletin"
+				})
+			},
+			gotoBulletin() {
+				uni.navigateTo({
+					url: "/pages/info/comment"
+				})
+			},
+			treecave() {
+				uni.navigateTo({
+					url: "/pages/info/treecave"
+				})
+			},
 			gotopofile() {
 				uni.navigateTo({
 					url: '/pages/me/me' // 返回上一页面
@@ -199,9 +222,7 @@
 		/* 占满视口高度 */
 	}
 
-.likeimage{
-	display: block;
-}
+	.likeimage {}
 
 	.swiper {
 		flex: 1;
