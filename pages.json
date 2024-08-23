@@ -68,7 +68,7 @@
 		{
 			"path": "pages/me/concern",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText" : "我的关注"
 		}
 		},
 		{
@@ -78,7 +78,12 @@
 				"navigationStyle": "custom"
 			}
 		},
-	{
+		{
+		"path": "pages/me/concern",
+		"style": {
+			 "navigationStyle": "custom"
+		}
+	},{
 		"path": "pages/info/info",
 		"style": {
 			"navigationStyle": "custom"
@@ -90,16 +95,6 @@
 				"navigationStyle": "custom"
 			}
 		},
-		
-		{
-				"path" : "pages/corner/corner",
-				"style" : 
-				{
-					"navigationBarTitleText": "聚"
-				}
-			},
-		
-		
 		{
 			"path": "uview-ui/components/u-avatar-cropper/u-avatar-cropper",
 			"style": {
@@ -108,10 +103,9 @@
 			}
 		},
 		{
-			"path" : "pages/info/like",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
+			"path":"pages/info/like",
+			"style": {
+				"navigationStyle": "custom"
 			}
 		}
 	],

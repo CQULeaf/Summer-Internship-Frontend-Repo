@@ -1,23 +1,51 @@
 <template>
     <div class="container">
+		<u-form :model="user" ref="uForm">
             <div class="login-wrapper">
                 <div class="header">注册</div>
                 <div class="form-wrapper">
-                    <input type="text" name="username" placeholder="账户" class="input-item">
-                    <input type="password" name="password" placeholder="密码" class="input-item">
-                    <input type="password" name="repassword" placeholder="再次确认密码" class="input-item">
+                    <input type="text" name="username" placeholder="账户" class="input-item" v-model="user.username">
+                    <input type="password" name="password" placeholder="密码" class="input-item" v-model="user.password">
+                    <input type="password" name="repassword" placeholder="再次确认密码" class="input-item" v-model="user.rpassword">
                     <div class="btn" @click="register">注册</div>
                 </div>
             </div>
+		</u-form>
      </div>    
 </template>
     
 <script>
     export default {
+		data()
+		{
+			return{
+				user:{
+					username:"",
+					password:"",
+					rpassword:"",
+				}
+			}
+		},
         name:"Reg",
 		methods:{
 			register(){
-				uni.navigateBack()
+				
+				uni.request({
+					url:"http://localhost:1234/user/register",
+					data:this.user,
+					method:'POST',
+					success: (res) => {
+						console.log(res)
+						if(res.data.code==200)
+						{
+							uni.navigateBack()
+						}
+						else
+						{
+							this.$u.toast("注册失败，请更换用户名哦")
+						}
+					}
+				})
 			}
 		}
     }
