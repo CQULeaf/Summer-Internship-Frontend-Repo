@@ -10,7 +10,25 @@
 			}
 		},
 		{
-			"path": "pages/tabbar",
+			"path": "pages/tabbar1",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/tabbar2",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/tabbar3",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/tabbar4",
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
@@ -112,31 +130,31 @@
 		"borderStyle": "black",
 		"list": [
 			{
-				"pagePath": "pages/tabbar",
+				"pagePath": "pages/tabbar1",
 				"iconPath": "/static/newhomeg.png",
 				"selectedIconPath": "/static/newhomep.png",
 				"text": "家"
 			},
 			{
-				"pagePath": "pages/tabbar",
+				"pagePath": "pages/tabbar2",
 				"iconPath": "/static/happygrey.png",
 				"selectedIconPath": "/static/happierp.png",
 				"text": "聚"
 			},
 			{
-				"pagePath": "pages/tabbar",
+				"pagePath": "pages/tabbar3",
 				"iconPath": "/static/yanblack.png",
 				"selectedIconPath": "/static/yanpink.png",
 				"text": "言"
 			},
 			{
-				"pagePath": "pages/tabbar",
+				"pagePath": "pages/tabbar4",
 				"iconPath": "/static/messagegrey.png",
 				"selectedIconPath": "/static/messagep.png",
 				"text": "讯"
 			},
 			{
-				"pagePath": "pages/me/me",
+				"pagePath": "pages/me/mypage",
 				"iconPath": "/static/megrey.png",
 				"selectedIconPath": "/static/mep.png",
 				"text": "我"
