@@ -10,6 +10,24 @@
 			}
 		},
 		{
+			"path": "pages/login",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/info/msg/bulletin/bulletin",
+			"style": {
+				"navigationBarTitleText": "公告"
+			}
+		},
+		{
+			"path": "pages/info/msg/bulletin/bulletinCheck",
+			"style": {
+				"navigationBarTitleText": "公告"
+			}
+		},
+		{
 			"path": "pages/tabbar1",
 			"style": {
 				"navigationBarTitleText": "我的"
@@ -77,19 +95,7 @@
 			}
 		},
 		{
-			"path": "pages/login",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		},
-		{
 			"path": "pages/me/concern",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/info/infopage",
 			"style": {
 				"navigationStyle": "custom"
 			}
@@ -119,11 +125,6 @@
 		}
 	},
 	{
-		"path": "pages/info/bulletin",
-		"style": {
-			"navigationStyle": "custom"
-		}
-	},{
 			"path": "pages/register",
 			"style": {
 				"navigationStyle": "custom"

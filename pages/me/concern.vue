@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view>
-			<u-navbar height=60 back-text="" title="" :background="background" is-back=false :customBack="gotopofile">
+			<u-navbar height=60 back-text="" title="" :background="background" is-back=true :customBack="gotopofile">
 				<view class="slot-wrap"><!-- 通过自定义slot传入的内容 -->
 					<u-tabs-swiper ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false"
 						swiper-Width="100"  :bold="false" bg-color="#ffc7cb"

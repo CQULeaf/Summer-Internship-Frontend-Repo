@@ -33,9 +33,9 @@
 				uni.request({
 					url:'http://localhost:1234/user/login',
 					data:this.user,
-					method:"GET",
+					method:"POST",
 					success: (res) => {//成功返回之后
-					console.log(res,"1111****")
+						console.log(res,"1111****")
 						if(res.data.code*1==200){
 							try{
 								uni.setStorageSync("user",res.data.result)
