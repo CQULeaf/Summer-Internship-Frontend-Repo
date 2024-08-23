@@ -78,8 +78,32 @@
 				"navigationStyle": "custom"
 			}
 		},
+		{
+			"path": "pages/info/infopage",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
 	{
-		"path": "pages/info/infopage",
+		"path": "pages/info/treecave",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	},
+	{
+		"path": "pages/info/like",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	},
+	{
+		"path": "pages/info/comment",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	},
+	{
+		"path": "pages/info/bulletin",
 		"style": {
 			"navigationStyle": "custom"
 		}
