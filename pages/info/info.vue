@@ -23,7 +23,7 @@
 					<view class="list">
 						<!-- 用户列表 -->
 						<view class="like"></view>
-						<image class="likeimage" src='/static/like.png'></image>
+						<image class="likeimage" width=30 height=30 src='/static/like.png' shape="circle"></image>
 						<text class="liketext">点赞</text>
 						<view v-if="list[current].type === 'msg'">
 							<view class="list-item" v-for="(item, index) in currentItems" :key="index">
@@ -199,9 +199,9 @@
 		/* 占满视口高度 */
 	}
 
-	.slot-wrap {
-		padding: 0 50rpx;
-	}
+.likeimage{
+	display: block;
+}
 
 	.swiper {
 		flex: 1;

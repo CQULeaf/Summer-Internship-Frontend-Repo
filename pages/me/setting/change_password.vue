@@ -26,10 +26,10 @@
 				<view class="font">
 					确认密码
 				</view>
-				<input type="password" placeholder="再次输入新密码" v-model="user.confirmPassword" />
+				<input type="password" placeholder="再输入密码" v-model="user.confirmPassword" />
 			</view>
 
-			<!-- Sign In提交按钮 -->
+			<!-- 提交按钮 -->
 			<view class="button">
 				<view @click="submitForm" class="input">提交</view>
 			</view>
@@ -70,7 +70,7 @@ export default {
         method: 'POST',
         data: data,
         header: {
-          'content-type': 'application/json' // 根据需要设置请求头
+          'content-type': 'application/json' // 根据需要设置请求
         },
         success: (res) => {
           // 请求成功的处理逻辑
@@ -119,41 +119,48 @@ export default {
 	}
 
 	.input {
-		background-color: #fef1f4; /* 确保与.content背景色一致 */
-		width: 80%;
-		height: 10vw;
-		border-radius: 20vw;
-		margin: 2vw auto;
-		margin-top: 10vw;
-		transition: 1s;
+	  background-color: #fef1f4; /* 确保与.content背景色一致 */
+	  width: 80%;
+	  height: 10vw; /* 保持不变 */
+	  border-radius: 20vw;
+	  margin: 2vw auto;
+	  margin-top: 10vw;
+	  transition: 1s;
+	  position: relative; /* 添加相对定位 */
 	}
-
+	
 	.input .font {
-		background-color: #fed6dc;
-		width: 30vw;
-		color: #fff;
-		font-size: 3vw;
-		margin-top: -3vw;
-		margin-left: 6vw;
-		text-align: center;
-		border-radius: 20rpx;
+	  background-color: #fed6dc;
+	  width: 30vw;
+	  color: #fff;
+	  font-size: 3vw;
+	  margin-top: -3vw;
+	  margin-left: 6vw;
+	  text-align: center;
+	  border-radius: 20rpx;
+	  position: absolute; /* 添加绝对定位 */
+	  top: 0; /* 调整字体位置 */
+	  left: 0; /* 调整字体位置 */
+	}
+	
+	.input input {
+	  background-color: #fef1f4; /* 确保与.content背景色一致 */
+	  border: none;
+	  margin-top: 2vw; /* 增加margin-top，避免背景色覆盖 */
+	  margin-left: 5vw;
+	  font-size: 4vw;
+	  color: #000000;
+	  width: 85%;
+	  outline: none;
+	  /* 调整input的宽度，以适应背景色 */
+	  width: calc(100% - 30vw - 6vw - 20vw);
 	}
 
-	.input input {
-		background-color: #fef1f4; /* 确保与.content背景色一致 */
-		border: none;
-		margin-top: 2vw;
-		margin-left: 5vw;
-		font-size: 4vw;
-		color: #000000;
-		width: 85%;
-		outline: none;
-	}
 
 	/*按钮样式*/
 	.button {
 		text-align: center;
-		margin-top: 50rpx;
+		margin-top: 100rpx;
 	}
 
 	.button .input {
@@ -162,10 +169,10 @@ export default {
 		padding: 10rpx 0rpx;
 		width: 80%;
 		height: 80rpx;
-		margin: 0 auto;
+		margin: 1 auto;
 		border-radius: 20rpx;
 		color: #fff;
-		font-size: 28rpx;
-		line-height: 80rpx;
+		font-size: 35rpx;
+		line-height: 60rpx;
 	}
 </style>

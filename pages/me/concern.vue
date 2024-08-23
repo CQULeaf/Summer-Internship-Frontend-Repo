@@ -75,10 +75,10 @@
 				current: 0, //变量名：变量值
 				swiperCurrent: 0,
 				currentItems: [], // 当前用户列表数据
-				user: {
-					avatar: '/static/image/1.png',
-					nickname: 'MyNickname'
-				},
+				// user: {
+				// 	avatar: '/static/image/1.png',
+				// 	nickname: 'MyNickname'
+				// },
 				dataCache: {},
 				loading: false,
 				page: 1, // 当前页码
@@ -98,7 +98,7 @@
 			// },
 			gotopofile(){
 			      uni.navigateTo({
-			         url:'/pages/me/me'// 返回上一页面
+			         url:'/pages/me/mypage'// 返回上一页面
 			      });
 			    },
 			onreachBottom() {

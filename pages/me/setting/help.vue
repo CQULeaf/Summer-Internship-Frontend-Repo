@@ -14,7 +14,7 @@
 export default {
   data() {
     return {
-      message: ''
+      message: ''//变量
     };
   },
   methods: {
@@ -38,6 +38,10 @@ export default {
 
 .form-item {
   margin-bottom: 20px;
+  /* 添加一个左右边距，使输入框居中 */
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%; /* 设置一个固定宽度，使左右边距生效 */
 }
 
 .label {
@@ -52,10 +56,12 @@ export default {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  /* 通过设置 margin-left 负值来向左移动输入框 */
+  margin-left: -10px;
 }
 
 .submit-button {
-  width: 100%;
+  width: 95%;
   height: 40px;
   background-color: #ffd7dd;
   color: white;
