@@ -20,18 +20,22 @@
 		<swiper class="swiper" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 			<swiper-item v-for="(tab, tabindex) in list" :key="tabindex">
 				<scroll-view class="scroll-view" scroll-y>
-					<view class="action-section" @click="gotolike">
-						<image src='../../static/liked.png' class="action-icon"></image>
-						<text class="action-text">点赞</text>
+					<view class="subinfolist" @click="gotopofile(index)" v-for="(subinfo, index) in subinfolist" :key="index">
+						<image class="image" :src="subinfo.image"></image>
+						<text class="text">{{ subinfo.text }}</text>
 					</view>
-					<view class="action-section" @click="gotocomment">
+					<!-- <view class="Likeimage" @click="gotoLike">
+						<image src='../../static/liked.png' class="action-icon"></image>
+						<text class="Liketext">点赞</text>
+					</view>
+					<view class="Commentimage" @click="gotoComment">
 						<image src='../../static/comment.svg' class="action-icon"></image>
 						<text class="action-text">评论</text>
 					</view>
-					<view class="action-section" @click="gotobulletin">
+					<view class="Bulletinimage" @click="gotoBulletin">
 						<image src='../../static/announcement.svg' class="action-icon"></image>
 						<text class="action-text">公告</text>
-					</view>
+					</view> -->
 				</scroll-view>
 				<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
 
@@ -45,7 +49,8 @@
 						</view>
 
 						<!-- 帖子列表 -->
-						<view v-if="list[current].type === 'treehole'" @click="treecave"></view>
+						<view v-if="list[current].type === 'treehole'" @click="treecave">
+						</view>
 					</view>
 				</scroll-view>
 			</swiper-item>
@@ -57,9 +62,9 @@
 	export default {
 		data() {
 			return { //专门写变量   在模板里面写 ：herf 表示herf是变量
-				background: {
-					backgroundColor: '#ffc7cb',
-				}, //导航栏的颜色
+				// background: {
+				// 	backgroundColor: '#ffc7cb',
+				// }, //导航栏的颜色
 				list: [
 					// 标签数据
 					{
@@ -70,6 +75,21 @@
 					{
 						name: '树洞',
 						type: 'treehole'
+					}
+				],
+				subinfolist: [
+					// 标签数据
+					{
+						image: '../../static/liked.png',
+						text: '点赞',
+					},
+					{
+						image: '../../static/comment.svg',
+						text: '评论',
+					},
+					{
+						image: '../../static/announcement.svg',
+						text: '公告'
 					}
 				],
 				current: 0, //变量名：变量值
@@ -92,30 +112,40 @@
 			// 		url:'/'
 			// 	})
 			// },
-			gotoLike() {
-				uni.navigateTo({
-					url: "/pages/info/like"
-				})
-			},
-			gotoComment() {
-				uni.navigateTo({
-					url: "/pages/info/bulletin"
-				})
-			},
-			gotoBulletin() {
-				uni.navigateTo({
-					url: "/pages/info/comment"
-				})
-			},
+			
+			gotopofile(index) {
+			            // 根据 index 跳转到不同的页面
+			            switch (index) {
+			                case 0:
+			                    // 跳转到点赞页面
+			                    uni.navigateTo({
+			                    	url:"/pages/info/like"
+			                    })
+			                    break;
+			                case 1:
+			                    // 跳转到评论页面
+			                   uni.navigateTo({
+			                   	url: "/pages/info/comment"
+			                   })
+			                    break;
+			                case 2:
+			                    // 跳转到公告页面
+			                   uni.navigateTo({
+			                   	url: "/pages/info/bulletin"
+			                   })
+			                    break;
+			                default:
+			                    break;
+			            }
+			        },
 			treecave() {
+				console.log("当前列表:", this.list),
+				console.log("当前索引:", this.current),
+				console.log("跳转到树洞页面"),
 				uni.navigateTo({
+						
 					url: "/pages/info/treecave"
 				})
-			},
-			gotopofile() {
-				uni.navigateTo({
-					url: '/pages/me/me' // 返回上一页面
-				});
 			},
 			onreachBottom() {
 				if (this.loading || !this.hasMore) return; // 正在加载中或没有更多数据则不执行
@@ -220,10 +250,8 @@
 		flex-direction: column;
 		height: 100vh;
 		/* 占满视口高度 */
+		background-color: #fffdfe;
 	}
-
-	.likeimage {}
-
 	.swiper {
 		flex: 1;
 		/* 占据剩余的空间 */
@@ -239,6 +267,8 @@
 		width: 100%;
 		height: 100%;
 		/* 确保 scroll-view 填满 swiper-item */
+
+		
 	}
 
 	.list {
@@ -257,17 +287,28 @@
 		align-items: center;
 		padding: 10px;
 	}
+    .subinfolist{
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	background-color: #fffbfd;
+	border-bottom: 2px solid #969696; /* 2px 是边框宽度 */
 
-	.useravatar {
+       }
+	.image {
 		width: 100rpx;
 		height: 100rpx;
-		border-radius: 50%;
-		margin-right: 10px;
+		border-radius: 10%;
+		margin-top: 3px;
+		margin-right: 20px;
+		margin-left: 10px;
 	}
 
-	.nickname {
+	.text {
 		font-size: 16px;
 		color: #333;
+	
+		
 	}
 
 	.loading {
