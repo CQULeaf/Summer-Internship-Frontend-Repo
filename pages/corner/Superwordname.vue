@@ -17,7 +17,7 @@
 							<view class="list-item" v-for="(item, index) in currentItems" :key="index">
 								<image class="useravatar" :src="item.cover"></image>
 								<text class="item-title">{{item.name}}</text>
-								<text class="item-title">{{item.description}}</text>
+							
 							</view>
 						</view>
 						
@@ -28,7 +28,7 @@
 								<!-- key为每个渲染元素 提供唯一的key属性 -->
 								<image class="useravatar" :src="post.cover"></image>
 								<text class="item-title">{{post.name}}</text>
-								<text class="item-title">{{post.description}}</text>
+								
 								<!-- post.title元素属性 -->
 							</view>
 						</view>
@@ -53,13 +53,15 @@
 					{
 						name: '关注',
 						type: 'like',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/corner/superWordNameClub',
+						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/corner/superWordNameConcern?user_id',
 						//api连接
+						//为什么两个url都能用？之后可能要修改
+						
 					},
 					{
 						name: '推荐',
 						type: 'recommend',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/corner/superWordNameClub'
+						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/corner/superWordNameRecommend?user_id'
 					}
 				],
 				current: 0,
@@ -67,7 +69,7 @@
 				currentItems: [],
 				dataCache: {},
 				loading: false,
-				page: 1,
+				page: 1,//分页变量
 				hasMore: true,
 				touchStartX: 0,
 				touchEndX: 0,
@@ -96,19 +98,10 @@
 							
 							let items = res.data;
 							        // 确保items是数组
-							        if (!Array.isArray(items)) {
-							            // 如果不是数组，尝试将其转换为数组
-							            if (items !== null && typeof items === 'object') {
-							                items = Object.values(items);
-							            } else {
-							                // 如果items不是对象或者为null，则设置为空数组
-							                items = [];
-							            }
-							        }
 							        if (items.length === 0) {
 							            this.hasMore = false;
 							        } else {
-							            this.currentItems = [...this.currentItems, ...items];
+							            this.currentItems = [...this.currentItems, ...items.data];
 							            this.dataCache[apiEndpoint] = this.currentItems;
 							        }
 							    } else {

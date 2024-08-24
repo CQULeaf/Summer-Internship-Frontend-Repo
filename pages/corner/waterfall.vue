@@ -1,5 +1,19 @@
 <template>
 	<view class="wrap">
+		<!-- 新增的板块，用于展示头像、标题、描述、关注数和帖子数 -->
+				<view class="profile-section">
+					<image class="avatar" src="http://example.com/avatar.jpg"></image>
+					<view class="profile-info">
+						<text class="title">用户昵称</text>
+						<text class="description">这里是帖子描述，可以写一些用户介绍或者帖子内容概要。</text>
+						<view class="stats">
+							<text class="stat">关注数：1234</text>
+							<text class="stat">帖子数：5678</text>
+						</view>
+					</view>
+				</view>
+			
+			
 		<u-waterfall v-model="flowList" ref="uWaterfall">
 			
 			<template v-slot:left="{leftList}">
@@ -59,6 +73,16 @@
 		data() {
 			return {
 				
+				//---------------帖子
+				profile: {
+							avatar: 'http://example.com/avatar.jpg',
+							title: '用户昵称',
+							description: '这里是帖子描述...',
+							followers: 1234,
+							posts: 5678
+						},
+				//---------------帖子		
+				
 				loadStatus: 'loadmore',//加载状态
 				flowList: [],//瀑布流数据
 				list: [
@@ -108,6 +132,7 @@
 	}
 </script>
 
+//------------------------------------
 <style>
     /* page不能写带scope的style标签中，否则无效 */
     page {
@@ -117,8 +142,10 @@
         padding-bottom: 100px; /* 页面底部内边距 */
     }
 </style>
+//------------------------------------
 
 <style lang="scss" scoped>
+	//--------------------瀑布流
 	.demo-warter {
 		border-radius: 8px;
 		margin: 5px;
@@ -150,9 +177,9 @@
 	.demo-tag {
 		display: flex;
 		margin-top: 5px;
-	}//两个框框的排版
+	}//两个小框框的排版
 	
-	.demo-tag-owner {//红色框框
+	.demo-tag-owner {//红色小框框
 		background-color: $u-type-error;
 		color: #FFFFFF;
 		display: flex;
@@ -174,7 +201,7 @@
 		align-items: center;
 		border-radius: 50rpx;
 		font-size: 20rpx;
-	}//蓝色框框
+	}//蓝色小框框
 	
 	
 	.demo-shop {
@@ -182,4 +209,51 @@
 		color: $u-tips-color;
 		margin-top: 5px; 
 	}//名字
+	
+//-------------------上方框框的位置
+.wrap {
+		padding-top: 0rpx; // 减少顶部内边距，使内容更靠近顶部
+	
+	}
+	.profile-section {
+			display: flex;
+			align-items: center;
+			background-color: #ffffff;
+			padding:50rpx;//超话框的宽度
+			margin-bottom: 10rpx; //超话和帖子之间的距离
+		
+		}
+		
+		.avatar {
+			width: 100rpx;
+			height: 100rpx;
+			border-radius: 50%;
+			margin-right: 20rpx;
+		}
+		
+		.profile-info {
+			flex: 1;
+		}
+		
+		.title {
+			font-size: 34rpx;
+			font-weight: bold;
+		}
+		
+		.description {
+			font-size: 28rpx;
+			color: #666;
+			margin-top: 10rpx;
+		}
+		
+		.stats {
+			display: flex;
+			margin-top: 10rpx;
+		}
+		
+		.stat {
+			font-size: 24rpx;
+			color: #999;
+			margin-right: 20rpx;
+		}
 </style>
