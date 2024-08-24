@@ -8,7 +8,7 @@
                     <input type="password" name="password" placeholder="密码" class="input-item" v-model="user.password1">
                     <input type="password" name="repassword" placeholder="再次确认密码" class="input-item" v-model="user.password2">
                     <div class="btn" @click="register">注册</div>
-					<view @click="backtologin">已经注册账号</view>
+					<view class="alredy"  @click="backtologin">我已经注册账号</view>
                 </div>
             </div>
 		</u-form>
@@ -114,9 +114,11 @@
     text-align: center;
     line-height: 88px;
 }
-a {
+.alredy {
     text-decoration-line: none;
-    color: #eebec5;
+    color: #d6adb4;
+	padding: 5px;
+
 }
 
 </style>

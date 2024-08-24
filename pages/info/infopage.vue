@@ -1,57 +1,36 @@
 <template>
 	<view>
 		<view class="container">
-			<!-- 用户信息部分 -->
-			<!-- <view class="myinfo">
-		  <image class="myavatar" :src="user.avatar"></image>
-		  <text class="mynickname">{{ user.nickname }}</text>
-		  <button size="default" style="background-color:#ffb9c0;color: #000000" @click="goToProfile">去设置</button>
-		       </view> -->
-			<!-- 切换标签部分 -->
 			<view>
-		
-				<u-tabs-swiper font-size="40" ref="uTabs" :list="pagelist" :current="pagecurrent" @change="tabsChange"
-					:is-scroll="false" swiper-Width="100" height=100 :bold="false" bg-color="#ffc7cb"
-					active-color="#000000"></u-tabs-swiper>
-		
-		
+				<u-navbar class="wrap" height=60 title="" :background="background" :is-back=false>
+					<view  class="subwrap">
+						<u-tabs-swiper font-size="40" ref="uTabs" :list="pagelist" :current="pagecurrent" @change="tabsChange" :is-scroll="false" swiper-Width="100" height=100 :bold="false"
+							bg-color="#ffc7cb" active-color="#000000"></u-tabs-swiper>
+					</view>
+					<view>
+						<text class="subwarp1" @click="goToPageTreeCave">树洞</text>
+					</view>
+				</u-navbar>
 			</view>
-		
 			<!-- 用户列表部分 -->
-			<swiper class="swiper" :current="swiperCurrent" @transition="transition"
-				@animationfinish="animationfinish">
+			<swiper class="swiper" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 				<swiper-item v-for="(tab, tabindex) in pagelist" :key="tabindex">
-					<scroll-view class="scroll-view" scroll-y>
+					<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
 						<view class="subinfolist" @click="gotopofile(index)" v-for="(subinfo, index) in subinfolist"
 							:key="index">
 							<image class="image" :src="subinfo.image"></image>
 							<text class="text">{{ subinfo.text }}</text>
 						</view>
-						<!-- <view class="Likeimage" @click="gotoLike">
-							<image src='../../static/liked.png' class="action-icon"></image>
-							<text class="Liketext">点赞</text>
-						</view>
-						<view class="Commentimage" @click="gotoComment">
-							<image src='../../static/comment.svg' class="action-icon"></image>
-							<text class="action-text">评论</text>
-						</view>
-						<view class="Bulletinimage" @click="gotoBulletin">
-							<image src='../../static/announcement.svg' class="action-icon"></image>
-							<text class="action-text">公告</text>
-						</view> -->
-					</scroll-view>
-					<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
-		
 						<view class="list">
 							<!-- 用户列表 -->
 							<view v-if="pagelist[pagecurrent].type === 'msg'">
-								<view class="list-item" v-for="(item, index) in currentItems" :key="index" @click="goToChat(item)">
+								<view class="list-item" v-for="(item, index) in currentItems" :key="index"
+									@click="goToChat(item)">
 									<image class="useravatar" :src="item.avatar"></image>
-									<text class="item-title">{{item.username}}</text>
+									<text class="username">{{item.username}}</text>
 								</view>
 							</view>
-		
-							<!-- 帖子列表 -->
+							<!-- 树洞跳转 -->
 							<view v-if="pagelist[pagecurrent].type === 'treehole'" @click="treecave">
 							</view>
 						</view>
@@ -61,6 +40,7 @@
 		</view>
 		<!-- 与包裹页面所有内容的元素u-page同级，且在它的下方 -->
 		<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
+		<text>点击进入树洞</text>
 	</view>
 
 </template>
@@ -69,21 +49,18 @@
 	export default {
 		data() {
 			return { //专门写变量   在模板里面写 ：herf 表示herf是变量
-				// background: {
-				// 	backgroundColor: '#ffc7cb',
-				// }, //导航栏的颜色
+				background: {
+					backgroundColor: '#ffc7cb',
+				}, //导航栏的颜色
 				list: '',
 				current: 4,
+				minUserListLength: 5,
 				pagelist: [
 					// 标签数据
 					{
 						name: '消息',
 						type: 'msg',
 						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/info/message'
-					},
-					{
-						name: '树洞',
-						type: 'treehole'
 					}
 				],
 				subinfolist: [
@@ -155,8 +132,12 @@
 				},
 			]
 		},
-
 		methods: { //写自定义方法
+		goToPageTreeCave(){
+			uni.navigateTo({
+				url: "/pages/info/treecave"
+			})
+		},
 			gotopofile(index) {
 				// 根据 index 跳转到不同的页面
 				switch (index) {
@@ -183,16 +164,15 @@
 				}
 			},
 			goToChat(user) {
-			        uni.navigateTo({
-			            url: `/pages/chat/chatpage?userId=${user.sender_id}` // 修改为你聊天页面的实际路径
-			        });
-			    },
+				uni.navigateTo({
+					url: `/pages/chat/chatpage?userId=${user.sender_id}` // 修改为你聊天页面的实际路径
+				});
+			},
 			treecave() {
 				console.log("当前列表:", this.pagelist),
 					console.log("当前索引:", this.pagecurrent),
 					console.log("跳转到树洞页面"),
 					uni.navigateTo({
-
 						url: "/pages/info/treecave"
 					})
 			},
@@ -218,7 +198,7 @@
 									// 处理用户数据
 									this.currentItems = [...this.currentItems, ...res.data.data];
 								}
-								 //else if (this.pagelist[this.pagecurrent].type === 'posts') {
+								//else if (this.pagelist[this.pagecurrent].type === 'posts') {
 								// 	// 处理帖子数据
 								// 	this.currentItems = [...this.currentItems, ...res.data];
 								// }
@@ -256,15 +236,15 @@
 				}
 			},
 			tabsChange(index) {
-			    if (index >= 0 && index < this.pagelist.length) {
-			        this.pagecurrent = index; // 只在有效范围内更新
-			        this.swiperCurrent = index;
-			        this.page = 1; // 重置页码
-			        this.hasMore = true; // 重新设置有更多数据标志
-			        this.currentItems = []; // 清空当前用户列表
-			        this.loading = true; // 开始加载
-			        this.fetchUserList(this.pagelist[index].api, this.page);
-			    }
+				if (index >= 0 && index < this.pagelist.length) {
+					this.pagecurrent = index; // 只在有效范围内更新
+					this.swiperCurrent = index;
+					this.page = 1; // 重置页码
+					this.hasMore = true; // 重新设置有更多数据标志
+					this.currentItems = []; // 清空当前用户列表
+					this.loading = true; // 开始加载
+					this.fetchUserList(this.pagelist[index].api, this.page);
+				}
 			},
 
 
@@ -297,8 +277,6 @@
 		},
 		mounted() {
 			this.fetchUserList(this.pagelist[this.pagecurrent].api, this.page);
-			console.log("当前页索引:", this.pagecurrent);
-			 console.log("页列表:", this.pagelist);
 		}
 	};
 </script>
@@ -308,7 +286,7 @@
 		flex-direction: column;
 		height: 100vh;
 		/* 占满视口高度 */
-		background-color: #fffdfe;
+		background-color: #fffbfd;
 	}
 
 	.swiper {
@@ -319,22 +297,22 @@
 	.swiper-item {
 		height: 100%;
 		/* 确保 swiper-item 填满父容器 */
-		background-color: #ffffff;
+		background-color: #fffbfd;
 	}
 
 	.scroll-view {
 		width: 100%;
 		height: 100%;
 		/* 确保 scroll-view 填满 swiper-item */
-
-
+		background-color: #fffdff;
 	}
+
 
 	.list {
 		display: flex;
 		flex-direction: column;
 		/* 垂直排列列表项 */
-		background-color: #ffffff;
+		background-color: #fffbfd;
 		flex: 1;
 		/* 占据剩余空间 */
 		overflow-y: auto;
@@ -345,6 +323,35 @@
 		display: flex;
 		align-items: center;
 		padding: 10px;
+		border-bottom: 1px solid #f0dddf;
+	}
+
+	.wrap {
+		display: flex;
+		/* 使用 flex 布局 */
+		align-items: center;
+		/* 水平居中 */
+		padding: 0 110rpx;
+		/* 背景颜色 */
+		border: 2px solid #ff8e96;
+		/* 边框 */
+		border-radius: 5px;
+		/* 圆角 */
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		/* 阴影效果 */
+	}
+	.subwrap{
+		margin-left: 120px;
+	}
+
+	.subwarp1 {
+		margin-left: 20px;
+		font-size: 20px;
+	}
+
+	.itemimage {
+		width: 3px;
+		height: 30px;
 	}
 
 	.subinfolist {
@@ -369,8 +376,20 @@
 	.text {
 		font-size: 16px;
 		color: #333;
+	}
 
+	.useravatar {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 50%;
+		margin-top: 3px;
+		margin-right: 20px;
+		margin-left: 10px;
+	}
 
+	.username {
+		font-size: 16px;
+		color: #333;
 	}
 
 	.loading {
