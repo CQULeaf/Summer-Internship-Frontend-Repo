@@ -109,9 +109,31 @@
 			}
 		},
 	{
-		"path": "pages/info/treecave",
+		"path": "pages/info/treecave/treecave",
 		"style": {
-			"navigationStyle": "custom"
+			"navigationStyle": "custom",
+			"navigationBarTextStyle": "white" 
+		}
+	},
+	{
+		"path": "pages/info/treecave/ai",
+		"style": {
+			"navigationStyle": "custom",
+			"navigationBarTextStyle": "white" 
+		}
+	},
+	{
+		"path": "pages/info/treecave/treepost",
+		"style": {
+			"navigationStyle": "custom",
+			"navigationBarTextStyle": "white" 
+		}
+	},
+	{
+		"path": "pages/info/treecave/treetalk",
+		"style": {
+			"navigationStyle": "custom",
+			"navigationBarTextStyle": "white" 
 		}
 	},
 	{
@@ -141,7 +163,7 @@
 				}
 			},
 		{
-				"path" : "pages/corner/Superwordname_club",
+				"path" : "pages/corner/Superwordname",
 				"style" : 
 				{
 					"navigationBarTitleText": "聚"
@@ -162,8 +184,7 @@
 				"navigationBarBackgroundColor": "#000000"
 			}
 		}
-		
-		
+	
 		
 	],
 	"globalStyle": {

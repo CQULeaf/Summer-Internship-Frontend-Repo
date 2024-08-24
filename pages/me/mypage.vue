@@ -119,7 +119,7 @@
 					text: '我',
 					isDot: false,
 					customIcon: false,
-					pagePath: '/pages/me/me'
+					pagePath: '/pages/me/mypage'
 				},
 			]
 		},

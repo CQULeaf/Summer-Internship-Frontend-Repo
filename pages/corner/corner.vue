@@ -1,9 +1,12 @@
 <template>
   <view class="container">
-    
-
     <!-- 搜索栏 -->
-    <u-search placeholder="搜索" v-model="searchText" @search="search"></u-search>
+	<!-- 能根据关键词“专业” “同乡”搜索感兴趣的内容
+	还能进一步搜索“专业->计科”  “同乡->安徽”
+	这个搜索的地方包含所有数据，其他地方可能只有自己板块数据 -->
+    <view class="search-container">
+      <u-search placeholder="搜索" v-model="searchText" border-color=#dddddd  @search="search"></u-search>
+    </view>
 
     <view class="container">
       <!-- 轮播图 -->
@@ -18,22 +21,31 @@
           </swiper>
         </uni-swiper-dot>
       </view>
-      
     </view>
 
     <!-- 2x2排列的四个小圆形图标 -->
-    <view class="icons" style="margin-top: 70px;padding: 80px;">
-      <!-- 专业图标太大了要继续改，下面或者里面有字  -->
-  <image class="icon" @click="toggleCategory('专业')" src="/static/speciality.png" style="background-color:#f2b2c3;">
+   <view class="icons" style="margin-top: 70px;padding: 60px;">
+      <!-- 专业 -->
+      <view class="icon1" @click="toggleCategory('专业')" style="background-color: #f2b2c3; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+        <image class="icon2" src="/static/speciality.png" />
+        <text class="icon-text">专业</text>
+      </view>
       <!-- 同乡 -->
-      <image class="icon" @click="toggleCategory('同乡')" src="/static/homie.png" style="background-color:#fed6e3;">
-      
+      <view class="icon1" @click="toggleCategory('同乡')" style="background-color: #fed2e0; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+        <image class="icon2" src="/static/homie.png" />
+        <text class="icon-text">同乡</text>
+      </view>
       <!-- MBTI -->
-      <image class="icon" @click="toggleCategory('MBTI')" src="/static/mbti.png" style="background-color: #f9e9ea;">
+      <view class="icon1" @click="toggleCategory('MBTI')" style="background-color: #f9e4e5; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+        <image class="icon2" src="/static/mbti.png" />
+        <text class="icon-text">MBTI</text>
+      </view>
       <!-- 社团 -->
-      <image class="icon" @click="toggleCategory('社团')" src="/static/society.png" style="background-color: #ffe1e7 ;">
+      <view class="icon1" @click="toggleCategory('社团')" style="background-color: #ffdfe6; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+        <image class="icon2" src="/static/society.png" />
+        <text class="icon-text">社团</text>
+      </view>
     </view>
-
 
 <view>
 		<!-- 与包裹页面所有内容的元素u-page同级，且在它的下方 -->
@@ -48,11 +60,12 @@ export default {
   data() {
 	  
     return {
+		searchText:"搜索你想要的",
 		info: [
 				{
 					colorClass: 'uni-bg-blue',
 					url: 'https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/shuijiao.jpg',
-					content: '内容 C'
+					//轮播图图片，不知要不要改成数据库图片
 				}
 			],
 			
@@ -66,7 +79,6 @@ export default {
 					iconPath:  "/static/happygrey.png",
 					selectedIconPath:"/static/happierp.png",
 					text: '聚',
-					customIcon: false,
 				},
 				{
 					iconPath: "/static/yanblack.png",
@@ -85,15 +97,13 @@ export default {
 					iconPath:  "/static/megrey.png",
 					selectedIconPath:"/static/mep.png",
 					text: '我',
-					
-					isDot: false,
 					customIcon: false,
 				},
 			],
-			current: 0,
+			current: 0,//这个要改吗
 			
 			
-			
+			//轮播图
 			dotStyle: [
 				
 				{
@@ -110,8 +120,6 @@ export default {
 			mode: 'default',
 			dotsStyles: {},
 			swiperDotIndex: 0,
-		
-      searchText: ''
     };
   },
   methods: {
@@ -136,8 +144,11 @@ export default {
 	  },
     toggleCategory(category) {
       // 假设这是点击某个图标后触发的逻辑
+	  //跳转到对应的超话推荐与关注页面
       console.log(`点击了 ${category}`);
     },
+	
+	//重点！！！之后要和后端连接
     search() {
       // 搜索逻辑
       console.log(`搜索了: ${this.searchText}`);
@@ -146,61 +157,7 @@ export default {
 };
 </script>
 
-<style>
-.container {
-  display: flex;
-  flex-direction: column;
-  
-}
-
-.icon-text {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  color: #aa675f;
-  cursor: pointer;
-}
-
-.icon {
-  width: 100px;
-  height: 100px;
-  background-color: #fea49d;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  color: #fff;
-  cursor: pointer;
-}
-
-.icon-text text {
-  position: absolute;
-  top: 100%;
-  left: 200%;
-  transform: translate(-50%, -50%);
-  font-size: 20px;
-}
-
-.slider {
-  margin-top: 20px;
-}
-
-.icons {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0px;
-  margin-top: 0px;
-    padding: 20px; /* 调整图标之间的间距 */
-  
-}
-
-
-</style>
+//轮播图
 <style lang="scss">
 	
 	.container {
@@ -293,7 +250,7 @@ export default {
 		padding: 0 15rpx;
 		/* #endif */
 		flex: 1;
-		border-color: #e5e5e5;
+		border-color: #fff5ff;
 		border-style: solid;
 		border-width: 1px;
 		border-radius: 5px;
@@ -308,3 +265,60 @@ export default {
 	}
 </style>
 
+
+<style>
+	//四个框框
+.container {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.icon2 {
+  width: 50%; /* 设置图标的宽度 */
+  height: 50%; /* 设置图标的高度 */
+  margin-top: 10px; /* 设置图标与顶部的距离 */
+}
+
+.icon-text {
+  color: white; /* 设置文字颜色为黑色 */
+  margin-top: 5px; /* 设置文字与图标的距离 */
+  font-size: 14px; /* 设置文字大小 */
+}
+
+.icon1 {
+  width: 100px;
+  height: 100px;
+  background-color: #fed6e3;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.slider {
+  margin-top: 20px;
+}
+
+.icons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0px;/* 调整图标之间的间距 */
+ /* margin-top: 40px;
+    padding: 40px; */
+}
+//搜索框
+.search-container {
+  display: flex;
+  justify-content: center;
+    bg-color:#007bff;
+	 border-color:#007bff;
+	/* 使搜索框水平居中 */
+}
+
+
+
+</style>
