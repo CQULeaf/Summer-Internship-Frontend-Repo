@@ -180,10 +180,17 @@
 			}
 		},
 		{
+<<<<<<< HEAD
 			"path" : "pages/corner/post",
 			"style" : 
 			{
 				"navigationBarTitleText" : ""
+=======
+			"path" : "pages/post/postpage",
+			"style" : 
+			{
+				"navigationStyle" : "custom"
+>>>>>>> 327e47608561d6b651be2363d75143d569010cbb
 			}
 		}
 	

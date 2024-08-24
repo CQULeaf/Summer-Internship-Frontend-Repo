@@ -5,7 +5,7 @@
 				<u-navbar class="wrap" height=60 title="" :background="background" :is-back=false>
 					<view  class="subwrap">
 						<u-tabs-swiper font-size="40" ref="uTabs" :list="pagelist" :current="pagecurrent" @change="tabsChange" :is-scroll="false" swiper-Width="100" height=100 :bold="false"
-							active-color="#000000"></u-tabs-swiper>
+							bg-color="rgba(255, 255, 255, 0)" :subackground="transparentBackground" active-color="#000000"></u-tabs-swiper>
 					</view>
 					<view>
 						<text class="subwarp1" @click="goToPageTreeCave">树洞</text>
@@ -52,7 +52,7 @@
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(255, 217, 220),rgb(255, 193, 199),rgb(255, 193, 199),rgb(255, 188, 195),rgb(159, 209, 177),rgb(112, 215, 164))',
 				// 导航栏背景图
-									background: 'url(static/navigatorbackground.jpg) no-repeat',
+									background: 'url(static/navigatorbackground1.jpg) no-repeat',
 									backgroundSize: 'cover',
 				}, //导航栏的颜色
 				list: '',
@@ -100,7 +100,7 @@
 					text: '家',
 					isDot: true,
 					customIcon: false,
-					pagePath: '/pages/tabbar1'
+					pagePath: '/pages/home/homepage'
 				},
 				{
 					iconPath: "/static/happygrey.png",
@@ -108,7 +108,7 @@
 					text: '聚',
 					isDot: true,
 					customIcon: false,
-					pagePath: '/pages/tabbar2'
+					pagePath: '/pages/coner/coner'
 				},
 				{
 					iconPath: "/static/yanblack.png",
