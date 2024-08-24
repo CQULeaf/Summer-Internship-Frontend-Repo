@@ -5,8 +5,8 @@
                 <div class="header">注册</div>
                 <div class="form-wrapper">
                     <input type="text" name="username" placeholder="账户" class="input-item" v-model="user.username">
-                    <input type="password" name="password" placeholder="密码" class="input-item" v-model="user.password">
-                    <input type="password" name="repassword" placeholder="再次确认密码" class="input-item" v-model="user.rpassword">
+                    <input type="password" name="password" placeholder="密码" class="input-item" v-model="user.password1">
+                    <input type="password" name="repassword" placeholder="再次确认密码" class="input-item" v-model="user.password2">
                     <div class="btn" @click="register">注册</div>
                 </div>
             </div>
@@ -21,17 +21,17 @@
 			return{
 				user:{
 					username:"",
-					password:"",
-					rpassword:"",
+					password1:"",
+					password2:"",
 				}
 			}
 		},
         name:"Reg",
 		methods:{
 			register(){
-				
+				console.log(this.user)
 				uni.request({
-					url:"http://localhost:1234/user/register",
+					url:"http://localhost:8080/user/register",
 					data:this.user,
 					method:'POST',
 					success: (res) => {
