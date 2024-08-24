@@ -1,10 +1,14 @@
 <template>
 	<view>
 		<view v-if="logined">
-			<view>
-				<view class="u-m-r-10 u-avatar-wrap">
-					<image @tap="preAvatar" class="u-avatar-demo" :src="this.user.avatar"></image>
+			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
+				<view class="u-m-r-10">
+					<u-avatar :src="pic" size="140"></u-avatar>
 				</view>
+				<view class="u-flex-1">
+					<view class="u-font-18 u-p-b-20">{{user.username}}</view>
+				</view>
+				
 			</view>
 
 			<u-grid :col="8" :border="false">
@@ -68,6 +72,9 @@
 				show: true,
 				// 定义一个变量
 				logined: true,
+				user:{
+					username:"游客"
+				},
 				list: '',
 				current: 4
 			}
@@ -102,7 +109,7 @@
 					selectedIconPath: "/static/messagep.png",
 					text: '讯',
 					customIcon: false,
-					pagePath: '/pages/tabbar'
+					pagePath: '/pages/info/infopage'
 				},
 				{
 					iconPath: "/static/megrey.png",
@@ -113,6 +120,20 @@
 					pagePath: '/pages/me/me'
 				},
 			]
+		},
+		onShow() {
+			console.log("页面展示了")
+			//判断用户是否登录
+			const value=uni.getStorageSync("user")
+			if(value)
+			{
+				this.logined=true
+				this.name=value
+			}
+			else
+			{
+				this.logined=false
+			}
 		},
 		methods: {
 			fetchUser() {

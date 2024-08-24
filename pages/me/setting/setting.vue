@@ -34,6 +34,8 @@
 	    uni.navigateTo({
 	      url: '/pages/login'
 	    });
+		uni.setStorageSync("user","")
+		this.logined=false
 	  		
 	  },
 	  goToHelp() {

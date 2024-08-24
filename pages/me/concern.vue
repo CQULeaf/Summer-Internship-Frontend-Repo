@@ -1,11 +1,10 @@
 <template>
 	<view class="container">
 		<view>
-			<u-navbar height=60 back-text="" title="" :background="background" is-back=false :customBack="gotopofile">
+			<u-navbar height=60 back-text="" title="" :background="background" is-back=true :customBack="gotopofile">
 				<view class="slot-wrap"><!-- 通过自定义slot传入的内容 -->
 					<u-tabs-swiper ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false"
-						swiper-Width="100"  :bold="false" bg-color="#ffc7cb"
-						active-color="#ffa6af"></u-tabs-swiper>
+						swiper-Width="100" :bold="false" bg-color="#ffc7cb" active-color="#ffa6af"></u-tabs-swiper>
 				</view>
 
 			</u-navbar>
@@ -17,18 +16,9 @@
 				<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
 					<view class="list">
 						<!-- 用户列表 -->
-						<view v-if="list[current].type === 'users'">
-							<view class="list-item" v-for="(item, index) in currentItems" :key="index">
-								<image class="useravatar" :src="item.avatar"></image>
-								<text class="item-title">{{item.nickname}}</text>
-							</view>
-						</view>
-
-						<!-- 帖子列表 -->
-						<view v-if="list[current].type === 'posts'">
-							<view class="list-item" v-for="(post, index) in currentItems" :key="index">
-								<text class="post-title">{{post.title}}</text>
-							</view>
+						<view class="list-item" v-for="(item, index) in currentItems" :key="index">
+							<image class="useravatar" :src="item.avatar"></image>
+							<text class="item-title">{{item.nickname}}</text>
 						</view>
 					</view>
 				</scroll-view>
@@ -41,9 +31,9 @@
 	export default {
 		data() {
 			return { //专门写变量   在模板里面写 ：herf 表示herf是变量
-			background:{
-				backgroundColor: '#ffc7cb',
-			},//导航栏的颜色
+				background: {
+					backgroundColor: '#ffc7cb',
+				}, //导航栏的颜色
 				list: [
 					// 标签数据
 					{
@@ -60,16 +50,6 @@
 						name: '粉丝',
 						type: 'users',
 						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/user/fans'
-					},
-					{
-						name: '点赞',
-						type: 'posts',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/user/thumb'
-					},
-					{
-						name: '浏览记录',
-						type: 'posts',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/user/browse'
 					}
 				],
 				current: 0, //变量名：变量值
@@ -96,11 +76,11 @@
 			// 		url:'/'
 			// 	})
 			// },
-			gotopofile(){
-			      uni.navigateTo({
-			         url:'/pages/me/mypage'// 返回上一页面
-			      });
-			    },
+			gotopofile() {
+				uni.navigateTo({
+					url: '/pages/me/mypage' // 返回上一页面
+				});
+			},
 			onreachBottom() {
 				if (this.loading || !this.hasMore) return; // 正在加载中或没有更多数据则不执行
 				this.page++;
@@ -117,13 +97,13 @@
 							if (res.data.length === 0) {
 								this.hasMore = false; // 没有更多数据
 							} else {
-								if (this.list[this.current].type === 'users') {
-									// 处理用户数据
-									this.currentItems = [...this.currentItems, ...res.data];
-								} else if (this.list[this.current].type === 'posts') {
-									// 处理帖子数据
-									this.currentItems = [...this.currentItems, ...res.data];
-								}
+
+								// 处理用户数据
+								this.currentItems = [...this.currentItems, ...res.data];
+
+								// 处理帖子数据
+
+
 								this.dataCache[apiEndpoint] = this.currentItems;
 							}
 						} else {
@@ -205,8 +185,9 @@
 		height: 100vh;
 		/* 占满视口高度 */
 	}
-	.slot-wrap{
-		padding: 0 50rpx;
+
+	.slot-wrap {
+		padding: 0 150rpx;
 	}
 
 	.swiper {
