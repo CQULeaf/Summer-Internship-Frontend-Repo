@@ -17,21 +17,33 @@
 							<view class="list-item" v-for="(item, index) in currentItems" :key="index">
 								<image class="useravatar" :src="item.cover"></image>
 								<text class="item-title">{{item.name}}</text>
+								<text class="item-title">{{item.description}}</text>
 							</view>
 						</view>
 						
 						<!-- 帖子列表 -->
 						<view v-if="list[current].type === 'recommend'">
+							<!-- 渲染指令 -->
 							<view class="list-item" v-for="(post, index) in currentItems" :key="index">
-								<text class="post-title">{{post.title}}</text>
+								<!-- key为每个渲染元素 提供唯一的key属性 -->
+								<image class="useravatar" :src="post.cover"></image>
+								<text class="item-title">{{post.name}}</text>
+								<text class="item-title">{{post.description}}</text>
+								<!-- post.title元素属性 -->
 							</view>
 						</view>
+						
 					</view>
 				</scroll-view>
 			</swiper-item>
 		</swiper>
 	</view>
 </template>
+
+
+
+
+
 
 <script>
 	export default {
@@ -41,12 +53,13 @@
 					{
 						name: '关注',
 						type: 'like',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/corner/superWordNameClub'
+						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/corner/superWordNameClub',
+						//api连接
 					},
 					{
 						name: '推荐',
 						type: 'recommend',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/corner/Superwordname_club'
+						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/corner/superWordNameClub'
 					}
 				],
 				current: 0,
@@ -68,37 +81,59 @@
 				this.fetchUserList(this.list[this.current].api, this.page);
 			},
 			fetchUserList(apiEndpoint, page) {
-				this.loading = true;
-				uni.request({
-					url: `${apiEndpoint}?page=${page}`, // 使用模板字符串动态替换变量
-					method: 'GET',
-					success: (res) => {
-						console.log(res)
-						if (res.statusCode === 200) {
-							if (res.data.length === 0) {
-								this.hasMore = false;
-							} else {
-								this.currentItems = [...this.currentItems, ...res.data];
-								this.dataCache[apiEndpoint] = this.currentItems;
-								console.log(currentItems)
-							}
-						} else {
-							uni.showToast({
-								title: '获取数据失败',
-								icon: 'none'
-							});
-						}
-					},
-					fail: (err) => {
-						uni.showToast({
-							title: '请求失败',
-							icon: 'none'
-						});
-					},
-					complete: () => {
-						this.loading = false;
-					}
-				});
+			    this.loading = true;
+			    uni.request({
+			        url: `${apiEndpoint}?page=${page}`,
+			        method: 'GET',
+			        success: (res) => {
+						console.log('API响应:', res.data);
+						    console.log('API响应类型:', typeof res.data);
+			            console.log('请求成功:', res);
+						 console.log('返回的数据:', res.data.data);
+			            if (res.statusCode === 200) {
+							
+							
+							
+							let items = res.data;
+							        // 确保items是数组
+							        if (!Array.isArray(items)) {
+							            // 如果不是数组，尝试将其转换为数组
+							            if (items !== null && typeof items === 'object') {
+							                items = Object.values(items);
+							            } else {
+							                // 如果items不是对象或者为null，则设置为空数组
+							                items = [];
+							            }
+							        }
+							        if (items.length === 0) {
+							            this.hasMore = false;
+							        } else {
+							            this.currentItems = [...this.currentItems, ...items];
+							            this.dataCache[apiEndpoint] = this.currentItems;
+							        }
+							    } else {
+							        uni.showToast({
+							            title: '获取数据失败',
+							            icon: 'none'
+							        });
+							  
+			            
+			            }
+			        },
+			        fail: (err) => {
+			            console.error('请求失败:', err);
+			            uni.showToast({
+			                title: '请求失败',
+			                icon: 'none'
+			            });
+			        },
+			        complete: () => {
+			            this.loading = false;
+			        }
+			    });
+			},
+			handleTouchStart(e) {
+				this.touchStartX = e.touches[0].clientX;
 			},
 			handleTouchEnd(e) {
 				this.touchEndX = e.changedTouches[0].clientX;
@@ -111,14 +146,14 @@
 			tabsChange(index) {
 				this.swiperCurrent = index;
 				this.current = index;
-				this.page = 1;
-				this.hasMore = true;
-				this.currentItems = [];
-				this.loading = true;
+				this.page = 1;//充值页码
+				this.hasMore = true;//重新设置更多数据标志
+				this.currentItems = [];//清空用户列表
+				this.loading = true;//开始价值
 				this.fetchUserList(this.list[index].api, this.page);
 			},
 			transition(e) {
-				this.handleTouchEnd(e);
+				this.handleTouchEnd(e);//处理滑动
 				let dx = e.detail.dx;
 				this.$refs.uTabs.setDx(dx);
 			},
@@ -147,6 +182,11 @@
 						}
 					};
 				</script>
+				
+				
+				
+				
+				
 				
 				
 				<style>

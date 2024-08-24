@@ -18,7 +18,7 @@
 						<!-- 用户列表 -->
 						<view class="list-item" v-for="(item, index) in currentItems" :key="index">
 							<image class="useravatar" :src="item.avatar"></image>
-							<text class="item-title">{{item.nickname}}</text>
+							<text class="item-title">{{item.username}}</text>
 						</view>
 					</view>
 				</scroll-view>
@@ -99,7 +99,7 @@
 							} else {
 
 								// 处理用户数据
-								this.currentItems = [...this.currentItems, ...res.data];
+								this.currentItems = [...this.currentItems, ...res.data.data];
 
 								// 处理帖子数据
 
