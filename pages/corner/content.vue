@@ -1,3 +1,6 @@
+
+<!-- 点击里面的帖子跳转到post -->
+
 <template>
 	<view class="wrap">
 		<!-- 新增的板块，用于展示头像、标题、描述、关注数和帖子数 -->
@@ -138,7 +141,7 @@
     page {
         background-color: rgb(240, 240, 240);
         /* 添加页面的上下内边距 */
-        padding-top: 100px; /* 页面顶部内边距 */
+        padding-top: 10px; /* 页面顶部内边距 */
         padding-bottom: 100px; /* 页面底部内边距 */
     }
 </style>
@@ -221,6 +224,7 @@
 			background-color: #ffffff;
 			padding:50rpx;//超话框的宽度
 			margin-bottom: 10rpx; //超话和帖子之间的距离
+			
 		
 		}
 		
@@ -243,17 +247,17 @@
 		.description {
 			font-size: 28rpx;
 			color: #666;
-			margin-top: 10rpx;
+			margin-top: 0rpx;
 		}
 		
 		.stats {
-			display: flex;
-			margin-top: 10rpx;
+			display: flex;//没啥用
+			margin-top: 20rpx;//关注和介绍的距离
 		}
 		
 		.stat {
-			font-size: 24rpx;
+			font-size: 24rpx;//字体大小
 			color: #999;
-			margin-right: 20rpx;
+			margin-right: 30rpx;//关注和帖子的排版
 		}
 </style>
