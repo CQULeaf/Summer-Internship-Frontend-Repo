@@ -70,9 +70,6 @@ export default {
 					date: '12-25 18:58',
 					contentText: '赞了你的评论',
 					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-					allReply: 12,
-					likeNum: 33,
-					isLike: false,
 					replyList: [
 						{
 							name: '雷焱丹',
@@ -85,9 +82,6 @@ export default {
 					name: '陈榕',
 					date: '01-25 13:58',
 					contentText: '赞了你的帖子',
-					allReply: 0,
-					likeNum: 11,
-					isLike: false,
 					url: 'https://cdn.uviewui.com/uview/template/niannian.jpg',
 				},
 				{
@@ -95,9 +89,6 @@ export default {
 					name: '马逸民',
 					date: '03-25 13:58',
 					contentText: '赞了你的评论',
-					allReply: 0,
-					likeNum: 21,
-					isLike: false,
 					allReply: 2,
 					url: '../../../static/logo.png',
 					replyList: [
@@ -114,9 +105,6 @@ export default {
 					date: '06-20 13:58',
 					contentText: '赞了你的帖子',
 					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-					allReply: 0,
-					likeNum: 150,
-					isLike: false
 				},
 				{
 					id: 5,
@@ -124,9 +112,6 @@ export default {
 					date: '06-25 20:40',
 					contentText: '赞了你的帖子',
 					url: 'https://cdn.uviewui.com/uview/template/niannian.jpg',
-					allReply: 0,
-					likeNum: 150,
-					isLike: false
 				}
 			];
 		}
