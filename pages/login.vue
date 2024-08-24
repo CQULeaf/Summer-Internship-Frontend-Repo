@@ -5,7 +5,7 @@
 				<div class="login-wrapper">
 					<div class="header">登录</div>
 					<div class="form-wrapper">
-						<input type="text" name="username" placeholder="请输入用户名" class="input-item" v-model="user.name">
+						<input type="text" name="username" placeholder="请输入用户名" class="input-item" v-model="user.username">
 						<input type="password" name="password" placeholder="请输入密码" class="input-item" v-model="user.password">
 						<div class="btn" @click="login">登录</div>
 						<div class="btn" @click="register">注册</div>
@@ -22,17 +22,39 @@
 		{
 			return{
 				user:{
-					name:"",
+					username:"",
 					password:""
-				}
+				},
+				account:''
 			}
 		},
-        name:"Login",
-		methods:{
 		
+		methods:{
+			login:function(){
+				console.log(this.user)
+				uni.request({
+					url:'http://localhost:8080/user/login',
+					data:this.user,
+					method:"POST",
+					header:{
+						'Content-Type': 'application/json'
+					},
+					success: (res) => {
+						uni.setStorageSync('nowAccount', res.data);
+					}
+				});
+				const value = uni.getStorageSync('nowAccount');
+				console.log(value)
+				
+				if (value.code===200){
+					uni.switchTab({
+						url: '/pages/me/mypage'
+					});
+				};
+			},
+			
 			register(){
 				console.log("注册")
-				
 				uni.navigateTo({
 					url:"/pages/register"
 				})

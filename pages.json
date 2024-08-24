@@ -1,27 +1,61 @@
 {
-    "easycom": {
+	"easycom": {
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
-    },
+	},
 	"pages": [
 		{
-			"path" : "pages/me/mypage",
-			"style" : 
-			{
-				"navigationBarTitleText" : "我的"
+			"path": "pages/login",
+			"style": {
+				"navigationStyle": "custom"
 			}
 		},
 		{
-			"path" : "pages/tabbar",
+			"path" : "pages/home/homepage",
 			"style" : 
 			{
-				"navigationBarTitleText" : "我的"
+				"navigationBarTitleText" : "主页"
 			}
 		},
 		{
-			"path" : "pages/me/setting/setting",
-			"style" : 
-			{
-				"navigationBarTitleText" : "设置"
+			"path": "pages/me/mypage",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/info/msg/bulletin/bulletin",
+			"style": {
+				"navigationBarTitleText": "公告"
+			}
+		},
+		{
+			"path": "pages/info/msg/bulletin/bulletinCheck",
+			"style": {
+				"navigationBarTitleText": "公告"
+			}
+		},
+		{
+			"path": "pages/tabbar1",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/tabbar2",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/tabbar3",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/me/setting/setting",
+			"style": {
+				"navigationBarTitleText": "设置"
 			}
 		},
 		{
@@ -31,16 +65,14 @@
 			}
 		},
 		{
-			"path" : "pages/me/myinfo/InformationChange",
-			"style" : 
-			{
-				"navigationBarTitleText" : "个人信息修改"
+			"path": "pages/me/myinfo/InformationChange",
+			"style": {
+				"navigationBarTitleText": "个人信息修改"
 			}
 		},
 		{
 			"path": "pages/index/index",
-			"style": 
-			{
+			"style": {
 				"navigationBarTitleText": "uni-app"
 			}
 		},
@@ -52,41 +84,50 @@
 			}
 		},
 		{
-			"path" : "pages/me/setting/help",
-			"style" : 
-			{
-				"navigationBarTitleText" : "帮助与客服"
+			"path": "pages/me/setting/help",
+			"style": {
+				"navigationBarTitleText": "帮助与客服"
 			}
 		},
 		{
-			"path" : "pages/me/setting/change_password",
-			"style" : 
-			{
-				"navigationBarTitleText" : "修改密码"
+			"path": "pages/me/setting/change_password",
+			"style": {
+				"navigationBarTitleText": "修改密码"
 			}
 		},
 		{
 			"path": "pages/me/concern",
 			"style": {
 				"navigationStyle": "custom"
-		}
+			}
 		},
 		{
-			"path" : "pages/login",
-			"style" : 
-			{
+			"path": "pages/info/infopage",
+			"style": {
 				"navigationStyle": "custom"
 			}
 		},
 	{
-		"path": "pages/info/info",
+		"path": "pages/info/treecave",
 		"style": {
 			"navigationStyle": "custom"
 		}
-	},{
-			"path" : "pages/register",
-			"style" : 
-			{
+	},
+	{
+		"path": "pages/info/msg/like",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	},
+	{
+		"path": "pages/info/msg/comment",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	},
+	{
+			"path": "pages/register",
+			"style": {
 				"navigationStyle": "custom"
 			}
 		},
@@ -98,7 +139,20 @@
 					"navigationBarTitleText": "聚"
 				}
 			},
-		
+		{
+				"path" : "pages/corner/Superwordname_club",
+				"style" : 
+				{
+					"navigationBarTitleText": "聚"
+				}
+			},
+			{
+					"path" : "pages/corner/waterfall",
+					"style" : 
+					{
+						"navigationBarTitleText": "聚"
+					}
+				},
 		
 		{
 			"path": "uview-ui/components/u-avatar-cropper/u-avatar-cropper",
@@ -107,6 +161,9 @@
 				"navigationBarBackgroundColor": "#000000"
 			}
 		}
+		
+		
+		
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -122,34 +179,35 @@
 		"selectedColor": "#303133",
 		"backgroundColor": "#FFFFFF",
 		"borderStyle": "black",
-		"list": [{
-				"pagePath": "pages/tabbar",
+		"list": [
+			{
+				"pagePath": "pages/tabbar1",
 				"iconPath": "/static/newhomeg.png",
 				"selectedIconPath": "/static/newhomep.png",
 				"text": "家"
 			},
 			{
-				"pagePath": "pages/tabbar",
-				"iconPath":  "/static/happygrey.png",
-				"selectedIconPath":"/static/happierp.png",
+				"pagePath": "pages/tabbar2",
+				"iconPath": "/static/happygrey.png",
+				"selectedIconPath": "/static/happierp.png",
 				"text": "聚"
 			},
 			{
-				"pagePath": "pages/tabbar",
+				"pagePath": "pages/tabbar3",
 				"iconPath": "/static/yanblack.png",
 				"selectedIconPath": "/static/yanpink.png",
 				"text": "言"
 			},
 			{
-				"pagePath": "pages/tabbar",
-				"iconPath":  "/static/messagegrey.png",
-				"selectedIconPath":"/static/messagep.png",
+				"pagePath": "pages/info/infopage",
+				"iconPath": "/static/messagegrey.png",
+				"selectedIconPath": "/static/messagep.png",
 				"text": "讯"
 			},
 			{
-				"pagePath": "pages/me/me",
-				"iconPath":  "/static/megrey.png",
-				"selectedIconPath":"/static/mep.png",
+				"pagePath": "pages/me/mypage",
+				"iconPath": "/static/megrey.png",
+				"selectedIconPath": "/static/mep.png",
 				"text": "我"
 			}
 		]

@@ -1,9 +1,12 @@
 <template>
 	<view>
-		<view v-if="logined">
-			<view>
-				<view class="u-m-r-10 u-avatar-wrap">
-					<image @tap="preAvatar" class="u-avatar-demo" :src="this.user.avatar"></image>
+		<view v-if="logined" v-model="this.user">
+			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
+				<view class="u-m-r-10">
+					<u-avatar :src="user.avatar" size="140"></u-avatar>
+				</view>
+				<view class="u-flex-1">
+					<view class="u-font-18 u-p-b-20 u-p-l-28">{{user.nickname}}</view>
 				</view>
 			</view>
 
@@ -62,17 +65,25 @@
 				href: 'https://uniapp.dcloud.io/component/README?id=uniui',
 				user: {
 					avatar: '/static/logo.png',
-					nickname: '1111'
+					nickname: '1111',
+					username:''
 				},
 				pic: 'https://uviewui.com/common/logo.png',
 				show: true,
 				// 定义一个变量
 				logined: true,
+				user:{
+					username:"游客"
+				},
 				list: '',
 				current: 4
 			}
 		},
 		onLoad() {
+			const value = uni.getStorageSync('nowAccount');
+			this.user=value.data
+			this.logined=(value.code==200)
+			console.log(value.code)
 			this.list = [{
 					iconPath: "/static/newhomeg.png",
 					selectedIconPath: "/static/newhomep.png",
@@ -102,7 +113,7 @@
 					selectedIconPath: "/static/messagep.png",
 					text: '讯',
 					customIcon: false,
-					pagePath: '/pages/tabbar'
+					pagePath: '/pages/info/infopage'
 				},
 				{
 					iconPath: "/static/megrey.png",
@@ -110,9 +121,16 @@
 					text: '我',
 					isDot: false,
 					customIcon: false,
-					pagePath: '/pages/me/me'
+					pagePath: '/pages/me/mypage'
 				},
 			]
+		},
+		onShow() {
+			//判断用户是否登录
+			const value = uni.getStorageSync('nowAccount');
+			this.user=value.data
+			this.logined=(value.code==200)
+			console.log(this.logined)
 		},
 		methods: {
 			fetchUser() {
