@@ -3,19 +3,29 @@
 		<view>
 			<view class="u-m-r-10 u-avatar-wrap">
 				<image class="u-avatar-demo" :src="user.avatar"></image>
+				<view>{{this.user.nickname}}</view>
 			</view>
 		</view>
 		
 		<view class="u-m-t-20">
 			<u-cell-group>
-				<u-cell-item title="昵称" :arrow="false" v-model="this.user.nickname"></u-cell-item>
-				<u-cell-item title="个人简介" :arrow="false" v-model="user.bio"></u-cell-item>
-				<u-cell-item title="ID" :arrow="false" v-model="user.id"></u-cell-item>
-				<u-cell-item title="生日" :arrow="false" v-model="user.birthday"></u-cell-item>
-				<u-cell-item title="性别" :arrow="false" v-model="user.gender"></u-cell-item>
-				<u-cell-item title="年龄" :arrow="false" v-model="user.age"></u-cell-item>
-				<u-cell-item title="电子邮箱" :arrow="false" v-model="user.email"></u-cell-item>
-				<u-cell-item title="手机号码" :arrow="false" v-model="user.phone_number"></u-cell-item>
+				<u-cell-item title="一句话介绍" :arrow="false" v-model="this.user.headline"></u-cell-item>
+			</u-cell-group>
+			<u-cell-group class="u-m-t-20">
+				<view>
+					<u-cell-item title="ID" :arrow="false" v-model="user.userId"></u-cell-item>
+					<u-cell-item title="性别" :arrow="false" v-model="user.gender"></u-cell-item>
+					<u-cell-item title="电子邮箱" :arrow="false" v-model="user.email"></u-cell-item>
+					<u-cell-item title="手机号码" :arrow="false" v-model="user.phoneNumber"></u-cell-item>
+				</view>
+			</u-cell-group>
+			<u-cell-group class="u-m-t-20">
+				<view>
+					<u-cell-item title="个人简介" :arrow="false" v-model="user.bio"></u-cell-item>
+					<u-cell-item title="家乡" :arrow="false" v-model="user.hometown"></u-cell-item>
+					<u-cell-item title="专业" :arrow="false" v-model="user.major"></u-cell-item>
+					<u-cell-item title="mbti" :arrow="false" v-model="user.mbti"></u-cell-item>
+				</view>
 			</u-cell-group>
 		</view>
 		
@@ -32,7 +42,7 @@
 		data() {
 			return {
 				user:{
-					id:123,
+					userId:123,
 					username:"",
 					email:"6666666@qq.com",
 					phone_number:"15252525252",
@@ -49,19 +59,6 @@
 			}
 		},
 		
-		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
-				var hit
-				this.current=this.user.gender=='男' ? 0:1
-				const eventChannel = this.getOpenerEventChannel();
-				eventChannel.on('acceptDataFromOpenerPage', function(data){
-					hit=data.data
-				})
-				//this.user.id=hit.id
-				console.log(hit.id)
-				this.user=hit
-				console.log((this.user))
-		},
-		
 		onShow(){
 			const value = uni.getStorageSync('nowAccount');
 			this.user=value.data
@@ -70,11 +67,7 @@
 		methods: {
 			InformationChange(user){//修改个人信息
 				uni.navigateTo({
-					url:'/pages/me/myinfo/InformationChange',
-					success: function(res) {
-						console.log(user)
-					    res.eventChannel.emit('acceptDataFromOpenerPage',{ data: user})
-					}
+					url:'/pages/me/myinfo/InformationChange'
 				})
 				
 			},
@@ -92,7 +85,7 @@
 
 <style lang="scss">
 page{
-	background-color: #ffffff;
+	background-color: #efefef;
 }
 
 .u-avatar-wrap {

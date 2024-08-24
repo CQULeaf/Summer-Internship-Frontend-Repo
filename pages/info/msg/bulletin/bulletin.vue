@@ -1,6 +1,5 @@
 <template>
 	<view>
-		<u-navbar :background="background" title-color="#fff" title="系统公告"></u-navbar>
 		<view class="bulletin" v-for="(res, index) in bulletinList" :key="res.id">
 			<view class="right">
 				<view class="content">{{ res.bulletinTitle }}</view>

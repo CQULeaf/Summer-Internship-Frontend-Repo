@@ -1,12 +1,13 @@
 <template>
 	<view>
 		<view v-if="logined" v-model="this.user">
-			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
-				<view class="u-m-r-10">
-					<u-avatar :src="user.avatar" size="140"></u-avatar>
-				</view>
-				<view class="u-flex-1">
-					<view class="u-font-18 u-p-b-20 u-p-l-28">{{user.nickname}}</view>
+			<view class="u-demo-wrap">
+				<view class="u-demo-area">
+					<u-toast ref="uToast"></u-toast>
+					<view class="u-avatar-wrap">
+						<image @click="chooseAvatar" class="u-avatar-demo" v-if="this.user.avatar" :src="this.user.avatar" mode="aspectFill"></image>
+						<view>{{this.user.nickname}}</view>
+					</view>
 				</view>
 			</view>
 
@@ -64,7 +65,7 @@
 			return {
 				href: 'https://uniapp.dcloud.io/component/README?id=uniui',
 				user: {
-					avatar: '/static/logo.png',
+					avatar: '',
 					nickname: '1111',
 					username:''
 				},
@@ -72,9 +73,6 @@
 				show: true,
 				// 定义一个变量
 				logined: true,
-				user:{
-					username:"游客"
-				},
 				list: '',
 				current: 4
 			}
@@ -90,7 +88,7 @@
 					text: '家',
 					isDot: true,
 					customIcon: false,
-					pagePath: '/pages/tabbar'
+					pagePath: '/pages/home/homepage'
 				},
 				{
 					iconPath: "/static/happygrey.png",
@@ -130,35 +128,39 @@
 			const value = uni.getStorageSync('nowAccount');
 			this.user=value.data
 			this.logined=(value.code==200)
-			console.log(this.logined)
+			// const avatarData = uni.getStorageSync('avatarData')
+			// this.user.avatar=avatarData
+			// uni.removeStorageSync('avatarData')
+			//console.log(this.user.avatar)
 		},
-		methods: {
-			fetchUser() {
-				uni.request({
-					url: "http://127.0.0.1:4523/m1/5010181-4669608-default/user/me", //在fetchUserList方法中的请求URL使用了'${apiEndpoint}?page=${page}'，这会导致字符串直接拼接而非动态生成变量。正确的做法应该是使用模板字符串的语法来动态替换变量
-					data: this.user,
-					method: 'GET',
-					success: (res) => {
-						if (res.statusCode === 200) {
-							console.log(res)
-						} else {
-							uni.showToast({
-								title: '获取数据失败',
-								icon: 'none'
-							});
-						}
-					},
-					fail: (err) => {
-						uni.showToast({
-							title: '请求失败',
-							icon: 'none'
-						});
-					},
-					complete: () => {
-						this.loading = false;
+		created() {
+			// 监听从裁剪页发布的事件，获得裁剪结果
+			uni.$on('uAvatarCropper', path => {
+				const value = uni.getStorageSync('nowAccount');
+				value.data.avatar=path
+				uni.setStorageSync('nowAccount',value)
+				// 可以在此上传到服务端
+				uni.uploadFile({
+					url: 'http://localhost:1234/user/updateAvatar',
+					filePath: path,
+					formData: this.user.username,
+					name: 'file',
+					complete: (res) => {
+						console.log(res);
 					}
 				});
-			},
+			})
+			//console.log(this.user.avatar)
+			uni.request({
+				url:'http://localhost:1234/user/updateAvatar',
+				data:this.user,
+				method:'POST',
+				header:{
+					'Content-Type': 'application/json'
+				},
+			})
+		},
+		methods: {
 			goToProfile() {
 				uni.navigateTo({
 					url: '/pages/me/setting'
@@ -185,13 +187,19 @@
 				console.log("退出"),
 				this.logined = false
 			},
-			preAvatar() {
-				wx.previewImage({
-					current: '', // 当前显示图片的 http 链接
-					urls: [this.user.avatar] // 需要预览的图片 http 链接列表
+			chooseAvatar() {
+				this.$u.route({
+					url: '/uview-ui/components/u-avatar-cropper/u-avatar-cropper',
+					params: {
+						// 输出图片宽度，高等于宽，单位px
+						destWidth: 300,
+						// 裁剪框宽度，高等于宽，单位px
+						rectWidth: 200,
+						// 输出的图片类型，如果'png'类型发现裁剪的图片太大，改成"jpg"即可
+						fileType: 'jpg',
+					}
 				})
-			}
-
+			},
 		},
 	}
 </script>

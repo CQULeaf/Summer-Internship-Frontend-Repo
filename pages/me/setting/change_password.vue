@@ -18,7 +18,7 @@
 				<view class="font">
 					新密码
 				</view>
-				<input type="password" placeholder="输入新密码" v-model="user.newPassword" />
+				<input type="password" placeholder="输入新密码" v-model="user.newPassword1" />
 			</view>
 
 			<!-- 再次输入新密码 -->
@@ -26,7 +26,7 @@
 				<view class="font">
 					确认密码
 				</view>
-				<input type="password" placeholder="再输入密码" v-model="user.confirmPassword" />
+				<input type="password" placeholder="再输入密码" v-model="user.newPassword2" />
 			</view>
 
 			<!-- 提交按钮 -->
@@ -42,15 +42,22 @@ export default {
   data() {
     return {
       user: {
-        oldPassword: '1234',
-        newPassword: '',
-        confirmPassword: ''
+        oldPassword: '',
+        newPassword1: '',
+        newPassword2: '',
+		username:''
       }
-    };
+    }
   },
+  
+  onShow(){
+  	const value = uni.getStorageSync('nowAccount');
+  	this.user.username=value.data.username
+  },
+  
   methods: {
     submitForm() {
-      if (this.newPassword !== this.confirmPassword) {
+      if (this.newPassword2 !== this.newPassword1) {
         uni.showToast({
           title: '两次输入的密码不一致',
           icon: 'none'
@@ -58,31 +65,24 @@ export default {
         return;
       }
 
-      // 构建请求数据
-      const data = {
-        oldPassword: this.oldPassword,
-        newPassword: this.newPassword
-      };
-
       // 发送请求到后端 API
       uni.request({
-        url:'http://127.0.0.1:4523/m1/5010181-4669608-default/auth/account_settings', // 你的后端 API URL
-        method: 'POST',
-        data: data,
-        header: {
-          'content-type': 'application/json' // 根据需要设置请求
+        url:'http://localhost:1234/user/updatePassword',
+        data:this.user,
+        method:"POST",
+        header:{
+        	'Content-Type': 'application/json'
         },
         success: (res) => {
-          // 请求成功的处理逻辑
-          if (res.statusCode === 200 && res.data.success) {
+          console.log(res)
+          if (res.statusCode === 200) {
             uni.showToast({
               title: '密码修改成功',
               icon: 'success'
             });
-            // 清空输入框
-            this.oldPassword = '';
-            this.newPassword = '';
-            this.confirmPassword = '';
+			uni.redirectTo({
+				url:'/pages/me/setting/setting'
+			})
           } else {
             // 处理其他情况，比如错误消息
             uni.showToast({

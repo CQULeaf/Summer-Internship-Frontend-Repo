@@ -17,6 +17,13 @@
 			}
 		},
 		{
+			"path" : "pages/home/reply",
+			"style" : 
+			{
+				"navigationBarTitleText" : "评论"
+			}
+		},
+		{
 			"path": "pages/me/mypage",
 			"style": {
 				"navigationBarTitleText": "我的"
@@ -32,12 +39,6 @@
 			"path": "pages/info/msg/bulletin/bulletinCheck",
 			"style": {
 				"navigationBarTitleText": "公告"
-			}
-		},
-		{
-			"path": "pages/tabbar1",
-			"style": {
-				"navigationBarTitleText": "我的"
 			}
 		},
 		{
@@ -181,7 +182,7 @@
 		"borderStyle": "black",
 		"list": [
 			{
-				"pagePath": "pages/tabbar1",
+				"pagePath": "pages/home/homepage",
 				"iconPath": "/static/newhomeg.png",
 				"selectedIconPath": "/static/newhomep.png",
 				"text": "家"
