@@ -24,36 +24,37 @@
 				user:{
 					username:"",
 					password:""
-				}
+				},
+				account:''
 			}
 		},
-        name:"Login",
+		
 		methods:{
 			login:function(){
+				console.log(this.user)
 				uni.request({
 					url:'http://localhost:8080/user/login',
 					data:this.user,
 					method:"POST",
-					success: (res) => {//成功返回之后
-						console.log(res,"1111****")
-						if(res.data.code*1==200){
-							try{
-								uni.setStorageSync("user",res.data.result)
-							}
-							catch(e){
-								this.$u.toast("存储用户信息异常")
-							}
-							uni.navigateBack()
-						}
-						else{
-							this.$u.toast("登录失败,用户名密码错误")
-						}
+					header:{
+						'Content-Type': 'application/json'
+					},
+					success: (res) => {
+						uni.setStorageSync('nowAccount', res.data);
 					}
 				});
+				const value = uni.getStorageSync('nowAccount');
+				console.log(value)
+				
+				if (value.code===200){
+					uni.switchTab({
+						url: '/pages/me/mypage'
+					});
+				};
 			},
+			
 			register(){
 				console.log("注册")
-				
 				uni.navigateTo({
 					url:"/pages/register"
 				})

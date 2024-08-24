@@ -1,14 +1,13 @@
 <template>
 	<view>
-		<view v-if="logined">
+		<view v-if="logined" v-model="this.user">
 			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
 				<view class="u-m-r-10">
-					<u-avatar :src="pic" size="140"></u-avatar>
+					<u-avatar :src="user.avatar" size="140"></u-avatar>
 				</view>
 				<view class="u-flex-1">
-					<view class="u-font-18 u-p-b-20">{{user.username}}</view>
+					<view class="u-font-18 u-p-b-20 u-p-l-28">{{user.nickname}}</view>
 				</view>
-				
 			</view>
 
 			<u-grid :col="8" :border="false">
@@ -66,7 +65,8 @@
 				href: 'https://uniapp.dcloud.io/component/README?id=uniui',
 				user: {
 					avatar: '/static/logo.png',
-					nickname: '1111'
+					nickname: '1111',
+					username:''
 				},
 				pic: 'https://uviewui.com/common/logo.png',
 				show: true,
@@ -80,6 +80,10 @@
 			}
 		},
 		onLoad() {
+			const value = uni.getStorageSync('nowAccount');
+			this.user=value.data
+			this.logined=(value.code==200)
+			console.log(value.code)
 			this.list = [{
 					iconPath: "/static/newhomeg.png",
 					selectedIconPath: "/static/newhomep.png",
@@ -122,18 +126,11 @@
 			]
 		},
 		onShow() {
-			console.log("页面展示了")
 			//判断用户是否登录
-			const value=uni.getStorageSync("user")
-			if(value)
-			{
-				this.logined=true
-				this.name=value
-			}
-			else
-			{
-				this.logined=false
-			}
+			const value = uni.getStorageSync('nowAccount');
+			this.user=value.data
+			this.logined=(value.code==200)
+			console.log(this.logined)
 		},
 		methods: {
 			fetchUser() {

@@ -8,6 +8,7 @@
                     <input type="password" name="password" placeholder="密码" class="input-item" v-model="user.password1">
                     <input type="password" name="repassword" placeholder="再次确认密码" class="input-item" v-model="user.password2">
                     <div class="btn" @click="register">注册</div>
+					<view @click="backtologin">已经注册账号</view>
                 </div>
             </div>
 		</u-form>
@@ -38,13 +39,21 @@
 						console.log(res)
 						if(res.data.code==200)
 						{
-							uni.navigateBack()
+							uni.redirectTo({
+								url: '/pages/login'
+							});
 						}
 						else
 						{
 							this.$u.toast("注册失败，请更换用户名哦")
 						}
 					}
+				})
+			},
+			
+			backtologin(){
+				uni.navigateTo({
+					url:'/pages/login'
 				})
 			}
 		}

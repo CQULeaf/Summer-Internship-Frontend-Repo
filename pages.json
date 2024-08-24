@@ -4,15 +4,22 @@
 	},
 	"pages": [
 		{
-			"path": "pages/me/mypage",
-			"style": {
-				"navigationBarTitleText": "我的"
-			}
-		},
-		{
 			"path": "pages/login",
 			"style": {
 				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/home/homepage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "主页"
+			}
+		},
+		{
+			"path": "pages/me/mypage",
+			"style": {
+				"navigationBarTitleText": "我的"
 			}
 		},
 		{
