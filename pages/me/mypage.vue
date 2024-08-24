@@ -8,6 +8,7 @@
 				<view class="u-flex-1">
 					<view class="u-font-18 u-p-b-20">{{user.username}}</view>
 				</view>
+				
 			</view>
 
 			<u-grid :col="8" :border="false">
@@ -29,7 +30,6 @@
 				</u-grid-item>
 			</u-grid>
 		</view>
-		
 		<view v-else>
 			<u-navbar :is-back="false" title="　" :border-bottom="false">
 				<view class="u-flex u-row-right" style="width: 100%;">
@@ -46,8 +46,11 @@
 					<view class="u-font-18 u-p-b-20">未登录</view>
 				</view>
 			</view>
+
+
 			<view class="u-m-t-20">
 				<u-cell-group>
+					<!-- 点击事件 -->
 					<u-cell-item icon="man-add" title="登录" @click="login()"></u-cell-item>
 				</u-cell-group>
 			</view>
@@ -69,8 +72,11 @@
 				show: true,
 				// 定义一个变量
 				logined: true,
+				user:{
+					username:"游客"
+				},
 				list: '',
-				current: 0
+				current: 4
 			}
 		},
 		onLoad() {
@@ -80,7 +86,7 @@
 					text: '家',
 					isDot: true,
 					customIcon: false,
-					pagePath: '/pages/tabbar1'
+					pagePath: '/pages/tabbar'
 				},
 				{
 					iconPath: "/static/happygrey.png",
@@ -88,7 +94,7 @@
 					text: '聚',
 					isDot: true,
 					customIcon: false,
-					pagePath: '/pages/tabbar2'
+					pagePath: '/pages/tabbar'
 				},
 				{
 					iconPath: "/static/yanblack.png",
@@ -96,7 +102,7 @@
 					text: '言',
 					midButton: true,
 					customIcon: false,
-					pagePath: '/pages/tabbar3'
+					pagePath: '/pages/tabbar'
 				},
 				{
 					iconPath: "/static/messagegrey.png",
@@ -111,12 +117,13 @@
 					text: '我',
 					isDot: false,
 					customIcon: false,
-					pagePath: '/pages/me/mypage'
+					pagePath: '/pages/me/me'
 				},
 			]
 		},
 		onShow() {
-			判断用户是否登录
+			console.log("页面展示了")
+			//判断用户是否登录
 			const value=uni.getStorageSync("user")
 			if(value)
 			{
@@ -177,13 +184,17 @@
 					url: "/pages/me/concern"
 				})
 			},
-			
+			quit() {
+				console.log("退出"),
+				this.logined = false
+			},
 			preAvatar() {
 				wx.previewImage({
 					current: '', // 当前显示图片的 http 链接
 					urls: [this.user.avatar] // 需要预览的图片 http 链接列表
 				})
 			}
+
 		},
 	}
 </script>
@@ -227,7 +238,7 @@
 		width: 54px;
 		height: 44px;
 
-		:active {
+		&:active {
 			background-color: #ededed;
 		}
 	}
