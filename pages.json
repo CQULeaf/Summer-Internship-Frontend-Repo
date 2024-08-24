@@ -98,7 +98,20 @@
 					"navigationBarTitleText": "聚"
 				}
 			},
-		
+		{
+				"path" : "pages/corner/Superwordname_club",
+				"style" : 
+				{
+					"navigationBarTitleText": "聚"
+				}
+			},
+			{
+					"path" : "pages/corner/waterfall",
+					"style" : 
+					{
+						"navigationBarTitleText": "聚"
+					}
+				},
 		
 		{
 			"path": "uview-ui/components/u-avatar-cropper/u-avatar-cropper",
@@ -107,6 +120,9 @@
 				"navigationBarBackgroundColor": "#000000"
 			}
 		}
+		
+		
+		
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

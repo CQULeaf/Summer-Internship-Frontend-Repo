@@ -23,13 +23,17 @@
 
     <!-- 2x2排列的四个小圆形图标 -->
     <view class="icons" style="margin-top: 70px;padding: 80px;">
-      <view class="icon" @click="toggleCategory('专业')" style="background-color:#f2b2c3;">专业</view>
-      <view class="icon" @click="toggleCategory('同乡')" style="background-color:#fed6e3;">同乡</view>
-	  
-	  <view class="icon" @click="toggleCategory('MBTI')" style="background-color: #f9e9ea;">MBTI</view>
-      <view class="icon" @click="toggleCategory('社团')" style="background-color: #ffe1e7 ;">社团</view>
-     
+      <!-- 专业图标太大了要继续改，下面或者里面有字  -->
+  <image class="icon" @click="toggleCategory('专业')" src="/static/speciality.png" style="background-color:#f2b2c3;">
+      <!-- 同乡 -->
+      <image class="icon" @click="toggleCategory('同乡')" src="/static/homie.png" style="background-color:#fed6e3;">
+      
+      <!-- MBTI -->
+      <image class="icon" @click="toggleCategory('MBTI')" src="/static/mbti.png" style="background-color: #f9e9ea;">
+      <!-- 社团 -->
+      <image class="icon" @click="toggleCategory('社团')" src="/static/society.png" style="background-color: #ffe1e7 ;">
     </view>
+
 
 <view>
 		<!-- 与包裹页面所有内容的元素u-page同级，且在它的下方 -->
