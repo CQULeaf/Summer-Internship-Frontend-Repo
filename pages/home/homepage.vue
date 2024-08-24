@@ -12,16 +12,7 @@
 				</swiper-item>
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
-						
-					</scroll-view>
-				</swiper-item>
-				<swiper-item class="swiper-item">
-					<scroll-view scroll-y style="height: 100%;width: 100%;">
-						
-					</scroll-view>
-				</swiper-item>
-				<swiper-item class="swiper-item">
-					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
+						<u-search placeholder="请输入关键字" v-model="keyword"></u-search>
 						
 					</scroll-view>
 				</swiper-item>
@@ -34,34 +25,27 @@
 export default {
 	data() {
 		return {
+			keyword:'',
 			orderList: [[], [], [], []],
 			current: 0,
 			swiperCurrent: 0,
 			tabsHeight: 0,
 			dx: 0,
 			loadStatus: ['loadmore','loadmore','loadmore','loadmore'],
+			list: [
+				{
+					name: '关注'
+				},
+				{
+					name: '推荐',
+				}
+			],
 		};
 	},
 	onLoad() {
 		this.getOrderList(0);
 		this.getOrderList(1);
 		this.getOrderList(3);
-	},
-	computed: {
-		// 价格小数
-		priceDecimal() {
-			return val => {
-				if (val !== parseInt(val)) return val.slice(-2);
-				else return '00';
-			};
-		},
-		// 价格整数
-		priceInt() {
-			return val => {
-				if (val !== parseInt(val)) return val.split('.')[0];
-				else return val;
-			};
-		}
 	},
 	methods: {
 		reachBottom() {
@@ -83,22 +67,6 @@ export default {
 			}
 			this.loadStatus.splice(this.current,1,"loadmore")
 		},
-		// 总价
-		totalPrice(item) {
-			let price = 0;
-			item.map(val => {
-				price += parseFloat(val.price);
-			});
-			return price.toFixed(2);
-		},
-		// 总件数
-		totalNum(item) {
-			let num = 0;
-			item.map(val => {
-				num += val.number;
-			});
-			return num;
-		},
 		// tab栏切换
 		change(index) {
 			this.swiperCurrent = index;
@@ -115,6 +83,10 @@ export default {
 	}
 };
 </script>
+
+
+
+
 
 <style>
 /* #ifndef H5 */

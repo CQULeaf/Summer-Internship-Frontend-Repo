@@ -31,6 +31,7 @@
 		
 		methods:{
 			login:function(){
+				console.log(this.user)
 				uni.request({
 					url:'http://localhost:1234/user/login',
 					data:this.user,

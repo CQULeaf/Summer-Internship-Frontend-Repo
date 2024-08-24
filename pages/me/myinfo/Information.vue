@@ -61,6 +61,11 @@
 				this.user=hit
 				console.log((this.user))
 		},
+		
+		onShow(){
+			const value = uni.getStorageSync('nowAccount');
+			this.user=value.data
+		},
 			
 		methods: {
 			InformationChange(user){//修改个人信息
