@@ -5,28 +5,32 @@
 				<view class="left">
 					<view class="heart-photo"><image :src="comment.pic" mode=""></image></view>
 					<view class="user-info">
-						<view class="name">{{ comment.name }}</view>
-						<view class="date">06-25 13:58</view>
+						<view class="name">{{ comment.nickname }}</view>
+						<view class="date">{{comment.createdAt}}</view>
 					</view>
 				</view>
 				<view class="right" :class="{ highlight: comment.isLike }">
-					{{ comment.likeNum }}
+					{{ comment.likeCount }}
 					<u-icon v-if="!comment.isLike" name="thumb-up" class="like" color="#9a9a9a" :size="30" @click="getLike"></u-icon>
 					<u-icon v-if="comment.isLike" name="thumb-up-fill" class="like" :size="30" @click="getLike"></u-icon>
 				</view>
 			</view>
-			<view class="content">{{ comment.contentText }}</view>
+			<view class="content u-font-40">{{ comment.title}}</view>
+			<view class="content u-p-t-30" >{{ comment.postContent }}</view>
+			<image :src="comment.pic" mode=""></image>
 		</view>
+		
+		<!-- 回复 -->
 		<view class="all-reply">
-			<view class="all-reply-top">全部回复（{{ comment.allReply }}）</view>
+			<view class="all-reply-top">全部回复{{ comment.allReply }}</view>
 			<view class="item" v-for="(item, index) in commentList" :key="index">
 				<view class="comment">
 					<view class="top">
 						<view class="left">
 							<view class="heart-photo"><image :src="item.url" mode=""></image></view>
 							<view class="user-info">
-								<view class="name">{{ item.name }}</view>
-								<view class="date">{{ item.date }}</view>
+								<view class="name">{{ item.nickname }}</view>
+								<view class="date">{{ item.createdAt }}</view>
 							</view>
 						</view>
 						<view class="right"  :class="{ highlight: item.isLike }">
@@ -47,13 +51,13 @@ export default {
 	data() {
 		return {
 			comment:{
-				id:'',
+				userId:'',
 				nickname: '',
 				date: '',
-				postText: '',
-				postTitle:'',
+				postContent: '',
+				title:'',
 				pic:'',
-				likeNum:'',
+				likeCount:'',
 				isLike:'',
 				},
 			commentList: [],
@@ -66,6 +70,16 @@ export default {
 	onShow(){
 		this.comment=uni.getStorageSync('postData');
 		console.log(this.com)
+		// this.comment = {
+		// 	id: 1,
+		// 	name: '叶轻眉',
+		// 	date: '12-25 18:58',
+		// 	contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
+		// 	pic: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
+		// 	allReply: 12,
+		// 	likeNum: 33,
+		// 	isLikes: false
+		// };
 	},
 	
 	methods: {
@@ -91,16 +105,7 @@ export default {
 
 		// 回复列表
 		getReply() {
-			this.comment = {
-				id: 1,
-				name: '叶轻眉',
-				date: '12-25 18:58',
-				contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-				pic: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-				allReply: 12,
-				likeNum: 33,
-				isLikes: false
-			};
+			
 			this.commentList = [
 				{
 					name: '新八几',

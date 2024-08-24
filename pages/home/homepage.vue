@@ -9,18 +9,18 @@
 					<scroll-view scroll-y style="height: 100%;width: 100%;">
 						<u-search placeholder="请输入关键字" v-model="keyword"></u-search>
 						<view class="post" v-for="(res, index) in postList" :key="res.id" @search="search" @custom="custom">
-							<view class="right" @click="toReply(res)">
-								<view class="content">{{ res.postTitle }}</view>
-								<view class="u-line-2">{{ res.postText }}</view>
+							<view class="right">
+								<view class="content" @click="toReply(res)">{{ res.title }}</view>
+								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
 								<u-image width="100%" height="300rpx" :src="res.pic"></u-image>
 								<view class="like" :class="{ highlight: res.isLike }">
-									<view class="num">{{ res.likeNum }}</view>
+									<view class="num">{{ res.likeCount }}</view>
 									<u-icon v-if="!res.isLike" name="thumb-up" :size="30" color="#9a9a9a" @click="getLike(index)"></u-icon>
 									<u-icon v-if="res.isLike" name="thumb-up-fill" :size="30" @click="getLike(index)"></u-icon>
 								</view>
 								<view class="top">
 									<view class="nickname">{{ res.nickname }}</view>
-									<view class="date">{{ res.date }}</view>
+									<view class="createdAt">{{ res.createdAt }}</view>
 								</view>
 							</view>
 						</view>
@@ -30,12 +30,12 @@
 					<scroll-view scroll-y style="height: 100%;width: 100%;">
 						<view class="post" v-for="(res, index) in postList" :key="res.id">
 							<view class="right">
-								<view class="content">{{ res.postTitle }}</view>
-								<view class="u-line-2">{{ res.postText }}</view>
+								<view class="content" @click="toReply(res)">{{ res.title }}</view>
+								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
 								<u-image width="100%" height="300rpx" :src="res.pic"></u-image>
 								<view class="top">
 									<view class="nickname">{{ res.nickname }}</view>
-									<view class="date">{{ res.date }}</view>
+									<view class="createdAt">{{ res.createdAt }}</view>
 								</view>
 							</view>
 						</view>
@@ -54,7 +54,6 @@ export default {
 			list:'',
 			current: 1,
 			keyword:'',
-			orderList: [[], [], [], []],
 			current: 0,
 			swiperCurrent: 0,
 			dx: 0,
@@ -70,7 +69,7 @@ export default {
 				{userId:'',
 				postId:'',
 				nickname: '',
-				date: '',
+				createdAt: '',
 				postContent: '',
 				title:'',
 				pic:'',
@@ -134,38 +133,38 @@ export default {
 			{
 				id: 1,
 				nickname: '叶轻眉',
-				date: '12-25 18:58',
-				postText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-				postTitle:'不敢相信',
+				createdAt: '12-25 18:58',
+				postContent: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
+				title:'不敢相信',
 				pic:'/static/c1.png',
-				likeNum: 33,
+				likeCount: 33,
 				isLike: false,
 			},
 			{
 				id: 2,
 				nickname: '叶轻眉1',
-				date: '01-25 13:58',
-				postText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-				postTitle:'不敢相信',
-				likeNum: 33,
+				createdAt: '01-25 13:58',
+				postContent: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
+				title:'不敢相信',
+				likeCount: 33,
 				isLike: false,
 			},
 			{
 				id: 3,
 				nickname: '叶轻眉2',
-				date: '03-25 13:58',
-				postText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-				postTitle:'不敢相信',
-				likeNum: 33,
+				createdAt: '03-25 13:58',
+				postContent: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
+				title:'不敢相信',
+				likeCount: 33,
 				isLike: false,
 			},
 			{
 				id: 4,
 				nickname: '叶轻眉3',
-				date: '06-20 13:58',
-				postText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-				postTitle:'不敢相信',
-				likeNum: 33,
+				createdAt: '06-20 13:58',
+				postContent: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
+				title:'不敢相信',
+				likeCount: 33,
 				isLike: false,
 			}
 		]
@@ -175,6 +174,7 @@ export default {
 		// 进入帖子的回复界面
 		toReply(index){
 			uni.setStorageSync("postData",index)
+			console.log(index)
 			uni.navigateTo({
 				url:'/pages/home/reply',
 				
@@ -189,9 +189,9 @@ export default {
 		getLike(index) {
 			this.postList[index].isLike = !this.postList[index].isLike;
 			if (this.postList[index].isLike == true) {
-				this.postList[index].likeNum++;
+				this.postList[index].likeCount++;
 			} else {
-				this.postList[index].likeNum--;
+				this.postList[index].likeCount--;
 			}
 		},
 		
@@ -275,7 +275,7 @@ page {
 			.nickname {
 				color: #c8c9cc;
 			}
-			.date {
+			.createdAt {
 				color: #c8c9cc;
 			}
 		}

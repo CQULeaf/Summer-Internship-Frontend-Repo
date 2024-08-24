@@ -24,8 +24,7 @@
 				user:{
 					username:"",
 					password:""
-				},
-				account:''
+				}
 			}
 		},
 		
@@ -33,7 +32,7 @@
 			login:function(){
 				console.log(this.user)
 				uni.request({
-					url:'http://localhost:8080/user/login',
+					url:'http://localhost:1234/user/login',
 					data:this.user,
 					method:"POST",
 					header:{
@@ -44,7 +43,6 @@
 					}
 				});
 				const value = uni.getStorageSync('nowAccount');
-				console.log(value)
 				
 				if (value.code===200){
 					uni.switchTab({

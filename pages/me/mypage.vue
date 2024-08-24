@@ -133,33 +133,39 @@
 			// uni.removeStorageSync('avatarData')
 			//console.log(this.user.avatar)
 		},
+		
 		created() {
 			// 监听从裁剪页发布的事件，获得裁剪结果
 			uni.$on('uAvatarCropper', path => {
 				const value = uni.getStorageSync('nowAccount');
 				value.data.avatar=path
+				this.user.avatar=path
+				console.log(path)
 				uni.setStorageSync('nowAccount',value)
 				// 可以在此上传到服务端
+				
+				const username = this.user.username;
+				const filePath = path;
+				
 				uni.uploadFile({
-					url: 'http://localhost:1234/user/updateAvatar',
-					filePath: path,
-					formData: this.user.username,
-					name: 'file',
-					complete: (res) => {
-						console.log(res);
-					}
+				    url: 'http://localhost:1234/user/updateAvatar',
+				    filePath: filePath,
+				    name: 'file', // 对应后端接收文件的字段名
+				    formData: {
+				        'username': username
+				    },
+					
+				    success: (res) => {
+				        console.log(res.data);
+				    },
+				    fail: (err) => {
+				        console.error(err);
+				    }
 				});
-			})
-			//console.log(this.user.avatar)
-			uni.request({
-				url:'http://localhost:1234/user/updateAvatar',
-				data:this.user,
-				method:'POST',
-				header:{
-					'Content-Type': 'application/json'
-				},
-			})
+				
+			});
 		},
+		
 		methods: {
 			goToProfile() {
 				uni.navigateTo({
