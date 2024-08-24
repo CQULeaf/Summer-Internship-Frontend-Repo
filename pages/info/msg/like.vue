@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u-navbar :is-back="true" title="收到的点赞" :background="background" :customBack="backtoinfo" >
+		<u-navbar :is-back="true" title="收到的点赞" :background="background" :customBack="backtoinfo" height="55">
 		</u-navbar>
 
 		<view class="comment" v-for="(res, index) in commentList" :key="res.id">
