@@ -77,7 +77,7 @@
 			// 	})
 			// },
 			gotopofile() {
-				uni.navigateTo({
+				uni.switchTab({
 					url: '/pages/me/mypage' // 返回上一页面
 				});
 			},
