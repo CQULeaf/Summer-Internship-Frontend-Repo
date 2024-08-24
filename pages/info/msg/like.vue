@@ -47,9 +47,17 @@ export default {
 	methods: {
 		backtoinfo()
 		{
-			uni.navigateTo
+			console.log("返回到 infopage");
+			uni.switchTab//如果你的目标页面是 TabBar 页面，请使用 uni.switchTab 方法来进行跳转。
+			             //TabBar 页面是指在移动应用中，通常位于底部的导航栏，用于快速切换不同的页面或功能模块。它允许用户在应用程序的多个主要视图之间进行切换，通常显示为一组图标和文本。
 			({
-				url:"/pages/info/infopage"
+				url:"/pages/info/infopage",
+				   success: () => {
+				        console.log("成功跳转到 infopage");
+				    },
+				    fail: (err) => {
+				        console.error("跳转失败:", err);
+				    }
 			})
 		},
 		

@@ -46,7 +46,7 @@
 					selectedIconPath:"/static/messagep.png",
 					text: '讯',
 					customIcon: false,
-					pagePath:'/pages/tabbar4'
+					pagePath:'/pages/info/infopage'
 				},
 				{
 					iconPath:  "/static/megrey.png",

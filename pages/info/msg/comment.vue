@@ -1,4 +1,5 @@
 <template>
+	<text>这是评论</text>
 </template>
 
 <script>
