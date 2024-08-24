@@ -50,15 +50,16 @@
 		},
 		
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
-				uni.request({
-					url:"http://127.0.0.1:4523/m1/5010181-4669608-default/user/userCheck?id=1&username=%E5%A7%9C%E5%8B%87&email=x.teoxsx@nuc.kh&phone_number=18175649418&created_at=1991-03-14&uodated_at&status&nickname&avatar&bio&gender&age=4271308378002070&birthday=1980-01-22",
-					data:this.user,
-					method:"GET",
-					success:(rep)=>{
-						//this.user=rep.data
-						console.log('suc')
-					},
+				var hit
+				this.current=this.user.gender=='男' ? 0:1
+				const eventChannel = this.getOpenerEventChannel();
+				eventChannel.on('acceptDataFromOpenerPage', function(data){
+					hit=data.data
 				})
+				//this.user.id=hit.id
+				console.log(hit.id)
+				this.user=hit
+				console.log((this.user))
 		},
 			
 		methods: {

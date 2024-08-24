@@ -63,7 +63,8 @@
 				href: 'https://uniapp.dcloud.io/component/README?id=uniui',
 				user: {
 					avatar: '/static/logo.png',
-					nickname: '1111'
+					nickname: '1111',
+					username:''
 				},
 				pic: 'https://uviewui.com/common/logo.png',
 				show: true,
@@ -74,6 +75,10 @@
 			}
 		},
 		onLoad() {
+			const value = uni.getStorageSync('nowAccount');
+			this.user=value.data
+			this.logined=(value.code==200)
+			console.log(value.code)
 			this.list = [{
 					iconPath: "/static/newhomeg.png",
 					selectedIconPath: "/static/newhomep.png",
@@ -116,17 +121,11 @@
 			]
 		},
 		onShow() {
-			判断用户是否登录
-			const value=uni.getStorageSync("user")
-			if(value)
-			{
-				this.logined=true
-				this.name=value
-			}
-			else
-			{
-				this.logined=false
-			}
+			//判断用户是否登录
+			const value = uni.getStorageSync('nowAccount');
+			this.user=value.data
+			this.logined=(value.code==200)
+			console.log(this.logined)
 		},
 		methods: {
 			fetchUser() {
