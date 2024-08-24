@@ -53,12 +53,6 @@
 			}
 		},
 		{
-			"path": "pages/tabbar4",
-			"style": {
-				"navigationBarTitleText": "我的"
-			}
-		},
-		{
 			"path": "pages/me/setting/setting",
 			"style": {
 				"navigationBarTitleText": "设置"
@@ -120,13 +114,13 @@
 		}
 	},
 	{
-		"path": "pages/info/like",
+		"path": "pages/info/msg/like",
 		"style": {
 			"navigationStyle": "custom"
 		}
 	},
 	{
-		"path": "pages/info/comment",
+		"path": "pages/info/msg/comment",
 		"style": {
 			"navigationStyle": "custom"
 		}
@@ -137,19 +131,39 @@
 				"navigationStyle": "custom"
 			}
 		},
+		
+		{
+				"path" : "pages/corner/corner",
+				"style" : 
+				{
+					"navigationBarTitleText": "聚"
+				}
+			},
+		{
+				"path" : "pages/corner/Superwordname_club",
+				"style" : 
+				{
+					"navigationBarTitleText": "聚"
+				}
+			},
+			{
+					"path" : "pages/corner/waterfall",
+					"style" : 
+					{
+						"navigationBarTitleText": "聚"
+					}
+				},
+		
 		{
 			"path": "uview-ui/components/u-avatar-cropper/u-avatar-cropper",
 			"style": {
 				"navigationBarTitleText": "头像裁剪",
 				"navigationBarBackgroundColor": "#000000"
 			}
-		},
-		{
-			"path": "pages/info/like",
-			"style": {
-				"navigationStyle": "custom"
-			}
 		}
+		
+		
+		
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -185,7 +199,7 @@
 				"text": "言"
 			},
 			{
-				"pagePath": "pages/tabbar4",
+				"pagePath": "pages/info/infopage",
 				"iconPath": "/static/messagegrey.png",
 				"selectedIconPath": "/static/messagep.png",
 				"text": "讯"
