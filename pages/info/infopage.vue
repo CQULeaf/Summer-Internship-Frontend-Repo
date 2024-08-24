@@ -45,7 +45,7 @@
 						<view class="list">
 							<!-- 用户列表 -->
 							<view v-if="pagelist[pagecurrent].type === 'msg'">
-								<view class="list-item" v-for="(item, index) in currentItems" :key="index">
+								<view class="list-item" v-for="(item, index) in currentItems" :key="index" @click="goToChat(item)">
 									<image class="useravatar" :src="item.avatar"></image>
 									<text class="item-title">{{item.username}}</text>
 								</view>
@@ -182,6 +182,11 @@
 						break;
 				}
 			},
+			goToChat(user) {
+			        uni.navigateTo({
+			            url: `/pages/chat/chatpage?userId=${user.sender_id}` // 修改为你聊天页面的实际路径
+			        });
+			    },
 			treecave() {
 				console.log("当前列表:", this.pagelist),
 					console.log("当前索引:", this.pagecurrent),
@@ -203,20 +208,23 @@
 					url: `${apiEndpoint}?page=${page}`, //在fetchUserList方法中的请求URL使用了'${apiEndpoint}?page=${page}'，这会导致字符串直接拼接而非动态生成变量。正确的做法应该是使用模板字符串的语法来动态替换变量
 					method: 'GET',
 					success: (res) => {
-						console.log('返回的数据:', res.data);
+						console.log('请求成功:', res);
+						console.log('返回的数据:', res.data.data);
 						if (res.statusCode === 200) {
-							if (res.data.length === 0) {
+							if (res.data.data.length === 0) {
 								this.hasMore = false; // 没有更多数据
 							} else {
 								if (this.pagelist[this.pagecurrent].type === 'msg') {
 									// 处理用户数据
-									this.currentItems = [...this.currentItems, ...res.data];
+									this.currentItems = [...this.currentItems, ...res.data.data];
 								}
 								 //else if (this.pagelist[this.pagecurrent].type === 'posts') {
 								// 	// 处理帖子数据
 								// 	this.currentItems = [...this.currentItems, ...res.data];
 								// }
 								this.dataCache[apiEndpoint] = this.currentItems;
+								console.log('当前用户列表:', this.currentItems);
+
 							}
 						} else {
 							uni.showToast({

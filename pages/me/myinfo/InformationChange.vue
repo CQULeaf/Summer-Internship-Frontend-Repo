@@ -65,8 +65,8 @@
 					created_at:"1",
 					updated_at:"1",
 					status:"1",
-					nickname:"huang",
-					avatar:"https://uviewui.com/common/logo.png",
+					nickname:"1",
+					avatar:"1",
 					bio:"1",
 					gender:'女',
 					age:"20",
@@ -80,7 +80,7 @@
 
 		methods: {
 			submit(){		
-				uni.navigateTo({
+				uni.redirectTo({
 					url:"/pages/me/myinfo/Information",
 				})
 			},
@@ -97,6 +97,11 @@
 				console.log(hit.id)
 				this.user=hit
 				console.log((this.user))
+			},
+			
+			onShow(){
+				const value = uni.getStorageSync('nowAccount');
+				this.user=value.data
 			},
 			
 			statusChange(index){	
