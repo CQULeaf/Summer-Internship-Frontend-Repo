@@ -1,14 +1,13 @@
 <template>
 	<view>
-		<view v-if="logined">
+		<view v-if="logined" v-model="this.user">
 			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
 				<view class="u-m-r-10">
-					<u-avatar :src="pic" size="140"></u-avatar>
+					<u-avatar :src="user.avatar" size="140"></u-avatar>
 				</view>
 				<view class="u-flex-1">
-					<view class="u-font-18 u-p-b-20">{{user.username}}</view>
+					<view class="u-font-18 u-p-b-20 u-p-l-28">{{user.nickname}}</view>
 				</view>
-				
 			</view>
 
 			<u-grid :col="8" :border="false">
@@ -122,7 +121,7 @@
 					text: '我',
 					isDot: false,
 					customIcon: false,
-					pagePath: '/pages/me/me'
+					pagePath: '/pages/me/mypage'
 				},
 			]
 		},

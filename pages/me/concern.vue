@@ -77,7 +77,7 @@
 			// 	})
 			// },
 			gotopofile() {
-				uni.navigateTo({
+				uni.switchTab({
 					url: '/pages/me/mypage' // 返回上一页面
 				});
 			},
@@ -93,6 +93,8 @@
 					url: `${apiEndpoint}?page=${page}`, //在fetchUserList方法中的请求URL使用了'${apiEndpoint}?page=${page}'，这会导致字符串直接拼接而非动态生成变量。正确的做法应该是使用模板字符串的语法来动态替换变量
 					method: 'GET',
 					success: (res) => {
+						console.log('请求成功:', res);
+						console.log('返回的数据:', res.data.data);
 						if (res.statusCode === 200) {
 							if (res.data.length === 0) {
 								this.hasMore = false; // 没有更多数据
