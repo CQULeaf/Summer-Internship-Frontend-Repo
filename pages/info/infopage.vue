@@ -5,7 +5,7 @@
 				<u-navbar class="wrap" height=60 title="" :background="background" :is-back=false>
 					<view  class="subwrap">
 						<u-tabs-swiper font-size="40" ref="uTabs" :list="pagelist" :current="pagecurrent" @change="tabsChange" :is-scroll="false" swiper-Width="100" height=100 :bold="false"
-							bg-color="#ffc7cb" active-color="#000000"></u-tabs-swiper>
+							active-color="#000000"></u-tabs-swiper>
 					</view>
 					<view>
 						<text class="subwarp1" @click="goToPageTreeCave">树洞</text>
@@ -50,7 +50,10 @@
 		data() {
 			return { //专门写变量   在模板里面写 ：herf 表示herf是变量
 				background: {
-					backgroundColor: '#ffc7cb',
+					backgroundImage: 'linear-gradient(45deg, rgb(255, 217, 220),rgb(255, 193, 199),rgb(255, 193, 199),rgb(255, 188, 195),rgb(159, 209, 177),rgb(112, 215, 164))',
+				// 导航栏背景图
+									background: 'url(static/navigatorbackground.jpg) no-repeat',
+									backgroundSize: 'cover',
 				}, //导航栏的颜色
 				list: '',
 				current: 4,
@@ -135,7 +138,7 @@
 		methods: { //写自定义方法
 		goToPageTreeCave(){
 			uni.navigateTo({
-				url: "/pages/info/treecave"
+				url: "/pages/info/treecave/treecave"
 			})
 		},
 			gotopofile(index) {
@@ -297,7 +300,6 @@
 	.swiper-item {
 		height: 100%;
 		/* 确保 swiper-item 填满父容器 */
-		background-color: #fffbfd;
 	}
 
 	.scroll-view {
