@@ -2,17 +2,19 @@
 	<view>
 		<view class="wrap">
 			<view class="u-tabs-box">
-				<u-tabs-swiper activeColor="#f29100" ref="tabs" :list="homelist" :current="current" @change="change" :is-scroll="false" swiperWidth="750"></u-tabs-swiper>
+				<u-tabs-swiper activeColor="#f2b2c3" ref="tabs" :list="homelist" :current="current" @change="change" :is-scroll="false" swiperWidth="750"></u-tabs-swiper>
 			</view>
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;">
-						<u-search placeholder="请输入关键字" v-model="keyword"></u-search>
-						<view class="post" v-for="(res, index) in postList" :key="res.id" @search="search" @custom="custom">
+						<u-search placeholder="请输入标题关键字" v-model="keyword" @search="search" @custom="search"></u-search>
+						<view class="post" v-for="(res, index) in postList" :key="res.id">
 							<view class="right">
 								<view class="content" @click="toReply(res)">{{ res.title }}</view>
 								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
-								<u-image width="100%" height="300rpx" :src="res.pic"></u-image>
+								<view v-if="res.cover">
+									<u-image width="100%" height="300rpx" :src="res.cover"></u-image>
+								</view>
 								<view class="like" :class="{ highlight: res.isLike }">
 									<view class="num">{{ res.likeCount }}</view>
 									<u-icon v-if="!res.isLike" name="thumb-up" :size="30" color="#9a9a9a" @click="getLike(index)"></u-icon>
@@ -28,11 +30,18 @@
 				</swiper-item>
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;">
-						<view class="post" v-for="(res, index) in postList" :key="res.id">
+						<view class="post" v-for="(res, index) in postList" :key="res.id" @search="search" @custom="custom">
 							<view class="right">
 								<view class="content" @click="toReply(res)">{{ res.title }}</view>
 								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
-								<u-image width="100%" height="300rpx" :src="res.pic"></u-image>
+								<view v-if="res.cover">
+									<u-image width="100%" height="300rpx" :src="res.cover"></u-image>
+								</view>
+								<view class="like" :class="{ highlight: res.isLike }">
+									<view class="num">{{ res.likeCount }}</view>
+									<u-icon v-if="!res.isLike" name="thumb-up" :size="30" color="#9a9a9a" @click="getLike(index)"></u-icon>
+									<u-icon v-if="res.isLike" name="thumb-up-fill" :size="30" @click="getLike(index)"></u-icon>
+								</view>
 								<view class="top">
 									<view class="nickname">{{ res.nickname }}</view>
 									<view class="createdAt">{{ res.createdAt }}</view>
@@ -65,21 +74,24 @@ export default {
 					name: '关注',
 				}
 			],
-			postList:[
-				{userId:'',
+			postList:
+			[{
+				userId:'',
 				postId:'',
 				nickname: '',
 				createdAt: '',
 				postContent: '',
 				title:'',
-				pic:'',
+				cover:'',
 				likeCount:'',
-				isLike:'',}
-			]
+				isLike:'',
+			}]
 		};
 	},
 	
 	onShow() {
+		
+		// 请求帖子数据
 		
 		// uni.request({
 		// 	url:'',
@@ -110,7 +122,7 @@ export default {
 				text: '言',
 				midButton: true,
 				customIcon: false,
-				pagePath:'/pages/tabbar3'
+				pagePath:'/pages/post/postpage'
 			},
 			{
 				iconPath:  "/static/messagegrey.png",
@@ -136,7 +148,7 @@ export default {
 				createdAt: '12-25 18:58',
 				postContent: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
 				title:'不敢相信',
-				pic:'/static/c1.png',
+				cover:'/static/c1.png',
 				likeCount: 33,
 				isLike: false,
 			},

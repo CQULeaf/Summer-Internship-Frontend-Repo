@@ -17,7 +17,7 @@
 			</view>
 			<view class="content u-font-40">{{ comment.title}}</view>
 			<view class="content u-p-t-30" >{{ comment.postContent }}</view>
-			<image :src="comment.pic" mode=""></image>
+			<image v-if="comment.pic" :src="comment.pic" mode=""></image>
 		</view>
 		
 		<!-- 回复 -->
@@ -34,7 +34,7 @@
 							</view>
 						</view>
 						<view class="right"  :class="{ highlight: item.isLike }">
-							<view class="num">{{ item.likeNum }}</view>
+							<view class="num">{{ item.likeCount }}</view>
 							<u-icon v-if="!item.isLike" name="thumb-up" class="like" :size="30" color="#9a9a9a" @click="getLike(index)"></u-icon>
 							<u-icon v-if="item.isLike" name="thumb-up-fill" class="like" :size="30" @click="getLike(index)"></u-icon>
 						</view>
@@ -69,17 +69,6 @@ export default {
 	
 	onShow(){
 		this.comment=uni.getStorageSync('postData');
-		console.log(this.com)
-		// this.comment = {
-		// 	id: 1,
-		// 	name: '叶轻眉',
-		// 	date: '12-25 18:58',
-		// 	contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-		// 	pic: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-		// 	allReply: 12,
-		// 	likeNum: 33,
-		// 	isLikes: false
-		// };
 	},
 	
 	methods: {
@@ -88,17 +77,17 @@ export default {
 			if (index === 0 || index > 0) {
 				this.commentList[index].isLike = !this.commentList[index].isLike;
 				if (this.commentList[index].isLike == true) {
-					this.commentList[index].likeNum++;
+					this.commentList[index].likeCount++;
 				} else {
-					this.commentList[index].likeNum--;
+					this.commentList[index].likeCount--;
 				}
 			} else {
 				if (this.comment.isLike == true) {
 					this.comment.isLike = !this.comment.isLike;
-					this.comment.likeNum--;
+					this.comment.likeCount--;
 				} else {
 					this.comment.isLike = !this.comment.isLike;
-					this.comment.likeNum++;
+					this.comment.likeCount++;
 				}
 			}
 		},
@@ -112,7 +101,7 @@ export default {
 					date: '12-25 18:58',
 					contentText: '不要乱打广告啊喂！虽然是真的超好用',
 					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-					likeNum: 33,
+					likeCount: 33,
 					isLike: false,
 				},
 				{
@@ -121,7 +110,7 @@ export default {
 					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
 					contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
 					allReply: 0,
-					likeNum: 11,
+					likeCount: 11,
 					isLike: false,
 				},
 				{
@@ -129,7 +118,7 @@ export default {
 					date: '03-25 13:58',
 					contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
 					allReply: 0,
-					likeNum: 21,
+					likeCount: 21,
 					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
 					isLike: false,
 					allReply: 2,
@@ -139,7 +128,7 @@ export default {
 					date: '06-20 13:58',
 					contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
 					allReply: 0,
-					likeNum: 150,
+					likeCount: 150,
 					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
 					isLike: false
 				}

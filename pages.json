@@ -225,7 +225,7 @@
 				"text": "聚"
 			},
 			{
-				"pagePath": "pages/tabbar3",
+				"pagePath": "pages/post/postpage",
 				"iconPath": "/static/yanblack.png",
 				"selectedIconPath": "/static/yanpink.png",
 				"text": "言"

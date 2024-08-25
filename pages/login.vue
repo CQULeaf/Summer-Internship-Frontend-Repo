@@ -43,12 +43,12 @@
 					}
 				});
 				const value = uni.getStorageSync('nowAccount');
-				
-				if (value.code===200){
+				console.log(value)
+				if (value.code==200){
 					uni.switchTab({
 						url: '/pages/me/mypage'
 					});
-				};
+				}
 			},
 			
 			register(){
