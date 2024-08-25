@@ -1,3 +1,6 @@
+
+//删除该板块
+
 <template>
 	<view class="container">
 		<!-- 切换标签部分 -->
@@ -14,7 +17,7 @@
 					<view class="list">
 						<!-- 用户列表 -->
 						<view v-if="list[current].type === 'like'">
-							<view class="list-item" v-for="(item, index) in currentItems" :key="index" @click="goToContent(item.id)">
+							<view class="list-item" v-for="(item, index) in currentItems" :key="index" @click="goToContent(item.topic_id)">
 								<image class="useravatar" :src="item.cover"></image>
 								<text class="item-title">{{item.name}}</text>
 							
@@ -24,7 +27,7 @@
 						<!-- 帖子列表 -->
 						<view v-if="list[current].type === 'recommend'">
 							<!-- 渲染指令 -->
-							<view class="list-item" v-for="(post, index) in currentItems" :key="index" @click="goToContent(post.id)">
+							<view class="list-item" v-for="(post, index) in currentItems" :key="index" @click="goToContent(post.topic_id)">
 								<!-- key为每个渲染元素 提供唯一的key属性 -->
 								<image class="useravatar" :src="post.cover"></image>
 								<text class="item-title">{{post.name}}</text>
@@ -53,7 +56,7 @@
 					{
 						name: '关注',
 						type: 'like',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/corner/superWordNameConcern?user_id',
+						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/corner/superWordNameRecommend?user_id'
 						//api连接
 						//为什么两个url都能用？之后可能要修改
 						
@@ -80,7 +83,7 @@
 			            goToContent(postId) {
 			                // 跳转到内容页面，并传递帖子ID
 			                uni.navigateTo({
-			                    url: `http://127.0.0.1:4523/m1/5010181-4669608-default/corner/concerntopost/?topic_id`
+			                    url: '/pages/corner/content?topic_id=' + this.topic_id 
 			                });
 			            },
 						

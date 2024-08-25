@@ -71,7 +71,7 @@
 			goToTalk() {
 				// 跳转到聊天界面，假设聊天界面的路径为 '/pages/chat/chat'
 				uni.navigateTo({
-					url: '/pages/info/treecave/treetalk?userId=' + this.user.id // 假设用户有一个 id 属性
+					url: '/pages/info/treecave/treetalk?userId=' + this.user.user_id // 假设用户有一个 id 属性
 				});
 			},
 			fetchUserAvatar() {
