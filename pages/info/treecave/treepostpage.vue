@@ -4,7 +4,7 @@
 			<div class="btn" @click="sent">投递</div>
 		</u-navbar>
 		<view class="form-item">
-		  <textarea class="input" v-model="message" placeholder="分享新鲜事..."></textarea>
+		  <textarea class="input" v-model="message" placeholder="在这里,没有人了解你的过去,没有你抒发不了的烦恼,所以请尽情释放自己吧>_<"></textarea>
 		</view>
 		<view class="u-demo">
 			<view class="u-demo-wrap">
