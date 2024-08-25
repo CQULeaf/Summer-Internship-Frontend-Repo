@@ -198,9 +198,9 @@
     margin: 0 auto;
 	margin-right: 10%;
     width: 9%;
-    background-color: #c5f0f3;
+    background-color: #66b1ff;
 	border-radius: 40%;
-    color: #bfbfbf;
+    color: #ffffff;
 	},
 .form-item 
 {
