@@ -96,7 +96,7 @@
 					text: '聚',
 					isDot: true,
 					customIcon: false,
-					pagePath: '/pages/tabbar'
+					pagePath: '/pages/corner/corner'
 				},
 				{
 					iconPath: "/static/yanblack.png",
@@ -104,7 +104,7 @@
 					text: '言',
 					midButton: true,
 					customIcon: false,
-					pagePath: '/pages/tabbar'
+					pagePath: '/pages/post/postpage'
 				},
 				{
 					iconPath: "/static/messagegrey.png",

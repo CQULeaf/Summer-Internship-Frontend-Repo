@@ -32,6 +32,7 @@
 				</view>
 			</view>
 		</view>
+		<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
 	</view>
 </template>
 
@@ -60,7 +61,51 @@
 				customStyle: false,
 				maxCount: 2,
 				lists: [], // 组件内部的文件列表
+				list:'',
+				current: 4
 			}
+		},
+		onLoad() {
+			this.list = [{
+					iconPath: "/static/newhomeg.png",
+					selectedIconPath: "/static/newhomep.png",
+					text: '家',
+					isDot: true,
+					customIcon: false,
+					pagePath:'/pages/home/homepage'
+				},
+				{
+					iconPath:  "/static/happygrey.png",
+					selectedIconPath:"/static/happierp.png",
+					text: '聚',
+					isDot: true,
+					customIcon: false,
+					pagePath:'/pages/corner/corner'
+				},
+				{
+					iconPath: "/static/yanblack.png",
+					selectedIconPath: "/static/yanpink.png",
+					text: '言',
+					midButton: true,
+					customIcon: false,
+					pagePath:'/pages/post/postpage'
+				},
+				{
+					iconPath:  "/static/messagegrey.png",
+					selectedIconPath:"/static/messagep.png",
+					text: '讯',
+					customIcon: false,
+					pagePath:'/pages/info/infopage'
+				},
+				{
+					iconPath:  "/static/megrey.png",
+					selectedIconPath:"/static/mep.png",
+					text: '我',
+					isDot: false,
+					customIcon: false,
+					pagePath:'/pages/me/mypage'
+				},
+			]
 		},
 		methods: {
 			backtohome()
