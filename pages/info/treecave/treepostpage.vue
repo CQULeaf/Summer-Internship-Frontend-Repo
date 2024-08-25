@@ -4,7 +4,7 @@
 			<div class="btn" @click="sent">投递</div>
 		</u-navbar>
 		<view class="form-item">
-		  <textarea class="input" v-model="message" placeholder="在这里,没有人了解你的过去,没有你抒发不了的烦恼,所以请尽情释放自己吧>_<"></textarea>
+		  <textarea class="input" v-model="message" placeholder="在这里,没有人了解你的过去,没有你抒发不了的烦恼,所以请尽情释放自己吧 (/≧▽≦)/"></textarea>
 		</view>
 		<view class="u-demo">
 			<view class="u-demo-wrap">
@@ -42,7 +42,10 @@
 				// 背景颜色
 				 background: 
 				 {
-				 	backgroundColor: '#32b391'
+				 	backgroundColor: '#001f3f',
+				 		backgroundSize: 'cover',
+				 		backgroundImage: 'linear-gradient(45deg, rgb(159, 219, 196),rgb(139, 219, 186),rgb(35, 187, 154))'
+				 	
 				},
 				action: 'http://127.0.0.1:7001/upload',
 				// 预置上传列表
@@ -152,7 +155,7 @@
 <style>
 .btnstyle
 {
-	color: #318133;
+	color: #4d8e4c;
 	background-color: #f8fdf8;
 }
 .btn 
@@ -162,7 +165,7 @@
     margin: 0 auto;
 	margin-right: 10%;
     width: 9%;
-    background-color: #318133;
+    background-color: #3a8b3f;
 	border-radius: 40%;
     color: #ffffff;
 	},
