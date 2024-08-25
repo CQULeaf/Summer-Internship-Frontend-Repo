@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="container">
 		<view v-if="logined" v-model="this.user">
 			<view class="u-demo-wrap">
 				<view class="u-demo-area">
@@ -224,13 +224,13 @@
 			goToPost(item) {
 				// 跳转到聊天界面，假设聊天界面的路径为 '/pages/me/mypost'
 				uni.navigateTo({
-					url: '/pages/me/mypost?post_id=' + item.postId // 假设用户有一个 id 属性
+					url: `/pages/me/mypost?postId=${item.postId}` // 假设用户有一个 id 属性
 				});
 			},
 			goToLiked(item) {
 				// 跳转到聊天界面，假设聊天界面的路径为 '/pages/info/treecave/treetalk'
 				uni.navigateTo({
-					url: '/pages/me/myliked?post_id=' + item.post_id // 假设用户有一个 id 属性
+					url: `/pages/me/myliked?postId=${item.postId}` // 假设用户有一个 id 属性
 				});
 			},
 			goToProfile() {
@@ -406,6 +406,11 @@
 </script>
 
 <style lang="scss">
+	.u-demo-wrap{
+		display: flex;
+		align-items: center;
+		background: #fff3f4;
+	}
 	.myinfo {
 		display: flex;
 		align-items: center;
@@ -461,6 +466,8 @@
 		width: 150rpx;
 		height: 150rpx;
 		border-radius: 100rpx;
+		align-items: center;
+	
 	}
 
 	.u-avatar-wrap {
@@ -468,6 +475,7 @@
 		overflow: hidden;
 		margin-bottom: 80rpx;
 		text-align: center;
+		margin-left: 299rpx;
 	}
 
 	.list-item {
@@ -475,6 +483,7 @@
 		align-items: center;
 		padding: 25px;
 		border-bottom: 1px solid #f0dddf;
+		background: #fff3f4;
 	}
 
 	.item-title {

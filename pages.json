@@ -205,14 +205,14 @@
 			"path" : "pages/me/mypost",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle" : "custom"
 			}
 		},
 		{
 			"path" : "pages/me/myliked",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle" : "custom"
 			}
 		}
 	
