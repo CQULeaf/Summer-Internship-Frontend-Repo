@@ -41,13 +41,6 @@
 				"navigationBarTitleText": "公告"
 			}
 		},
-		
-		{
-			"path": "pages/tabbar3",
-			"style": {
-				"navigationBarTitleText": "我的"
-			}
-		},
 		{
 			"path": "pages/me/setting/setting",
 			"style": {
@@ -193,6 +186,13 @@
 			{
 				"navigationBarTitleText" : ""
 			}
+		},
+		{
+			"path" : "pages/info/treecave/treepostpage",
+			"style" : 
+			{
+				"navigationStyle" : "custom"
+			}
 		}
 	
 		
@@ -225,7 +225,7 @@
 				"text": "聚"
 			},
 			{
-				"pagePath": "pages/tabbar3",
+				"pagePath": "pages/post/postpage",
 				"iconPath": "/static/yanblack.png",
 				"selectedIconPath": "/static/yanpink.png",
 				"text": "言"

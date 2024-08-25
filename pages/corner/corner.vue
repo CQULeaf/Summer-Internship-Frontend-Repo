@@ -117,7 +117,7 @@ export default {
   			text: '言',
   			midButton: true,
   			customIcon: false,
-  			pagePath:'/pages/tabbar3'
+  			pagePath:'/pages/post/postpage'
   		},
   		{
   			iconPath:  "/static/messagegrey.png",
