@@ -4,6 +4,7 @@
 	},
 	"pages": [
 		{
+			
 			"path": "pages/login",
 			"style": {
 				"navigationStyle": "custom"
@@ -13,13 +14,22 @@
 			"path" : "pages/home/homepage",
 			"style" : 
 			{
-				"navigationBarTitleText" : "主页"
+				"navigationStyle": "custom"
+				
+			}
+		},
+		{
+			"path" : "pages/home/reply",
+			"style" : 
+			{
+				"navigationBarTitleText" : "评论"
 			}
 		},
 		{
 			"path": "pages/me/mypage",
 			"style": {
-				"navigationBarTitleText": "我的"
+				"navigationBarTitleText": "我的",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -32,24 +42,6 @@
 			"path": "pages/info/msg/bulletin/bulletinCheck",
 			"style": {
 				"navigationBarTitleText": "公告"
-			}
-		},
-		{
-			"path": "pages/tabbar1",
-			"style": {
-				"navigationBarTitleText": "我的"
-			}
-		},
-		{
-			"path": "pages/tabbar2",
-			"style": {
-				"navigationBarTitleText": "我的"
-			}
-		},
-		{
-			"path": "pages/tabbar3",
-			"style": {
-				"navigationBarTitleText": "我的"
 			}
 		},
 		{
@@ -68,12 +60,6 @@
 			"path": "pages/me/myinfo/InformationChange",
 			"style": {
 				"navigationBarTitleText": "个人信息修改"
-			}
-		},
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
 			}
 		},
 		{
@@ -108,9 +94,31 @@
 			}
 		},
 	{
-		"path": "pages/info/treecave",
+		"path": "pages/info/treecave/treecave",
 		"style": {
-			"navigationStyle": "custom"
+			"navigationStyle": "custom",
+			"navigationBarTextStyle": "white" 
+		}
+	},
+	{
+		"path": "pages/info/treecave/ai",
+		"style": {
+			"navigationStyle": "custom",
+			"navigationBarTextStyle": "white" 
+		}
+	},
+	{
+		"path": "pages/info/treecave/treepost",
+		"style": {
+			"navigationStyle": "custom",
+			"navigationBarTextStyle": "white" 
+		}
+	},
+	{
+		"path": "pages/info/treecave/treetalk",
+		"style": {
+			"navigationStyle": "custom",
+			"navigationBarTextStyle": "white" 
 		}
 	},
 	{
@@ -126,43 +134,88 @@
 		}
 	},
 	{
-			"path": "pages/register",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		},
+		"path": "pages/register",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	},
 		
-		{
+	{
 				"path" : "pages/corner/corner",
 				"style" : 
 				{
 					"navigationBarTitleText": "聚"
 				}
-			},
-		{
-				"path" : "pages/corner/Superwordname_club",
-				"style" : 
-				{
-					"navigationBarTitleText": "聚"
-				}
-			},
-			{
-					"path" : "pages/corner/waterfall",
+	},
+	{
+					"path" : "pages/corner/post",
 					"style" : 
 					{
 						"navigationBarTitleText": "聚"
 					}
 				},
-		
+	{
+				"path" : "pages/corner/superWordName",
+				"style" : 
+				{
+					"navigationBarTitleText": "聚"
+				}
+	},
+	{
+					"path" : "pages/corner/content",
+					"style" : 
+					{
+						"navigationBarTitleText": "聚"
+					}
+	},
 		{
-			"path": "uview-ui/components/u-avatar-cropper/u-avatar-cropper",
-			"style": {
-				"navigationBarTitleText": "头像裁剪",
-				"navigationBarBackgroundColor": "#000000"
+			"path" : "pages/post/postpage",
+			"style" : 
+			{
+				"navigationStyle" : "custom"
+			}
+		},
+		{
+			"path" : "pages/corner/maybe",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/info/treecave/treepostpage",
+			"style" : 
+			{
+				"navigationStyle" : "custom"
+			}
+		},
+		{
+			"path" : "pages/userPage",
+			"style" : 
+			{
+				"navigationStyle" : "custom"
+			}},{
+
+			"path" : "pages/corner/postToCorner",
+			"style" : 
+			{
+				"navigationStyle" : "custom"
+			}},
+			{
+			"path" : "pages/me/mypost",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/me/myliked",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
 			}
 		}
-		
-		
+	
 		
 	],
 	"globalStyle": {
@@ -181,19 +234,19 @@
 		"borderStyle": "black",
 		"list": [
 			{
-				"pagePath": "pages/tabbar1",
+				"pagePath": "pages/home/homepage",
 				"iconPath": "/static/newhomeg.png",
 				"selectedIconPath": "/static/newhomep.png",
 				"text": "家"
 			},
 			{
-				"pagePath": "pages/tabbar2",
+				"pagePath": "pages/corner/corner",
 				"iconPath": "/static/happygrey.png",
 				"selectedIconPath": "/static/happierp.png",
 				"text": "聚"
 			},
 			{
-				"pagePath": "pages/tabbar3",
+				"pagePath": "pages/post/postpage",
 				"iconPath": "/static/yanblack.png",
 				"selectedIconPath": "/static/yanpink.png",
 				"text": "言"

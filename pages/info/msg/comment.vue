@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u-navbar :is-back="true" title="收到的评论" :background="background" :customBack="backtoinfo" >
+		<u-navbar :is-back="true" title="收到的评论" :background="background" :customBack="backtoinfo" height="55">
 		</u-navbar>
 
 		<view class="comment" v-for="(res, index) in commentList" :key="res.id">
@@ -19,7 +19,7 @@
 				</view>
 				<view class="bottom">
 					{{ res.date }}
-					<view class="reply">回复</view>
+					
 				</view>
 			</view>
 		</view>
@@ -58,13 +58,17 @@ export default {
 			this.commentList = [
 				{
 					id: 1,
+					name: '韩刚',
+					date: '08-29 13:58',
+					contentText: '评论了你：真棒！',
+					url: '../../../static/logo.png',
+				},
+				{
+					id: 2,
 					name: '叶旭航',
 					date: '12-25 18:58',
 					contentText: '回复：哈哈哈，你不仅聪明，长得也帅',
 					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-					allReply: 12,
-					likeNum: 33,
-					isLike: false,
 					replyList: [
 						{
 							name: '雷焱丹',
@@ -73,24 +77,17 @@ export default {
 					]
 				},
 				{
-					id: 2,
+					id: 3,
 					name: '陈榕',
 					date: '01-25 13:58',
 					contentText: '评论了你：丹丹好棒！',
-					allReply: 0,
-					likeNum: 11,
-					isLike: false,
 					url: 'https://cdn.uviewui.com/uview/template/niannian.jpg',
 				},
 				{
-					id: 3,
+					id: 4,
 					name: '马逸民',
 					date: '03-25 13:58',
 					contentText: '回复：我也觉得他没你帅',
-					allReply: 0,
-					likeNum: 21,
-					isLike: false,
-					allReply: 2,
 					url: '../../../static/logo.png',
 					replyList: [
 						
@@ -101,24 +98,18 @@ export default {
 					]
 				},
 				{
-					id: 4,
+					id: 5,
 					name: '黄靖杰',
 					date: '06-20 13:58',
 					contentText: '评论了你：好强啊',
 					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-					allReply: 0,
-					likeNum: 150,
-					isLike: false
 				},
 				{
-					id: 5,
+					id: 6,
 					name: '解吴雪',
 					date: '06-25 20:40',
 					contentText: '评论了你：棒棒！',
 					url: 'https://cdn.uviewui.com/uview/template/niannian.jpg',
-					allReply: 0,
-					likeNum: 150,
-					isLike: false
 				}
 			];
 		}

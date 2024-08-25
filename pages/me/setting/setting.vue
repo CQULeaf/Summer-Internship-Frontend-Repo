@@ -14,7 +14,7 @@
 		<u-icon name="arrow-right"></u-icon>
 	  </view>
 	  
-	  <view class="item"@click="goTologin" >
+	  <view class="item"@click="goTologout" >
 	    <text class="item-text" >退出登录</text>
 		<u-icon name="arrow-right"></u-icon>
 	  </view>
@@ -30,13 +30,12 @@
         });
 		
       },
-	  goTologin() {
+	  goTologout() {
+		uni.removeStorageSync('nowAccount');
 	    uni.navigateTo({
 	      url: '/pages/login'
 	    });
-		uni.setStorageSync("user","")
 		this.logined=false
-	  		
 	  },
 	  goToHelp() {
 	    uni.navigateTo({
@@ -56,7 +55,7 @@
   
   <style>
     .settings {
-      background-color: #fef1f4;
+      background-color: #fef6f8;
 	  margin-top: 15px;
       padding: 25px;
       border-radius: 8px;

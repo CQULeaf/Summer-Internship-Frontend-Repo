@@ -18,7 +18,7 @@
 				<view class="font">
 					新密码
 				</view>
-				<input type="password" placeholder="输入新密码" v-model="user.newPassword" />
+				<input type="password" placeholder="输入新密码" v-model="user.newPassword1" />
 			</view>
 
 			<!-- 再次输入新密码 -->
@@ -26,7 +26,7 @@
 				<view class="font">
 					确认密码
 				</view>
-				<input type="password" placeholder="再输入密码" v-model="user.confirmPassword" />
+				<input type="password" placeholder="再输入密码" v-model="user.newPassword2" />
 			</view>
 
 			<!-- 提交按钮 -->
@@ -42,15 +42,22 @@ export default {
   data() {
     return {
       user: {
-        oldPassword: '1234',
-        newPassword: '',
-        confirmPassword: ''
+        oldPassword: '',
+        newPassword1: '',
+        newPassword2: '',
+		username:''
       }
-    };
+    }
   },
+  
+  onShow(){
+  	const value = uni.getStorageSync('nowAccount');
+  	this.user.username=value.data.username
+  },
+  
   methods: {
     submitForm() {
-      if (this.newPassword !== this.confirmPassword) {
+      if (this.newPassword2 !== this.newPassword1) {
         uni.showToast({
           title: '两次输入的密码不一致',
           icon: 'none'
@@ -58,45 +65,29 @@ export default {
         return;
       }
 
-      // 构建请求数据
-      const data = {
-        oldPassword: this.oldPassword,
-        newPassword: this.newPassword
-      };
-
       // 发送请求到后端 API
       uni.request({
-        url:'http://127.0.0.1:4523/m1/5010181-4669608-default/auth/account_settings', // 你的后端 API URL
-        method: 'POST',
-        data: data,
-        header: {
-          'content-type': 'application/json' // 根据需要设置请求
+        url:'http://localhost:1234/user/updatePassword',
+        data:this.user,
+        method:"POST",
+        header:{
+        	'Content-Type': 'application/json'
         },
         success: (res) => {
-          // 请求成功的处理逻辑
-          if (res.statusCode === 200 && res.data.success) {
-            uni.showToast({
-              title: '密码修改成功',
-              icon: 'success'
-            });
-            // 清空输入框
-            this.oldPassword = '';
-            this.newPassword = '';
-            this.confirmPassword = '';
+          console.log(res)
+          if (res.data.code == 200) {
+            this.$u.toast("修改成功");
+			uni.redirectTo({
+				url:'/pages/me/setting/setting'
+			})
           } else {
             // 处理其他情况，比如错误消息
-            uni.showToast({
-              title: res.data.message || '密码修改失败',
-              icon: 'none'
-            });
+           this.$u.toast(res.data.data);
           }
         },
         fail: (err) => {
           // 请求失败的处理逻辑
-          uni.showToast({
-            title: '请求失败，请稍后再试',
-            icon: 'none'
-          });
+          this.$u.toast("请求失败，请稍后再试");
         }
       });
     }
@@ -107,7 +98,7 @@ export default {
 
 <style>
 	.content { 
-		background-color: #fef1f4;
+		background-color: #fef6f8;
 		height: 100vh; /* 修改为100vh，确保覆盖整个视口高度 */
 		padding-bottom: 20px; /* 可选，添加一些底部内边距 */
 	}
@@ -119,7 +110,7 @@ export default {
 	}
 
 	.input {
-	  background-color: #fef1f4; /* 确保与.content背景色一致 */
+	  background-color: #fef6f8; /* 确保与.content背景色一致 */
 	  width: 80%;
 	  height: 10vw; /* 保持不变 */
 	  border-radius: 20vw;

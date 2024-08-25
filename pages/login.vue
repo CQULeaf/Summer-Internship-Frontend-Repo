@@ -24,33 +24,48 @@
 				user:{
 					username:"",
 					password:""
-				},
-				account:''
+				}
 			}
 		},
 		
 		methods:{
 			login:function(){
-				console.log(this.user)
+				if(this.user.username==''){
+					this.$u.toast("请输入账号");
+					return
+				}else if(this.user.password==''){
+					this.$u.toast("请输入密码");
+					return
+				}
 				uni.request({
-					url:'http://localhost:8080/user/login',
+					url:'http://localhost:1234/user/login',
 					data:this.user,
 					method:"POST",
 					header:{
 						'Content-Type': 'application/json'
 					},
 					success: (res) => {
-						uni.setStorageSync('nowAccount', res.data);
+						console.log(res)
+						uni.setStorage({
+							key: 'nowAccount',
+							data: res.data,
+							success: () => {
+								var value = uni.getStorageSync('nowAccount');
+								console.log(value)
+								if (value.code==200){
+									uni.switchTab({
+										url: '/pages/me/mypage'
+									});
+								} 
+								else
+								{
+									this.$u.toast("用户名或密码错误");
+								}
+							}
+						});
 					}
 				});
-				const value = uni.getStorageSync('nowAccount');
-				console.log(value)
-				
-				if (value.code===200){
-					uni.switchTab({
-						url: '/pages/me/mypage'
-					});
-				};
+
 			},
 			
 			register(){
@@ -59,6 +74,12 @@
 					url:"/pages/register"
 				})
 			}
+		},
+		
+		onShow(){
+			uni.removeStorage({
+				key: 'nowAccount',
+			});
 		}
     }
 </script>
@@ -78,13 +99,13 @@ body {
 }
 .login-wrapper {
     background-color: #fff;
-    width: 500rpx;
-    height: 1100rpx;
+    width: 480rpx;
+    height: 1050rpx;
     border-radius: 15rpx;
     padding: 0 50px;
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 49%;
     transform: translate(-50%, -50%);
 }
 .header {
@@ -112,8 +133,8 @@ body {
     padding: 10px;
     margin: 0 auto;
     width: 90%;
-    margin-top: 40px;
-	margin-bottom: -25px;
+    margin-top: 45px;
+	margin-bottom: -30px;
     background-color: #fecdd4;
     color: #fff;
 }

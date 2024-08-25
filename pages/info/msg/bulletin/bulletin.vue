@@ -1,11 +1,9 @@
 <template>
 	<view>
-		<u-navbar :background="background" title-color="#fff" title="系统公告"></u-navbar>
 		<view class="bulletin" v-for="(res, index) in bulletinList" :key="res.id">
 			<view class="right">
 				<view class="content">{{ res.bulletinTitle }}</view>
 				<view class="top">
-					<view class="nickname">{{ res.nickname }}</view>
 					<view class="date">{{ res.date }}</view>
 				</view>
 				<view class="u-line-2">{{ res.bulletinText }}</view>
@@ -43,28 +41,24 @@ export default {
 			this.bulletinList = [
 				{
 					id: 1,
-					nickname: '叶轻眉',
 					date: '12-25 18:58',
 					bulletinText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
 					bulletinTitle:'不敢相信',
 				},
 				{
 					id: 2,
-					nickname: '叶轻眉1',
 					date: '01-25 13:58',
 					bulletinText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
 					bulletinTitle:'不敢相信',
 				},
 				{
 					id: 3,
-					nickname: '叶轻眉2',
 					date: '03-25 13:58',
 					bulletinText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
 					bulletinTitle:'不敢相信',
 				},
 				{
 					id: 4,
-					nickname: '叶轻眉3',
 					date: '06-20 13:58',
 					bulletinText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
 					bulletinTitle:'不敢相信',
