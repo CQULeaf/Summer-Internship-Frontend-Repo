@@ -2,70 +2,68 @@
 <!-- 点击里面的帖子跳转到post -->
 
 <template>
-	<view class="wrap">
-		<!-- 新增的板块，用于展示头像、标题、描述、关注数和帖子数 -->
-				<view class="profile-section">
-					<image class="avatar" src="http://example.com/avatar.jpg"></image>
-					<view class="profile-info">
-						<text class="title">用户昵称</text>
-						<text class="description">这里是帖子描述，可以写一些用户介绍或者帖子内容概要。</text>
-						<view class="stats">
-							<text class="stat">关注数：1234</text>
-							<text class="stat">帖子数：5678</text>
+				<view class="wrap">
+						<!-- 新增的板块，用于展示头像、标题、描述、关注数和帖子数 -->
+						<view class="topic-section">
+							<image class="avatar" :src="topic.cover"></image>
+							<view class="topic-info">
+								<text class="title">{{ topic.title }}</text>
+								<text class="description">{{ topic.description }}</text>
+								<view class="stats">
+									<text class="stat">关注数：{{ topic.follower_count  }}</text>
+									<text class="stat">帖子数：{{ topic.post_count }}</text>
+								</view>
+							</view>
 						</view>
-					</view>
-				</view>
+			<!-- 新增的板块，用于展示头像、标题、描述、关注数和帖子数 -->
 			
-			
-		<u-waterfall v-model="flowList" ref="uWaterfall">
-			
-			<template v-slot:left="{leftList}">
-				<view class="demo-warter" v-for="(item, index) in leftList" :key="index">
-					<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index"></u-lazy-load>
-					<view class="demo-title">
-						{{item.title}}
-					</view>
+		<u-waterfall v-model="flowList" ref="uWaterfall"><!-- 左边 -->
+					<template v-slot:left="{leftList}">
+						<view class="demo-warter" v-for="(item, index) in leftList" :key="index" @click="goToPost(item.post_id)">
+							<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index"></u-lazy-load>
+							<view class="demo-title">
+								{{item.title}}
+							</view>
+							<view class="demo-shop">
+								<!-- 注意一下这个哈，是发布者 -->
+								{{item.shop}}
+							</view>
+							<view class="demo-actions">
+								<text class="action-btn" @click.stop="likePost(item.post_id)">点赞</text>
+								<text class="action-btn" @click.stop="commentPost(item.post_id)">评论</text>
+							</view>
+							<u-icon name="close-circle-fill" color="#ffffff" size="34" class="u-close" @click="remove(item.post_id)"></u-icon>
+						</view>
+					</template>
 					
-					<view class="demo-tag">
-						<view class="demo-tag-owner">
-							新乐府
+					<!-- 右边 --><!-- 先不改形成对照，不太确定怎么改呢 -->
+					<template v-slot:right="{rightList}">
+						<view class="demo-warter" v-for="(item, index) in rightList" :key="index" @click="goToPost(item.post_id)">
+							<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index"></u-lazy-load>
+							<view class="demo-title">
+								{{item.title}}
+							</view>
+							
+							
+							<view class="demo-shop">
+								{{item.shop}}
+							</view>
+							<view class="post-actions">
+							  <button class="like-btn" @click="handleLike">
+							    <uni-icons type="heart" size="10" :color="isLiked ? '#ff6c60' : '#ccc'"></uni-icons>
+							    <text class="action-text">点赞</text>
+							  </button>
+							  <button class="comment-btn" @click="handleComment">
+							    <uni-icons type="chat" size="10" color="#2196f3"></uni-icons>
+							    <text class="action-text">评论</text>
+							  </button>
+							</view>
+							<u-icon name="close-circle-fill" color="#ffffff" size="34" class="u-close" @click="remove(item.id)"></u-icon>
 						</view>
-						<view class="demo-tag-text">
-							元白
-						</view>
-					</view>
-					<view class="demo-shop">
-						{{item.shop}}
-					</view>
-					<u-icon name="close-circle-fill" color="#ffffff" size="34" class="u-close" @click="remove(item.id)"></u-icon>
-				</view>
-			</template>
-			
-			
-			
-			<template v-slot:right="{rightList}">
-				<view class="demo-warter" v-for="(item, index) in rightList" :key="index">
-					<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index"></u-lazy-load>
-					<view class="demo-title">
-						{{item.title}}
-					</view>
-					
-					<view class="demo-tag">
-						<view class="demo-tag-owner">
-							新乐府 
-						</view>
-						<view class="demo-tag-text">
-							元白
-						</view>
-					</view>
-					<view class="demo-shop">
-						{{item.shop}}
-					</view>
-					<u-icon name="close-circle-fill" color="#ffffff" size="34" class="u-close" @click="remove(item.id)"></u-icon>
-				</view>
-			</template>
-		</u-waterfall>
-		<u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="addRandomData"></u-loadmore>
+					</template>
+				</u-waterfall>
+				<u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="addRandomData"></u-loadmore>
+			</view>
 	</view>
 </template>
 
@@ -77,11 +75,12 @@
 			return {
 				
 				//---------------帖子
-				profile: {
-							avatar: 'http://example.com/avatar.jpg',
-							title: '用户昵称',
-							description: '这里是帖子描述...',
-							followers: 1234,
+				topic: {
+							avatar: "/static/demodemo.jpg",
+							//显示不了哎
+							title: '元白超话   ',
+							description: '君埋泉下泥销骨,我寄人间雪满头',
+							followers: 1234,//显示不了
 							posts: 5678
 						},
 				//---------------帖子		
@@ -93,7 +92,7 @@
 						
 						title: '我今因病魂颠倒,唯梦闲人不梦君',
 						shop: '元稹',
-						image: 'http://pic.sc.chinaz.com/Files/pic/pic9/202002/zzpic23327_s.jpg',
+						image: "/static/demodemo.jpg",
 					},
 					{
 						
@@ -127,9 +126,34 @@
 					this.flowList.push(item);
 				}
 			},//增加随机数据
+			
 			remove(id) {
 				this.$refs.uWaterfall.remove(id);
 			},//删除
+			// 点击帖子，跳转到帖子详情页面
+			        goToPost(postId) {
+			            // 跳转到帖子详情页面，并传递帖子ID
+			            uni.navigateTo({
+			                url: '/pages/post/detail?postId=' + postId
+			            });
+			        },
+			        
+			        handleLike() {
+			          // 点赞逻辑
+			          this.isLiked = !this.isLiked;
+			          // 更新点赞数量或者状态
+			          console.log('点赞');
+			        },
+			        handleComment() {
+			          // 评论逻辑
+			          console.log('评论');
+			          //跳转试试？
+			          uni.navigateTo({
+			                  url: '/pages/home/reply',
+			                })
+			          
+			        },
+			        
 			
 		}
 	}
@@ -177,36 +201,6 @@
 		color: $u-main-color;
 	}
 	
-	.demo-tag {
-		display: flex;
-		margin-top: 5px;
-	}//两个小框框的排版
-	
-	.demo-tag-owner {//红色小框框
-		background-color: $u-type-error;
-		color: #FFFFFF;
-		display: flex;
-		align-items: center;
-		padding: 4rpx 14rpx;
-		border-radius: 50rpx;
-		font-size: 20rpx;
-		line-height: 1;
-	}
-	
-	.demo-tag-text {
-		border: 1px solid $u-type-primary;
-		color: $u-type-primary;
-		margin-left: 10px;
-		border-radius: 50rpx;
-		line-height: 1;
-		padding: 4rpx 14rpx;
-		display: flex;
-		align-items: center;
-		border-radius: 50rpx;
-		font-size: 20rpx;
-	}//蓝色小框框
-	
-	
 	.demo-shop {
 		font-size: 22rpx;
 		color: $u-tips-color;
@@ -218,7 +212,7 @@
 		padding-top: 0rpx; // 减少顶部内边距，使内容更靠近顶部
 	
 	}
-	.profile-section {
+	.topic-section {
 			display: flex;
 			align-items: center;
 			background-color: #ffffff;
@@ -235,12 +229,12 @@
 			margin-right: 20rpx;
 		}
 		
-		.profile-info {
+		.topic-info {
 			flex: 1;
 		}
 		
 		.title {
-			font-size: 34rpx;
+			font-size: 30rpx;
 			font-weight: bold;
 		}
 		
@@ -260,4 +254,13 @@
 			color: #999;
 			margin-right: 30rpx;//关注和帖子的排版
 		}
+		
+		//--------------------------
+		.post-actions {
+		  display: flex;
+		  justify-content: space-between;
+		  align-items: center;
+		  margin-top: 10px;
+		}
+			//-------------
 </style>

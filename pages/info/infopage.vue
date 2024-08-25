@@ -335,7 +335,7 @@
 		/* 水平居中 */
 		padding: 0 110rpx;
 		/* 背景颜色 */
-		border: 2px solid #ff8e96;
+		border: 2px solid #fcaea7;
 		/* 边框 */
 		border-radius: 5px;
 		/* 圆角 */

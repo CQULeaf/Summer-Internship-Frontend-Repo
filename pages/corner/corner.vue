@@ -167,7 +167,7 @@ export default {
 	  //跳转到对应的超话推荐与关注页面
       console.log(`点击了 ${category}`);
 	   uni.navigateTo({
-	          url: '/pages/corner/Superwordname',
+	          url: '/pages/corner/content',
 	        });
     },
 	
@@ -175,7 +175,10 @@ export default {
 	//重点！！！之后要和后端连接
     search() {
       // 搜索逻辑
-      console.log(`搜索了: ${this.searchText}`);
+     
+	  
+	  
+	  
     }
 	//--------------------------------------------
 	

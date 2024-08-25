@@ -1,10 +1,10 @@
 <template>
 	<view class="help-container">
-		<u-navbar :is-back="true" title="发帖子" :background="background" :customBack="backtohome" height="55">
-			<div class="btn" @click="sent">发送</div>
+		<u-navbar :is-back="true" title-size=40 title="你的秘密" :background="background" :customBack="backtotreepost" height="65">
+			<div class="btn" @click="sent">投递</div>
 		</u-navbar>
 		<view class="form-item">
-		  <textarea class="input" v-model="message" placeholder="分享新鲜事..."></textarea>
+		  <textarea class="input" v-model="message" placeholder="在这里,没有人了解你的过去,没有你抒发不了的烦恼,所以请尽情释放自己吧 (/≧▽≦)/"></textarea>
 		</view>
 		<view class="u-demo">
 			<view class="u-demo-wrap">
@@ -26,13 +26,12 @@
 							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
 						</view>
 					</u-upload>
-					<u-button :custom-style="{marginTop: '20rpx'}" @click="upload">上传</u-button>
-					<u-button :custom-style="{marginTop: '40rpx'}" @click="clear">清空列表</u-button>
+					<u-button :custom-style="{marginTop: '20rpx'}" @click="upload" class="btnstyle">上传</u-button>
+					<u-button :custom-style="{marginTop: '40rpx'}" @click="clear" class="btnstyle">清空列表</u-button>
 					<!-- <u-button :custom-style="{marginTop: '40rpx'}" @click="reUpload">重新上传</u-button> -->
 				</view>
 			</view>
 		</view>
-		<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
 	</view>
 </template>
 
@@ -43,7 +42,10 @@
 				// 背景颜色
 				 background: 
 				 {
-				 	backgroundColor:'#fed6dc'
+				 	backgroundColor: '#001f3f',
+				 		backgroundSize: 'cover',
+				 		backgroundImage: 'linear-gradient(45deg, rgb(159, 219, 196),rgb(139, 219, 186),rgb(35, 187, 154))'
+				 	
 				},
 				action: 'http://127.0.0.1:7001/upload',
 				// 预置上传列表
@@ -61,57 +63,13 @@
 				customStyle: false,
 				maxCount: 2,
 				lists: [], // 组件内部的文件列表
-				list:'',
-				current: 4
 			}
 		},
-		onLoad() {
-			this.list = [{
-					iconPath: "/static/newhomeg.png",
-					selectedIconPath: "/static/newhomep.png",
-					text: '家',
-					isDot: true,
-					customIcon: false,
-					pagePath:'/pages/home/homepage'
-				},
-				{
-					iconPath:  "/static/happygrey.png",
-					selectedIconPath:"/static/happierp.png",
-					text: '聚',
-					isDot: true,
-					customIcon: false,
-					pagePath:'/pages/corner/corner'
-				},
-				{
-					iconPath: "/static/yanblack.png",
-					selectedIconPath: "/static/yanpink.png",
-					text: '言',
-					midButton: true,
-					customIcon: false,
-					pagePath:'/pages/post/postpage'
-				},
-				{
-					iconPath:  "/static/messagegrey.png",
-					selectedIconPath:"/static/messagep.png",
-					text: '讯',
-					customIcon: false,
-					pagePath:'/pages/info/infopage'
-				},
-				{
-					iconPath:  "/static/megrey.png",
-					selectedIconPath:"/static/mep.png",
-					text: '我',
-					isDot: false,
-					customIcon: false,
-					pagePath:'/pages/me/mypage'
-				},
-			]
-		},
 		methods: {
-			backtohome()
+			backtotreepost()
 			{
-				uni.switchTab({
-					url:"/pages/home/homepage"
+				uni.navigateTo({
+					url:"/pages/info/treecave/treepost"
 				})
 				
 			},
@@ -195,6 +153,11 @@
 </script>
 
 <style>
+.btnstyle
+{
+	color: #4d8e4c;
+	background-color: #f8fdf8;
+}
 .btn 
 {
     text-align: right;
@@ -202,7 +165,7 @@
     margin: 0 auto;
 	margin-right: 10%;
     width: 9%;
-    background-color: #66b1ff;
+    background-color: #3a8b3f;
 	border-radius: 40%;
     color: #ffffff;
 	},
@@ -224,14 +187,15 @@
   border-radius: 4px;
   /* 通过设置 margin-left 负值来向左移动输入框 */
   margin-left: -10px;
+  background-color: #f8fdf8;
 }
 .help-container {
 	padding: 20px;
-	background-color: #fdfdfd;
+	background-color: #f1fdf1;
    min-height: 100vh; /* 确保至少与视口高度相同 */
 }
 	.u-demo-wrap {
-		background-color: #fdfdfd;
+		background-color: #f1fdf1;
 		padding: 40rpx 8rpx;
 		margin-left: -14rpx;
 		margin-right: -14rpx;

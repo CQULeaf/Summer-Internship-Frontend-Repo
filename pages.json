@@ -41,13 +41,6 @@
 				"navigationBarTitleText": "公告"
 			}
 		},
-		
-		{
-			"path": "pages/tabbar3",
-			"style": {
-				"navigationBarTitleText": "我的"
-			}
-		},
 		{
 			"path": "pages/me/setting/setting",
 			"style": {
@@ -159,7 +152,7 @@
 					}
 				},
 		{
-				"path" : "pages/corner/Superwordname",
+				"path" : "pages/corner/superWordName",
 				"style" : 
 				{
 					"navigationBarTitleText": "聚"
@@ -192,6 +185,13 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/info/treecave/treepostpage",
+			"style" : 
+			{
+				"navigationStyle" : "custom"
 			}
 		}
 	

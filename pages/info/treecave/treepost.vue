@@ -6,7 +6,7 @@
 			</u-navbar>
 		</view>
 			<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
-				<view class="subinfolist" @click="gotopofile(index)" v-for="(subinfo, index) in subinfolist"
+				<view class="subinfolist" @click="gotoreply(index)" v-for="(subinfo, index) in subinfolist"
 					:key="index">
 					<image class="image" :src="subinfo.image"></image>
 					<text class="text">{{ subinfo.text }}</text>
@@ -28,16 +28,36 @@
 				subinfolist: [
 					// 标签数据
 					{
-						image: '../../static/liked.png',
-						text: '点赞',
+						image: '/static/mail.svg',
+						text: '不会有人再像她一样爱我了...',
 					},
 					{
-						image: '../../static/comment.svg',
-						text: '评论',
+						image: '/static/mail.svg',
+						text: '我是全世界最聪明的小女孩！',
 					},
 					{
-						image: '../../static/announcement.svg',
-						text: '公告'
+						image: '/static/mail.svg',
+						text: '我今天被老师表扬了好开心>_<'
+					},
+					{
+						image: '/static/mail.svg',
+						text: '哈哈光顾着抽风，忘记抽你啦'
+					},
+					{
+						image: '/static/mail.svg',
+						text: '她今天跟我说话了嘿嘿...'
+					},
+					{
+						image: '/static/mail.svg',
+						text: '救命！！遇到下头男了...'
+					},
+					{
+						image: '/static/mail.svg',
+						text: '我真的要失去她了...'
+					},
+					{
+						image: '/static/mail.svg',
+						text: '原来一切都有迹可循...'
 					}
 				]
 			}
@@ -47,6 +67,11 @@
 			gotopofile() {
 				uni.navigateTo({
 					url: "/pages/info/treecave/treecave"
+				})
+			},
+			gotoreply(){
+				uni.navigateTo({
+					url:"/pages/home/reply"
 				})
 			}
 		}
@@ -77,19 +102,19 @@
 	.subinfolist {
 		display: flex;
 		align-items: center;
-		padding: 10px;
+		padding: 25px;
 		background-color: #fafff7;
-		border-bottom: 1px solid #f0dddf;
+		border-bottom: 1px solid #e7f0e6;
 		/* 2px 是边框宽度 */
-	
+		
 	}
 	.image {
 		width: 100rpx;
 		height: 100rpx;
 		border-radius: 10%;
 		margin-top: 3px;
-		margin-right: 20px;
-		margin-left: 10px;
+		margin-right: 22px;
+		margin-left: 1px;
 	}
 	
 	.text {
