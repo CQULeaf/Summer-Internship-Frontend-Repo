@@ -12,6 +12,9 @@
 					<text class="text">{{ subinfo.text }}</text>
 				</view>
 			</scroll-view>
+		<view class="floating-button">  
+		    <view @click="handleClick" class="hoverbutton" ><image class="button-image" src="/static/hoverbutton.svg" ></image></view>
+		</view>
 	</view>
 </template>
 
@@ -73,6 +76,12 @@
 				uni.navigateTo({
 					url:"/pages/home/reply"
 				})
+			},
+			handleClick()
+			{
+				uni.navigateTo({
+					url:"/pages/info/treecave/treepostpage"
+				})
 			}
 		}
 	}
@@ -121,4 +130,19 @@
 		font-size: 16px;
 		color: #333;
 	}
+.floating-button {  
+  position: fixed;  
+  bottom: 50px; /* 距离页面底部20px */  
+  right: 25px; /* 距离页面右侧20px */  
+  z-index: 1000; /* 确保按钮在其他内容之上 */  
+}  
+.button-image {  
+  width: 60px;  
+  height: 60px;  
+  /* 如果你不想图片被拉伸，可以使用aspectFit等mode值 */ 
+
+}  
+.hoverbutton{
+	background-color: rgba(255, 255, 255, 0);
+}
 </style>

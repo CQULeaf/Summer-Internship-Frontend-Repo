@@ -14,7 +14,8 @@
 			"path" : "pages/home/homepage",
 			"style" : 
 			{
-				"navigationBarTitleText" : "主页"
+				"navigationStyle": "custom"
+				
 			}
 		},
 		{
@@ -27,7 +28,8 @@
 		{
 			"path": "pages/me/mypage",
 			"style": {
-				"navigationBarTitleText": "我的"
+				"navigationBarTitleText": "我的",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -200,6 +202,19 @@
 			"style" : 
 			{
 				"navigationStyle" : "custom"
+			}},
+			{
+			"path" : "pages/me/mypost",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/me/myliked",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
 			}
 		}
 	

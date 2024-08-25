@@ -1,18 +1,28 @@
 <template>
 	<view>
+		<u-navbar :is-back="false" title="主页" :background="background" :customBack="backtohome" height="55" title-size=40 title-color=#262626>
+			
+		</u-navbar>
+		<view class="u-tabs-box">
+			<u-tabs-swiper activeColor="#f2b2c3" ref="tabs" :list="homelist" :current="current" @change="change" :is-scroll="true" swiperWidth="900" height=90></u-tabs-swiper>
+		</view>
+		<view class="=search">
+			<u-search placeholder="请输入标题关键字" v-model="keyword" @search="search" @custom="search" height=80 shape=round bg-color=#ededed input-align=center margin=10px></u-search>
+		</view>
 		<view class="wrap">
-			<view class="u-tabs-box">
-				<u-tabs-swiper activeColor="#f29100" ref="tabs" :list="homelist" :current="current" @change="change" :is-scroll="false" swiperWidth="750"></u-tabs-swiper>
-			</view>
+			
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
+				
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;">
-						<u-search placeholder="请输入关键字" v-model="keyword"></u-search>
-						<view class="post" v-for="(res, index) in postList" :key="res.id" @search="search" @custom="custom">
+						
+						<view class="post" v-for="(res, index) in postList" :key="res.id">
 							<view class="right">
 								<view class="content" @click="toReply(res)">{{ res.title }}</view>
 								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
-								<u-image width="100%" height="300rpx" :src="res.pic"></u-image>
+								<view v-if="res.cover">
+									<u-image width="100%" height="400rpx" :src="res.cover"></u-image>
+								</view>
 								<view class="like" :class="{ highlight: res.isLike }">
 									<view class="num">{{ res.likeCount }}</view>
 									<u-icon v-if="!res.isLike" name="thumb-up" :size="30" color="#9a9a9a" @click="getLike(index)"></u-icon>
@@ -26,21 +36,7 @@
 						</view>
 					</scroll-view>
 				</swiper-item>
-				<swiper-item class="swiper-item">
-					<scroll-view scroll-y style="height: 100%;width: 100%;">
-						<view class="post" v-for="(res, index) in postList" :key="res.id">
-							<view class="right">
-								<view class="content" @click="toReply(res)">{{ res.title }}</view>
-								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
-								<u-image width="100%" height="300rpx" :src="res.pic"></u-image>
-								<view class="top">
-									<view class="nickname">{{ res.nickname }}</view>
-									<view class="createdAt">{{ res.createdAt }}</view>
-								</view>
-							</view>
-						</view>
-					</scroll-view>
-				</swiper-item>
+				
 			</swiper>
 		</view>
 		<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
@@ -51,6 +47,11 @@
 export default {
 	data() {
 		return {
+			// 背景颜色
+			 background: 
+			 {
+			 	backgroundColor:'#fed6dc'
+			},
 			list:'',
 			current: 1,
 			keyword:'',
@@ -65,21 +66,24 @@ export default {
 					name: '关注',
 				}
 			],
-			postList:[
-				{userId:'',
+			postList:
+			[{
+				userId:'',
 				postId:'',
 				nickname: '',
 				createdAt: '',
 				postContent: '',
 				title:'',
-				pic:'',
+				cover:'',
 				likeCount:'',
-				isLike:'',}
-			]
+				isLike:'',
+			}]
 		};
 	},
 	
 	onShow() {
+		
+		// 请求帖子数据
 		
 		// uni.request({
 		// 	url:'',
@@ -136,7 +140,7 @@ export default {
 				createdAt: '12-25 18:58',
 				postContent: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
 				title:'不敢相信',
-				pic:'/static/c1.png',
+				cover:'/static/c1.png',
 				likeCount: 33,
 				isLike: false,
 			},
@@ -226,7 +230,7 @@ page {
 </style>
 
 <style lang="scss" scoped>
-	
+
 .like {
 	display: flex;
 	align-items: center;
@@ -243,6 +247,7 @@ page {
 	flex-direction: column;
 	height: calc(100vh - var(--window-top));
 	width: 100%;
+	color: #646464;
 }
 .swiper-box {
 	flex: 1;
@@ -264,8 +269,8 @@ page {
 		}
 	}
 	.right {
-		flex: 1;
-		padding-left: 20rpx;
+		flex: 2;
+		padding-left: 10rpx;
 		font-size: 30rpx;
 		.top {
 			display: flex;
@@ -280,11 +285,14 @@ page {
 			}
 		}
 		.content {
-			margin-bottom: 10rpx;
-			font-size: 20px;
+			margin-bottom: 30rpx;
+			margin-top: 30rpx;
+			font-size: 25px;
+			font-weight: bold;
 		}
 		.text {
-			margin-top: 20rpx;
+			margin-top: 30rpx;
+			margin-bottom: 20rpx;
 			display: flex;
 			font-size: 24rpx;
 			color: #9a9a9a;

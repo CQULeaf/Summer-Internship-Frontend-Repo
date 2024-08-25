@@ -149,6 +149,7 @@
 
 			confirm(index){
 				console.log(this.user)
+				this.user.hometown=index.province.label+index.city.label+index.area.label
 			},
 
 			chooseAvatar() {
