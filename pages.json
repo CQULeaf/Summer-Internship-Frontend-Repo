@@ -193,6 +193,20 @@
 			{
 				"navigationStyle" : "custom"
 			}
+		},
+		{
+			"path" : "pages/me/mypost",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/me/myliked",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
 	
 		

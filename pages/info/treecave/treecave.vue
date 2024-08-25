@@ -9,7 +9,7 @@
 			<image class="image" :src="imageSrc"></image>
 			<button v-if="isButtonVisible" class="center-button" @click="showTree()">开始相遇</button>
 			<view v-if="isImageVisible" class="useravatarborder">
-				<image class="useravatar" :src="user.avatar" @click="goToTalk()"></image>
+				<image class="useravatar" :src="fixedAvatarSrc" @click="goToTalk()"></image>
 			</view>
 		</view>
 		<bottom-nav-bar class="bottom-nav-bar" :navItems="navItems" />
@@ -48,11 +48,12 @@
 						text: '诉',
 						icon: '/static/robot.svg'
 					}
-
 				],
 				user: {
-					avatar: ''
-				}
+					userId: '' // 当前用户的 ID
+				},
+				fixedAvatarSrc: '/static/momo.jpg', // 固定头像图片路径
+				matchusAAer: {} // 用于存储匹配用户信息
 			}
 		},
 
@@ -67,38 +68,45 @@
 				this.isImageVisible = true;
 				this.imageSrc = '/static/treecave1.jpg';
 				this.isButtonVisible = false; // 隐藏按钮
+				this.fetchRandomMatch(); // 显示树时获取匹配用户
 			},
 			goToTalk() {
 				// 跳转到聊天界面，假设聊天界面的路径为 '/pages/info/treecave/treetalk'
 				uni.navigateTo({
-					url: '/pages/info/treecave/treetalk?userId=' + this.user.user_id // 假设用户有一个 id 属性
+					url: '/pages/info/treecave/treetalk?userId=' + this.matchuser.user_id // 假设用户有一个 id 属性
 				});
 			},
-			fetchUserAvatar() {
+			fetchRandomMatch() {
 				uni.request({
-					url:"http://127.0.0.1:4523/m1/5010181-4669608-default/info/treetalk",
-					data:this.user,
-					method:'GET',
+					url: "http://127.0.0.1:4523/m1/5010181-4669608-default/info/treetalk",
+					data: this.user,
+					method: 'GET',
 					success: (res) => {
 						console.log(res);
-						if(res.statusCode==200){
-							this.user=res.data.data
-						}else {
+						if (res.statusCode == 200) {
+							this.matchuser = res.data.data; // 假设 API 返回的数据格式包含用户信息
+							console.log(res.data);
+							uni.setStorage({
+								key: 'matchuser',
+								data: this.matchuser,
+								success: function() {
+									console.log('Match user data stored successfully.');
+								}
+							});
+						} else {
 							uni.showToast({
 								title: '获取数据失败',
 								icon: 'none'
 							});
 						}
-						
+
 					}
-					
-					
+
+
 				})
-				// 这里可以添加获取用户头像的逻辑，例如从 API 获取
 			}
 		},
 		mounted() {
-			this.fetchUserAvatar(); // 组件挂载后获取用户头像
 		}
 	}
 </script>
@@ -173,7 +181,6 @@
 		color: #ffffff;
 		/* 文字颜色 */
 		border: 5px solid #3cb68e;
-		;
 		/* 边框（可选） */
 		border-radius: 50px;
 		/* 圆角（可选） */
