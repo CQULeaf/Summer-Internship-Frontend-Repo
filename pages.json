@@ -186,6 +186,13 @@
 			{
 				"navigationBarTitleText" : ""
 			}
+		},
+		{
+			"path" : "pages/info/treecave/treepostpage",
+			"style" : 
+			{
+				"navigationStyle" : "custom"
+			}
 		}
 	
 		
