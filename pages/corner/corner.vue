@@ -13,7 +13,7 @@
       <view class="swiper-container">
         <uni-swiper-dot class="uni-swiper-dot-box" @clickItem=clickItem :info="info" :current="current" :mode="mode" :dots-styles="dotsStyles" field="content">
           <swiper class="swiper-box" @change="change" :current="swiperDotIndex">
-            <swiper-item v-for="(item, index) in 3" :key="index">
+            <swiper-item v-for="(item, index) in 4" :key="index">
               <view class="swiper-item" :class="'swiper-item' + index">
                 <text style="color: #fff; font-size: 32px;">{{index+1}}</text>
               </view>
@@ -65,7 +65,7 @@ export default {
 				{
 					colorClass: 'uni-bg-blue',
 					url: 'https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/shuijiao.jpg',
-					//轮播图图片，不知要不要改成数据库图片
+					//小角标
 				}
 			],
 			//-------------------------
@@ -167,7 +167,7 @@ export default {
 	  //跳转到对应的超话推荐与关注页面
       console.log(`点击了 ${category}`);
 	   uni.navigateTo({
-	          url: '/pages/corner/content',
+	          url: '/pages/corner/superWordName',
 	        });
     },
 	
@@ -229,7 +229,9 @@ export default {
 	.swiper-item2 {
 		background-color: #cee1fd;
 	}
-
+.swiper-item3 {
+		background-color: #cee1fd;
+	}
 	.image {
 		width: 500rpx;
 	}

@@ -4,6 +4,7 @@
 	},
 	"pages": [
 		{
+			
 			"path": "pages/login",
 			"style": {
 				"navigationStyle": "custom"
@@ -13,7 +14,8 @@
 			"path" : "pages/home/homepage",
 			"style" : 
 			{
-				"navigationBarTitleText" : "主页"
+				"navigationStyle": "custom"
+				
 			}
 		},
 		{
@@ -26,7 +28,8 @@
 		{
 			"path": "pages/me/mypage",
 			"style": {
-				"navigationBarTitleText": "我的"
+				"navigationBarTitleText": "我的",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -187,7 +190,24 @@
 			}
 		},
 		{
+<<<<<<< HEAD
 			"path" : "pages/userPage",
+=======
+			"path" : "pages/corner/postToCorner",
+			"style" : 
+			{
+				"navigationStyle" : "custom"
+			}},
+			{
+			"path" : "pages/me/mypost",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/me/myliked",
+>>>>>>> 3437fa63805033b147be799d4245e72ecfc1babd
 			"style" : 
 			{
 				"navigationBarTitleText" : ""

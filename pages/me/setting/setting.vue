@@ -55,7 +55,7 @@
   
   <style>
     .settings {
-      background-color: #fef1f4;
+      background-color: #fef6f8;
 	  margin-top: 15px;
       padding: 25px;
       border-radius: 8px;

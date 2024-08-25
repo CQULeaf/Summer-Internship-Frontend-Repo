@@ -1,6 +1,4 @@
-
-//删除该板块
-
+<!-- 跳转到超话里面 -->
 <template>
 	<view class="container">
 		<!-- 切换标签部分 -->
@@ -52,11 +50,12 @@
 	export default {
 		data() {
 			return {
+				
 				list: [
 					{
 						name: '关注',
 						type: 'like',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/corner/superWordNameRecommend?user_id'
+						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/follow/topicConcern'
 						//api连接
 						//为什么两个url都能用？之后可能要修改
 						
@@ -76,17 +75,56 @@
 				hasMore: true,
 				touchStartX: 0,
 				touchEndX: 0,
-				touchThreshold: 30
+				touchThreshold: 30,
+				
+				user: {
+				  topic_id:''
+				},
+				matchuser: {
+				name:'',cover:'',description:'',post_count:'',follower_count:''
+				
+				},
+				
 			};
 		},
 		methods: {
+			
+				//------------------------------------------跳转以及获取想要信息
 			            goToContent(postId) {
+							uni.request({
+								url: "http://127.0.0.1:4523/m1/5010181-4669608-default/corner/superWordNameConcern",//api
+								data: this.user,//自己定义的 变量，包含api中需要传递的信息
+								method: 'GET',//方法类型
+								success: (res) => {
+									console.log(res);
+									if (res.statusCode == 200) {
+										this.matchuser = res.data.data; // 假设 API 返回的数据格式包含用户信息
+										//获取想要的信息
+										console.log(res.data);//打印
+										uni.setStorage({//缓存
+											key: 'matchuser',//就是之前定义的变量
+											data: this.matchuser,
+											success: function() {
+												console.log('噫，好了，我中了');//成功后打印这句话
+											}
+										});
+									} else {
+										uni.showToast({
+											title: '获取数据失败',
+											icon: 'none'
+										});
+									}
+								},
+								fail:()=>{
+									console.log(1111)
+								}
+							})
 			                // 跳转到内容页面，并传递帖子ID
 			                uni.navigateTo({
 			                    url: '/pages/corner/content?topic_id=' + this.topic_id 
 			                });
 			            },
-						
+						//------------------------------------------跳转
 						
 			onreachBottom() {
 				if (this.loading || !this.hasMore) return;

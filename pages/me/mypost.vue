@@ -1,4 +1,3 @@
-
 <!-- 假设现在已经把评论移花接木了 -->
 <template>
   <view class="post-container">
@@ -9,7 +8,6 @@
     <view class="post-content">
       {{ postContent }}
     </view>
-	
     <view class="post-actions">
       <button class="like-btn" @click="handleLike">
         <uni-icons type="heart" size="10" :color="isLiked ? '#ff6c60' : '#ccc'"></uni-icons>
@@ -20,7 +18,6 @@
         <text class="action-text">评论</text>
       </button>
     </view>
-	
   </view>
 </template>
 
@@ -48,7 +45,7 @@ export default {
       console.log('评论');
 	  //跳转试试？
 	  uni.navigateTo({
-	          url: '/pages/home/reply',
+	          url: '/pages/me/mypage',
 	        })
 	  
     },
@@ -97,12 +94,12 @@ export default {
 .comment-btn {
   background-color: #f5f5f5;
   border: none;
-  padding: 14px;//按钮大小
-  font-size: 1px;//未知
+  padding: 10px;
+  font-size: 14px;
 }
 
 .action-text {
-  font-size: 14px;//变小
+  font-size: 14px;
   margin-left: 5px;
   margin-right: 5px;
 }
