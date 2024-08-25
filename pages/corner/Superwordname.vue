@@ -14,7 +14,7 @@
 					<view class="list">
 						<!-- 用户列表 -->
 						<view v-if="list[current].type === 'like'">
-							<view class="list-item" v-for="(item, index) in currentItems" :key="index">
+							<view class="list-item" v-for="(item, index) in currentItems" :key="index" @click="goToContent(item.id)">
 								<image class="useravatar" :src="item.cover"></image>
 								<text class="item-title">{{item.name}}</text>
 							
@@ -24,7 +24,7 @@
 						<!-- 帖子列表 -->
 						<view v-if="list[current].type === 'recommend'">
 							<!-- 渲染指令 -->
-							<view class="list-item" v-for="(post, index) in currentItems" :key="index">
+							<view class="list-item" v-for="(post, index) in currentItems" :key="index" @click="goToContent(post.id)">
 								<!-- key为每个渲染元素 提供唯一的key属性 -->
 								<image class="useravatar" :src="post.cover"></image>
 								<text class="item-title">{{post.name}}</text>
@@ -77,6 +77,14 @@
 			};
 		},
 		methods: {
+			            goToContent(postId) {
+			                // 跳转到内容页面，并传递帖子ID
+			                uni.navigateTo({
+			                    url: `http://127.0.0.1:4523/m1/5010181-4669608-default/corner/concerntopost/?topic_id`
+			                });
+			            },
+						
+						
 			onreachBottom() {
 				if (this.loading || !this.hasMore) return;
 				this.page++;
