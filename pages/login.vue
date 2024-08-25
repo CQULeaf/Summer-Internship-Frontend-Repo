@@ -30,25 +30,42 @@
 		
 		methods:{
 			login:function(){
-				console.log(this.user)
+				if(this.user.username==''){
+					this.$u.toast("请输入账号");
+					return
+				}else if(this.user.password==''){
+					this.$u.toast("请输入密码");
+					return
+				}
 				uni.request({
-					url:'http://localhost:8080/user/login',
+					url:'http://localhost:1234/user/login',
 					data:this.user,
 					method:"POST",
 					header:{
 						'Content-Type': 'application/json'
 					},
 					success: (res) => {
-						uni.setStorageSync('nowAccount', res.data);
+						console.log(res)
+						uni.setStorage({
+							key: 'nowAccount',
+							data: res.data,
+							success: () => {
+								var value = uni.getStorageSync('nowAccount');
+								console.log(value)
+								if (value.code==200){
+									uni.switchTab({
+										url: '/pages/me/mypage'
+									});
+								} 
+								else
+								{
+									this.$u.toast("用户名或密码错误");
+								}
+							}
+						});
 					}
 				});
-				const value = uni.getStorageSync('nowAccount');
-				console.log(value)
-				if (value.code==200){
-					uni.switchTab({
-						url: '/pages/me/mypage'
-					});
-				}
+
 			},
 			
 			register(){
@@ -57,6 +74,12 @@
 					url:"/pages/register"
 				})
 			}
+		},
+		
+		onShow(){
+			uni.removeStorage({
+				key: 'nowAccount',
+			});
 		}
     }
 </script>

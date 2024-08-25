@@ -13,7 +13,7 @@
 								<view class="content" @click="toReply(res)">{{ res.title }}</view>
 								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
 								<view v-if="res.cover">
-									<u-image width="100%" height="300rpx" :src="res.cover"></u-image>
+									<u-image width="100%" height="300rpx" :src="res.cover" @tap="preAvatar(res.cover)"></u-image>
 								</view>
 								<view class="like" :class="{ highlight: res.isLike }">
 									<view class="num">{{ res.likeCount }}</view>
@@ -93,12 +93,13 @@ export default {
 		
 		// 请求帖子数据
 		
-		// uni.request({
-		// 	url:'',
-		// 	success:(respones) => {
-		// 		this.list = respones.data
-		// 	}
-		// })
+		uni.request({
+			url:'http://localhost:1234/ccPost/getAllPosts',
+			success:(respones) => {
+				console.log(respones)
+				//this.postList = respones.data
+			}
+		})
 		
 		this.list = [{
 				iconPath: "/static/newhomeg.png",
@@ -183,6 +184,13 @@ export default {
 	},
 	
 	methods: {
+		preAvatar(img) {
+			wx.previewImage({
+				current: '', // 当前显示图片的 http 链接
+				urls: [img] // 需要预览的图片 http 链接列表
+			})
+		},
+		
 		// 进入帖子的回复界面
 		toReply(index){
 			uni.setStorageSync("postData",index)
@@ -210,7 +218,6 @@ export default {
 		// tab栏切换
 		change(index) {
 			this.swiperCurrent = index;
-			this.getOrderList(index);
 		},
 		transition({ detail: { dx } }) {
 			this.$refs.tabs.setDx(dx);
