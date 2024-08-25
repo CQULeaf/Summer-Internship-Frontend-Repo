@@ -68,40 +68,10 @@ export default {
 					//轮播图图片，不知要不要改成数据库图片
 				}
 			],
-			
-			list: [{
-					iconPath: "/static/newhomeg.png",
-					selectedIconPath: "/static/newhomep.png",
-					text: '家',
-					customIcon: false,
-				},
-				{
-					iconPath:  "/static/happygrey.png",
-					selectedIconPath:"/static/happierp.png",
-					text: '聚',
-				},
-				{
-					iconPath: "/static/yanblack.png",
-					selectedIconPath: "/static/yanpink.png",
-					text: '言',
-					midButton: true,
-					customIcon: false,
-				},
-				{
-					iconPath:  "/static/messagegrey.png",
-					selectedIconPath:"/static/messagep.png",
-					text: '讯',
-					customIcon: false,
-				},
-				{
-					iconPath:  "/static/megrey.png",
-					selectedIconPath:"/static/mep.png",
-					text: '我',
-					customIcon: false,
-				},
-			],
-			current: 0,//这个要改吗
-			
+			//-------------------------
+			list:'',
+			current: 4,
+			//-------------------------
 			
 			//轮播图
 			dotStyle: [
@@ -122,6 +92,55 @@ export default {
 			swiperDotIndex: 0,
     };
   },
+  
+  //--------------------------------------------
+  onLoad() {
+  	this.list = [{
+  			iconPath: "/static/newhomeg.png",
+  			selectedIconPath: "/static/newhomep.png",
+  			text: '家',
+  			isDot: true,
+  			customIcon: false,
+  			pagePath:'/pages/home/homepage'
+  		},
+  		{
+  			iconPath:  "/static/happygrey.png",
+  			selectedIconPath:"/static/happierp.png",
+  			text: '聚',
+  			isDot: true,
+  			customIcon: false,
+  			pagePath:'/pages/corner/corner'
+  		},
+  		{
+  			iconPath: "/static/yanblack.png",
+  			selectedIconPath: "/static/yanpink.png",
+  			text: '言',
+  			midButton: true,
+  			customIcon: false,
+  			pagePath:'/pages/tabbar3'
+  		},
+  		{
+  			iconPath:  "/static/messagegrey.png",
+  			selectedIconPath:"/static/messagep.png",
+  			text: '讯',
+  			customIcon: false,
+  			pagePath:'/pages/info/infopage'
+  		},
+  		{
+  			iconPath:  "/static/megrey.png",
+  			selectedIconPath:"/static/mep.png",
+  			text: '我',
+  			isDot: false,
+  			customIcon: false,
+  			pagePath:'/pages/me/mypage'
+  		},
+  	]
+  },
+  
+  
+  
+  
+  //--------------------------------------------
   methods: {
 	  change(e) {
 	  	this.current = e.detail.current
@@ -142,17 +161,24 @@ export default {
 	  onBanner(index) {
 	  	console.log(22222, index);
 	  },
+	  //-------------------------------------------
     toggleCategory(category) {
       // 假设这是点击某个图标后触发的逻辑
 	  //跳转到对应的超话推荐与关注页面
       console.log(`点击了 ${category}`);
+	   uni.navigateTo({
+	          url: '/pages/corner/Superwordname',
+	        });
     },
 	
+	//---------------------------------------------
 	//重点！！！之后要和后端连接
     search() {
       // 搜索逻辑
       console.log(`搜索了: ${this.searchText}`);
     }
+	//--------------------------------------------
+	
   }
 };
 </script>

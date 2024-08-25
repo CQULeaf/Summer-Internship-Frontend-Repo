@@ -72,13 +72,13 @@
 }
 .login-wrapper {
     background-color: #fff;
-    width: 500rpx;
+    width: 475rpx;
     height: 1050rpx;
     border-radius: 15rpx;
     padding: 0 50px;
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 49%;
     transform: translate(-50%, -50%);
 }
 .header {
@@ -106,7 +106,7 @@
     padding: 10px;
     margin: 0 auto;
     width: 90%;
-    margin-top: 40px;
+    margin-top: 35px;
     background-color: #fecdd4;
     color: #fff;
 }
