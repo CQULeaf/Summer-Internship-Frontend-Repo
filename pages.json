@@ -190,9 +190,12 @@
 			}
 		},
 		{
-<<<<<<< HEAD
 			"path" : "pages/userPage",
-=======
+			"style" : 
+			{
+				"navigationStyle" : "custom"
+			}},{
+
 			"path" : "pages/corner/postToCorner",
 			"style" : 
 			{
@@ -207,7 +210,6 @@
 		},
 		{
 			"path" : "pages/me/myliked",
->>>>>>> 3437fa63805033b147be799d4245e72ecfc1babd
 			"style" : 
 			{
 				"navigationBarTitleText" : ""
