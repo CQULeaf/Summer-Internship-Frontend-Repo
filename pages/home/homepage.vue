@@ -103,7 +103,7 @@ export default {
 				text: '聚',
 				isDot: true,
 				customIcon: false,
-				pagePath:'/pages/tabbar2'
+				pagePath:'/pages/corner/corner'
 			},
 			{
 				iconPath: "/static/yanblack.png",

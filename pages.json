@@ -41,12 +41,7 @@
 				"navigationBarTitleText": "公告"
 			}
 		},
-		{
-			"path": "pages/tabbar2",
-			"style": {
-				"navigationBarTitleText": "我的"
-			}
-		},
+		
 		{
 			"path": "pages/tabbar3",
 			"style": {
@@ -170,7 +165,7 @@
 				}
 			},
 			{
-					"path" : "pages/corner/waterfall",
+					"path" : "pages/corner/content",
 					"style" : 
 					{
 						"navigationBarTitleText": "聚"
@@ -216,7 +211,7 @@
 				"text": "家"
 			},
 			{
-				"pagePath": "pages/tabbar2",
+				"pagePath": "pages/corner/corner",
 				"iconPath": "/static/happygrey.png",
 				"selectedIconPath": "/static/happierp.png",
 				"text": "聚"
