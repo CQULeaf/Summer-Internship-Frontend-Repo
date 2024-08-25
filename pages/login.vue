@@ -38,7 +38,7 @@
 					return
 				}
 				uni.request({
-					url:'http://localhost:1234/user/login',
+					url:'http://localhost:8080/user/login',
 					data:this.user,
 					method:"POST",
 					header:{
@@ -99,13 +99,13 @@ body {
 }
 .login-wrapper {
     background-color: #fff;
-    width: 480rpx;
-    height: 1050rpx;
+    width: 400rpx;
+    height: 1100rpx;
     border-radius: 15rpx;
     padding: 0 50px;
     position: absolute;
     left: 50%;
-    top: 49%;
+    top: 50%;
     transform: translate(-50%, -50%);
 }
 .header {

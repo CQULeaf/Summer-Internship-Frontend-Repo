@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u-navbar :is-back="false" title="主页" :background="background" :customBack="backtohome" height="55" title-size=40 title-color=#262626>
+		<u-navbar :is-back="false" title="主页" :background="background" height="55" title-size=40 title-color=#262626>
 			
 		</u-navbar>
 		<view class="u-tabs-box">
@@ -10,9 +10,7 @@
 			<u-search placeholder="请输入标题关键字" v-model="keyword" @search="search" @custom="search" height=80 shape=round bg-color=#ededed input-align=center margin=10px></u-search>
 		</view>
 		<view class="wrap">
-			
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
-				
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;">
 						
@@ -21,7 +19,6 @@
 								<view class="content" @click="toReply(res)">{{ res.title }}</view>
 								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
 								<view v-if="res.cover">
-<<<<<<< HEAD
 									<u-image width="100%" height="300rpx" :src="res.cover" @tap="preAvatar(res.cover)"></u-image>
 								</view>
 								<view class="like" :class="{ highlight: res.isLike }">
@@ -45,9 +42,7 @@
 								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
 								<view v-if="res.cover">
 									<u-image width="100%" height="300rpx" :src="res.cover"></u-image>
-=======
 									<u-image width="100%" height="400rpx" :src="res.cover"></u-image>
->>>>>>> 3437fa63805033b147be799d4245e72ecfc1babd
 								</view>
 								<view class="like" :class="{ highlight: res.isLike }">
 									<view class="num">{{ res.likeCount }}</view>
