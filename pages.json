@@ -4,6 +4,7 @@
 	},
 	"pages": [
 		{
+			
 			"path": "pages/login",
 			"style": {
 				"navigationStyle": "custom"
@@ -189,6 +190,13 @@
 		},
 		{
 			"path" : "pages/info/treecave/treepostpage",
+			"style" : 
+			{
+				"navigationStyle" : "custom"
+			}
+		},
+		{
+			"path" : "pages/corner/postToCorner",
 			"style" : 
 			{
 				"navigationStyle" : "custom"

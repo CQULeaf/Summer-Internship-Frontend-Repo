@@ -5,9 +5,9 @@
 				<view class="wrap">
 						<!-- 新增的板块，用于展示头像、标题、描述、关注数和帖子数 -->
 						<view class="topic-section">
-							<image class="avatar" :src="topic.cover"></image>
+							<image class="cover" :src="topic.cover"></image>
 							<view class="topic-info">
-								<text class="title">{{ topic.title }}</text>
+								<text class="name">{{ topic.name }}</text>
 								<text class="description">{{ topic.description }}</text>
 								<view class="stats">
 									<text class="stat">关注数：{{ topic.follower_count  }}</text>
@@ -17,20 +17,28 @@
 						</view>
 			<!-- 新增的板块，用于展示头像、标题、描述、关注数和帖子数 -->
 			
-		<u-waterfall v-model="flowList" ref="uWaterfall"><!-- 左边 -->
+		<u-waterfall v-model="flowList" ref="uWaterfall">
+			<!-- 左边里面是帖子而不是topic -->
 					<template v-slot:left="{leftList}">
 						<view class="demo-warter" v-for="(item, index) in leftList" :key="index" @click="goToPost(item.post_id)">
 							<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index"></u-lazy-load>
 							<view class="demo-title">
 								{{item.title}}
 							</view>
-							<view class="demo-shop">
+							<view class="demo_user_id">
 								<!-- 注意一下这个哈，是发布者 -->
-								{{item.shop}}
+								{{item.user_id}}
 							</view>
-							<view class="demo-actions">
-								<text class="action-btn" @click.stop="likePost(item.post_id)">点赞</text>
-								<text class="action-btn" @click.stop="commentPost(item.post_id)">评论</text>
+							<!-- 点赞评论 -->
+							<view class="post-actions">
+							  <!-- <button class="like-btn" @click="handleLike">
+							    <uni-icons type="heart" size="5" :color="isLiked ? '#ff6c60' : '#ccc'"></uni-icons>
+							    <text class="action-text">点赞</text>
+							  </button> -->
+							  <view class="comment-btn" @click="handleComment">
+							    <uni-icons type="chat" size="5" color="#2196f3"></uni-icons>
+							    <text class="action-text">评论</text>
+							  </view>
 							</view>
 							<u-icon name="close-circle-fill" color="#ffffff" size="34" class="u-close" @click="remove(item.post_id)"></u-icon>
 						</view>
@@ -45,18 +53,18 @@
 							</view>
 							
 							
-							<view class="demo-shop">
-								{{item.shop}}
+							<view class="demo_user_id">
+								{{item.user_id}}
 							</view>
 							<view class="post-actions">
-							  <button class="like-btn" @click="handleLike">
-							    <uni-icons type="heart" size="10" :color="isLiked ? '#ff6c60' : '#ccc'"></uni-icons>
+							 <!-- <button class="like-btn" @click="handleLike">
+							    <uni-icons type="heart" size="5" :color="isLiked ? '#ff6c60' : '#ccc'"></uni-icons>
 							    <text class="action-text">点赞</text>
-							  </button>
-							  <button class="comment-btn" @click="handleComment">
-							    <uni-icons type="chat" size="10" color="#2196f3"></uni-icons>
+							  </button> -->
+							  <view class="comment-btn" @click="handleComment">
+							    <uni-icons type="chat" size="5" color="#2196f3"></uni-icons>
 							    <text class="action-text">评论</text>
-							  </button>
+							  </view>
 							</view>
 							<u-icon name="close-circle-fill" color="#ffffff" size="34" class="u-close" @click="remove(item.id)"></u-icon>
 						</view>
@@ -74,35 +82,37 @@
 		data() {
 			return {
 				
-				//---------------帖子
+				//---------------超话的变量
 				topic: {
-							avatar: "/static/demodemo.jpg",
-							//显示不了哎
-							title: '元白超话   ',
+							cover: "/static/demodemo.jpg",
+							name: '元白超话   ',
 							description: '君埋泉下泥销骨,我寄人间雪满头',
-							followers: 1234,//显示不了
-							posts: 5678
+							follower_count : 1234,
+							post_count: 5678
 						},
-				//---------------帖子		
-				
+				//---------------超话
 				loadStatus: 'loadmore',//加载状态
 				flowList: [],//瀑布流数据
+				//------------------------------------------------------
+				//需要api进行连接，生成不同的图片和标题，昵称，头像
 				list: [
-					{//需要api进行连接，生成不同的图片和标题，昵称，头像
+					{
 						
 						title: '我今因病魂颠倒,唯梦闲人不梦君',
-						shop: '元稹',
+						user_id: '元稹',
 						image: "/static/demodemo.jpg",
 					},
 					{
 						
 						title: '不知忆我因何事,昨夜三回梦见君',
-						shop: '白居易',
+						user_id: '白居易',
 						image: 'http://pic.sc.chinaz.com/Files/pic/pic9/202002/zzpic23325_s.jpg',
 					},
 					
 					
-				]
+				],
+				//------------------------------------------------------
+				 isLiked: false, 
 			}
 		},
 		onLoad() {
@@ -117,6 +127,35 @@
 			}, 1000)
 		},
 		methods: {
+			//-----------------------------获取想要的信息
+			fetchRandomMatch() {
+							uni.request({
+								url: "http://127.0.0.1:4523/m1/5010181-4669608-default/info/treetalk",//api
+								data: this.user,//自己定义的 变量，包含api中需要传递的信息
+								method: 'GET',//方法类型
+								success: (res) => {
+									console.log(res);
+									if (res.statusCode == 200) {
+										this.matchuser = res.data.data; // 假设 API 返回的数据格式包含用户信息
+										//获取想要的信息
+										console.log(res.data);//打印
+										uni.setStorage({//缓存
+											key: 'matchuser',//就是之前定义的变量
+											data: this.matchuser,
+											success: function() {
+												console.log('Match user data stored successfully.');//成功后打印这句话
+											}
+										});
+									} else {
+										uni.showToast({
+											title: '获取数据失败',
+											icon: 'none'
+										});
+									}
+								}
+							})
+						},
+						//-----------------------------------获取想要的信息
 			addRandomData() {
 				for(let i = 0; i < 10; i++) {
 					let index = this.$u.random(0, this.list.length - 1);
@@ -131,10 +170,13 @@
 				this.$refs.uWaterfall.remove(id);
 			},//删除
 			// 点击帖子，跳转到帖子详情页面
+			//-------------------------------------------------------------------------------------------------------
 			        goToPost(postId) {
 			            // 跳转到帖子详情页面，并传递帖子ID
+						//只要按这个帖子就能进去
 			            uni.navigateTo({
-			                url: '/pages/post/detail?postId=' + postId
+			                url: '/pages/corner/post' ,
+							//加上就去不了了
 			            });
 			        },
 			        
@@ -145,15 +187,20 @@
 			          console.log('点赞');
 			        },
 			        handleComment() {
-			          // 评论逻辑
 			          console.log('评论');
-			          //跳转试试？
-			          uni.navigateTo({
-			                  url: '/pages/home/reply',
-			                })
 			          
 			        },
-			        
+					// handleComment() {
+					//   // 评论逻辑
+					//   console.log('评论');
+					//   //跳转试试？
+					//   uni.navigateTo({
+					//           url: '/pages/home/reply?post_id=' + post_id
+					// 		  //是不是还要传参数
+					//         });
+					  
+					// },
+			  //------------------------------------------------------------------      
 			
 		}
 	}
@@ -201,7 +248,7 @@
 		color: $u-main-color;
 	}
 	
-	.demo-shop {
+	.demo-user_id {
 		font-size: 22rpx;
 		color: $u-tips-color;
 		margin-top: 5px; 
@@ -222,7 +269,7 @@
 		
 		}
 		
-		.avatar {
+		.cover {
 			width: 100rpx;
 			height: 100rpx;
 			border-radius: 50%;
@@ -261,6 +308,13 @@
 		  justify-content: space-between;
 		  align-items: center;
 		  margin-top: 10px;
+		}
+		
+		.comment-btn {
+		  background-color: #ffffff;
+		  border: none;
+		  padding: 1px;
+		  font-size:1px;
 		}
 			//-------------
 </style>

@@ -107,7 +107,7 @@ export default {
 
 <style>
 	.content { 
-		background-color: #fef1f4;
+		background-color: #fef6f8;
 		height: 100vh; /* 修改为100vh，确保覆盖整个视口高度 */
 		padding-bottom: 20px; /* 可选，添加一些底部内边距 */
 	}
@@ -119,7 +119,7 @@ export default {
 	}
 
 	.input {
-	  background-color: #fef1f4; /* 确保与.content背景色一致 */
+	  background-color: #fef6f8; /* 确保与.content背景色一致 */
 	  width: 80%;
 	  height: 10vw; /* 保持不变 */
 	  border-radius: 20vw;
