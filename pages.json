@@ -214,8 +214,14 @@
 			{
 				"navigationStyle" : "custom"
 			}
+		},
+		{
+			"path" : "pages/info/infotalk",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
-	
 		
 	],
 	"globalStyle": {

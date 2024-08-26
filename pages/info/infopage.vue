@@ -4,7 +4,7 @@
 			<view>
 				<u-navbar class="wrap" height=60 title="" :background="background" :is-back=false>
 					<view  class="subwrap">
-						<u-tabs-swiper font-size="40" ref="uTabs" :list="pagelist" :current="pagecurrent" @change="tabsChange" :is-scroll="false" swiper-Width="100" height=100 :bold="false"
+						<u-tabs-swiper font-size="40" ref="uTabs" :list="pagelist" :is-scroll="false" swiper-Width="100" height=100 :bold="false"
 							bg-color="rgba(255, 255, 255, 0)" :subackground="transparentBackground" active-color="#000000"></u-tabs-swiper>
 					</view>
 					<view>
@@ -13,7 +13,7 @@
 				</u-navbar>
 			</view>
 			<!-- 用户列表部分 -->
-			<swiper class="swiper" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
+			<swiper class="swiper" >
 				<swiper-item v-for="(tab, tabindex) in pagelist" :key="tabindex">
 					<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
 						<view class="subinfolist" @click="gotopofile(index)" v-for="(subinfo, index) in subinfolist"
@@ -29,9 +29,6 @@
 									<image class="useravatar" :src="item.avatar"></image>
 									<text class="username">{{item.username}}</text>
 								</view>
-							</view>
-							<!-- 树洞跳转 -->
-							<view v-if="pagelist[pagecurrent].type === 'treehole'" @click="treecave">
 							</view>
 						</view>
 					</scroll-view>
@@ -87,10 +84,8 @@
 				dataCache: {},
 				loading: false,
 				page: 1, // 当前页码
-				hasMore: true, // 是否还有更多数据
-				touchStartX: 0,
-				touchEndX: 0,
-				touchThreshold: 30 //处理滑动
+				hasMore: true, // 是否还有更多数
+				user:[]
 			};
 		},
 		onLoad() {
@@ -166,18 +161,10 @@
 						break;
 				}
 			},
-			goToChat(user) {
+			goToChat(item) {
 				uni.navigateTo({
-					url: `/pages/chat/chatpage?userId=${user.sender_id}` // 修改为你聊天页面的实际路径
+					url: `/pages/info/infotalk?userId=${item.sender_id}` // 修改为你聊天页面的实际路径
 				});
-			},
-			treecave() {
-				console.log("当前列表:", this.pagelist),
-					console.log("当前索引:", this.pagecurrent),
-					console.log("跳转到树洞页面"),
-					uni.navigateTo({
-						url: "/pages/info/treecave"
-					})
 			},
 			onreachBottom() {
 				if (this.loading || !this.hasMore) return; // 正在加载中或没有更多数据则不执行
@@ -227,55 +214,9 @@
 					}
 				});
 			},
-			handleTouchStart(e) {
-				this.touchStartX = e.touches[0].clientX;
-			},
-			handleTouchEnd(e) {
-				this.touchEndX = e.changedTouches[0].clientX;
-				let swipeDistance = this.touchEndX - this.touchStartX;
-				if (Math.abs(swipeDistance) > this.touchThreshold) {
-					this.swiperCurrent = swipeDistance > 0 ? Math.max(0, this.swiperCurrent - 1) : Math.min(this.list
-						.length - 1, this.swiperCurrent + 1);
-				}
-			},
-			tabsChange(index) {
-				if (index >= 0 && index < this.pagelist.length) {
-					this.pagecurrent = index; // 只在有效范围内更新
-					this.swiperCurrent = index;
-					this.page = 1; // 重置页码
-					this.hasMore = true; // 重新设置有更多数据标志
-					this.currentItems = []; // 清空当前用户列表
-					this.loading = true; // 开始加载
-					this.fetchUserList(this.pagelist[index].api, this.page);
-				}
-			},
 
 
-			transition(e) {
-				this.handleTouchEnd(e); // 处理滑动
-				let dx = e.detail.dx;
-				this.$refs.uTabs.setDx(dx);
-			},
-
-			animationfinish(e) {
-				let pagecurrent = e.detail.pagecurrent;
-				if (pagecurrent < 0) {
-					pagecurrent = 0;
-				} else if (pagecurrent >= this.pagelist.length) {
-					pagecurrent = this.pagelist.length - 1;
-				}
-				this.$refs.uTabs.setFinishCurrent(pagecurrent);
-				this.swiperCurrent = pagecurrent;
-				this.pagecurrent = pagecurrent;
-
-				if (!this.dataCache[this.pagelist[pagecurrent].api]) {
-					this.loading = true; // 开始加载
-					this.fetchUserList(this.pagelist[pagecurrent].api, this.page);
-				} else {
-					this.currentUsers = this.dataCache[this.pagelist[pagecurrent].api];
-					this.loading = false; // 数据已缓存，无需再次加载
-				}
-			}
+		
 
 		},
 		mounted() {
