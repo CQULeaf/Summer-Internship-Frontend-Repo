@@ -208,6 +208,13 @@
 			{
 				"navigationStyle" : "custom"
 			}
+		},
+		{
+			"path" : "pages/home/commentpage",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}
 		}
 	
 		
