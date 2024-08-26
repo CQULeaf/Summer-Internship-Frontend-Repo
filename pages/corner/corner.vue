@@ -28,17 +28,17 @@
           <text class="icon-text">专业</text>
         </view>
         <!-- 同乡 -->
-        <view class="icon1" @click="toggleCategory( '同乡')" style="background-color: #fed2e0; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+        <view class="icon1" @click="toggleCategory('同乡')" style="background-color: #fed2e0; display: flex; flex-direction: column; align-items: center; margin: 10px;">
           <image class="icon2" src="/static/homie.png" />
           <text class="icon-text">同乡</text>
         </view>
         <!-- MBTI -->
-        <view class="icon1" @click="toggleCategory( 'MBTI')" style="background-color: #f9e4e5; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+        <view class="icon1" @click="toggleCategory('MBTI')" style="background-color: #f9e4e5; display: flex; flex-direction: column; align-items: center; margin: 10px;">
           <image class="icon2" src="/static/mbti.png" />
           <text class="icon-text">MBTI</text>
         </view>
         <!-- 社团 -->
-        <view class="icon1" @click="toggleCategory( '社团')" style="background-color: #ffdfe6; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+        <view class="icon1" @click="toggleCategory('社团')" style="background-color: #ffdfe6; display: flex; flex-direction: column; align-items: center; margin: 10px;">
           <image class="icon2" src="/static/society.png" />
           <text class="icon-text">社团</text>
         </view>
@@ -67,11 +67,10 @@ export default {
 				}
 			],
 			//-------------------------
-			user:{
-				
+			user:{//传给后台的信息
 				flag:''
 			},
-			matchuser:{
+			matchuser1:{//超话信息
 				topicId:'',
 				      name: '',
 				      cover:'',
@@ -169,7 +168,7 @@ export default {
 	  	console.log(22222, index);
 	  },
 
-	//------------------------------------------跳转以及获取想要信息
+	//------------------------------------------根据flag跳转以及获取想要信息
 	       toggleCategory(flag) {
 				uni.request({
 					url: "http://localhost:1234/corner/getTopicsByFlag",//api
@@ -178,14 +177,17 @@ export default {
 					success: (res) => {
 						console.log(res);
 						if (res.statusCode == 200) {
-							this.matchuser = res.data.data; // 假设 API 返回的数据格式包含用户信息
+							this.matchuser1 = res.data.data; // 假设 API 返回的数据格式包含用户信息
 							//获取想要的信息
 							console.log(res.data);//打印
 							uni.setStorage({//缓存
-								key: 'matchuser',//就是之前定义的变量
-								data: this.matchuser,
+								key: 'matchuser1',//就是之前定义的变量
+								data: this.matchuser1,
 								success: function() {
 									console.log('噫，好了，我中了');//成功后打印这句话
+									uni.navigateTo({
+									    url: '/pages/corner/superWordName',
+									})
 								}
 							});
 						} else {
@@ -199,11 +201,7 @@ export default {
 						console.log(1111)
 					}
 				})
-				// 跳转到内容页面，并传递帖子ID
-				uni.navigateTo({
-				    url: '/pages/corner.superWordNmae?user_id=' + this.user_id 
-				});
-	           
+				
 	        },
 			//------------------------------------------跳转
 	//---------------------------------------------
