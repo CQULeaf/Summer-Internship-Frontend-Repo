@@ -147,12 +147,15 @@
 							// 发起请求
 							uni.request({
 								url: 'http://localhost:8080/ccPost/publish',
-								data:addPost,
+								data:this.addPost,
 								method: 'POST',
 								header: { 'Content-Type': 'application/json' },
 								success: (res) => {
 									console.log('发布成功', res.data);
 									uni.showToast({ title: '发布成功', icon: 'success' });
+									// 清空输入框内容
+									this.title = "";
+									this.message = "";
 									this.backtohome(); // 返回首页
 								},
 								fail: (err) => {
