@@ -39,10 +39,11 @@
 					return
 				}
 				uni.request({
-					url: 'http://localhost:8080/user/login',
-					data: this.user,
-					method: "POST",
-					header: {
+
+					url:'http://localhost:8080/user/login',
+					data:this.user,
+					method:"POST",
+					header:{
 						'Content-Type': 'application/json'
 					},
 					success: (res) => {
