@@ -1,9 +1,5 @@
 <template>
   <view class="container">
-    <!-- 搜索栏 -->
-	<!-- 能根据关键词“专业” “同乡”搜索感兴趣的内容
-	还能进一步搜索“专业->计科”  “同乡->安徽”
-	这个搜索的地方包含所有数据，其他地方可能只有自己板块数据 -->
     <view class="search-container">
       <u-search placeholder="搜索" v-model="searchText" border-color=#dddddd  @search="search"></u-search>
     </view>
@@ -13,38 +9,40 @@
       <view class="swiper-container">
         <uni-swiper-dot class="uni-swiper-dot-box" @clickItem=clickItem :info="info" :current="current" :mode="mode" :dots-styles="dotsStyles" field="content">
           <swiper class="swiper-box" @change="change" :current="swiperDotIndex">
-            <swiper-item v-for="(item, index) in 4" :key="index">
+            <swiper-item v-for="(item, index) in swiperImages" :key="index">
               <view class="swiper-item" :class="'swiper-item' + index">
-                <text style="color: #fff; font-size: 32px;">{{index+1}}</text>
+                <image class="swiper-image" :src="item" mode="aspectFill" />
               </view>
             </swiper-item>
           </swiper>
         </uni-swiper-dot>
       </view>
     </view>
-
-    <!-- 2x2排列的四个小圆形图标 -->
-   <view class="icons" style="margin-top: 70px;padding: 60px;">
-      <!-- 专业 -->
-      <view class="icon1" @click="toggleCategory('专业')" style="background-color: #f2b2c3; display: flex; flex-direction: column; align-items: center; margin: 10px;">
-        <image class="icon2" src="/static/speciality.png" />
-        <text class="icon-text">专业</text>
-      </view>
-      <!-- 同乡 -->
-      <view class="icon1" @click="toggleCategory('同乡')" style="background-color: #fed2e0; display: flex; flex-direction: column; align-items: center; margin: 10px;">
-        <image class="icon2" src="/static/homie.png" />
-        <text class="icon-text">同乡</text>
-      </view>
-      <!-- MBTI -->
-      <view class="icon1" @click="toggleCategory('MBTI')" style="background-color: #f9e4e5; display: flex; flex-direction: column; align-items: center; margin: 10px;">
-        <image class="icon2" src="/static/mbti.png" />
-        <text class="icon-text">MBTI</text>
-      </view>
-      <!-- 社团 -->
-      <view class="icon1" @click="toggleCategory('社团')" style="background-color: #ffdfe6; display: flex; flex-direction: column; align-items: center; margin: 10px;">
-        <image class="icon2" src="/static/society.png" />
-        <text class="icon-text">社团</text>
-      </view>
+	
+  <!-- 2x2排列的四个小圆形图标 -->
+  <view class="icons" style="margin-top: 70px;padding: 60px;display: grid;grid-template-columns: repeat(2, 1fr);">
+     
+        <!-- 专业 -->
+        <view class="icon1" @click="toggleCategory('专业')" style="background-color: #f2b2c3; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+          <image class="icon2" src="/static/speciality.png" />
+          <text class="icon-text">专业</text>
+        </view>
+        <!-- 同乡 -->
+        <view class="icon1" @click="toggleCategory( '同乡')" style="background-color: #fed2e0; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+          <image class="icon2" src="/static/homie.png" />
+          <text class="icon-text">同乡</text>
+        </view>
+        <!-- MBTI -->
+        <view class="icon1" @click="toggleCategory( 'MBTI')" style="background-color: #f9e4e5; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+          <image class="icon2" src="/static/mbti.png" />
+          <text class="icon-text">MBTI</text>
+        </view>
+        <!-- 社团 -->
+        <view class="icon1" @click="toggleCategory( '社团')" style="background-color: #ffdfe6; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+          <image class="icon2" src="/static/society.png" />
+          <text class="icon-text">社团</text>
+        </view>
+      
     </view>
 
 <view>
@@ -69,27 +67,36 @@ export default {
 				}
 			],
 			//-------------------------
+			user:{
+				
+				flag:''
+			},
+			matchuser:{
+				topicId:'',
+				      name: '',
+				      cover:'',
+				      description:'',
+				      postCount:'',
+				      followerCount:'',
+				      flag: ''
+			},
+			//-------------------------
 			list:'',
 			current: 4,
 			//-------------------------
-			
-			//轮播图
-			dotStyle: [
-				
-				{
-					backgroundColor: 'rgba(83, 200, 249,0.3)',
-					border: '1px rgba(83, 200, 249,0.3) solid',
-					color: '#fff',
-					selectedBackgroundColor: 'rgba(83, 200, 249,0.9)',
-					selectedBorder: '1px rgba(83, 200, 249,0.9) solid'
-				}
-			],
+		
 			modeIndex: -1,
 			styleIndex: -1,
 			current: 0,
 			mode: 'default',
 			dotsStyles: {},
 			swiperDotIndex: 0,
+			swiperImages: [
+			      '/static/MBTIb.png',
+				  '/static/chinas.png',
+				  '/static/joinUss.png',
+				  '/static/study.png'
+			    ],
     };
   },
   
@@ -161,16 +168,44 @@ export default {
 	  onBanner(index) {
 	  	console.log(22222, index);
 	  },
-	  //-------------------------------------------
-    toggleCategory(category) {
-      // 假设这是点击某个图标后触发的逻辑
-	  //跳转到对应的超话推荐与关注页面
-      console.log(`点击了 ${category}`);
-	   uni.navigateTo({
-	          url: '/pages/corner/superWordName',
-	        });
-    },
-	
+
+	//------------------------------------------跳转以及获取想要信息
+	       toggleCategory(flag) {
+				uni.request({
+					url: "http://localhost:8080/corner/getTopicsByFlag",//api
+					data: this.user,//自己定义的 变量，包含api中需要传递的信息
+					method: 'GET',//方法类型
+					success: (res) => {
+						console.log(res);
+						if (res.statusCode == 200) {
+							this.matchuser = res.data.data; // 假设 API 返回的数据格式包含用户信息
+							//获取想要的信息
+							console.log(res.data);//打印
+							uni.setStorage({//缓存
+								key: 'matchuser',//就是之前定义的变量
+								data: this.matchuser,
+								success: function() {
+									console.log('噫，好了，我中了');//成功后打印这句话
+								}
+							});
+						} else {
+							uni.showToast({
+								title: '获取数据失败',
+								icon: 'none'
+							});
+						}
+					},
+					fail:()=>{
+						console.log(1111)
+					}
+				})
+				// 跳转到内容页面，并传递帖子ID
+				uni.navigateTo({
+				    url: '/pages/corner.superWordNmae?user_id=' + this.user_id 
+				});
+	           
+	        },
+			//------------------------------------------跳转
 	//---------------------------------------------
 	//重点！！！之后要和后端连接
     search() {
@@ -189,6 +224,16 @@ export default {
 //轮播图
 <style lang="scss">
 	
+	.swiper-image {
+	  width: 100%; /* 使图片宽度充满整个轮播项 */
+	  height: 100%; /* 使图片高度充满整个轮播项 */
+	  display: block; /* 防止图片下方出现空隙 */
+	  margin: auto; /* 水平居中图片 */
+	}
+	/* 可能需要调整轮播图容器的高度 */
+	.swiper-box {
+	  height: 300px; /* 根据您的需求调整这个高度 */
+	}
 	.container {
 	  display: flex;
 	  flex-direction: column;
@@ -218,20 +263,6 @@ export default {
 		color: #fff;
 	}
 
-	.swiper-item0 {
-		background-color: #cee1fd;
-	}
-
-	.swiper-item1 {
-		background-color: #b2cef7;
-	}
-
-	.swiper-item2 {
-		background-color: #cee1fd;
-	}
-.swiper-item3 {
-		background-color: #cee1fd;
-	}
 	.image {
 		width: 500rpx;
 	}
@@ -295,10 +326,8 @@ export default {
 		border-width: 1px;
 	}
 </style>
-
-
 <style>
-	//四个框框
+//四个框框
 .container {
   display: flex;
   flex-direction: column;
@@ -336,7 +365,6 @@ export default {
 
 .icons {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
   gap: 0px;/* 调整图标之间的间距 */
  /* margin-top: 40px;
     padding: 40px; */
@@ -349,7 +377,5 @@ export default {
 	 border-color:#007bff;
 	/* 使搜索框水平居中 */
 }
-
-
 
 </style>

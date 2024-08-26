@@ -93,11 +93,16 @@
 
 		onShow() {
 			//获取用户信息
-			const value = uni.getStorageSync('nowAccount');
-			this.user=value.data
-			
+			uni.getStorage({
+				key:"userPost",
+				success: (res) =>{
+					console.log(res);
+					this.user=res.data
+					console.log(this.user);
+				}
+			})
 			//获取用户关注信息
-			
+			console.log(this.user);
 		},
 		
 		methods: {
