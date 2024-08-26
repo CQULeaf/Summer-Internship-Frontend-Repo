@@ -36,10 +36,11 @@
 		methods: {
 			initWebSocket() {
 				// 创建 WebSocket 连接
-				this.ws = new WebSocket('ws://your-websocket-server-url');
+				this.ws = new WebSocket('ws://127.0.0.1:8080/endpoint-websocket');
 
 				// 处理 WebSocket 消息
 				this.ws.onmessage = (event) => {
+					let message = JSON.parse(event.data);
 					this.messages.push(event.data);
 					this.$nextTick(() => {
 						// 滚动到聊天框底部
@@ -60,8 +61,14 @@
 			},
 			sendMessage() {
 				if (this.messageInput.trim() !== '') {
-					this.ws.send(this.messageInput);
-					this.messageInput = '';
+					let message = {
+						senderId: this.currentUserId,
+						receiverId: this.receiverId,
+						content: this.messageInput,
+						createdAt: new Date()
+					};
+					this.ws.send(JSON.stringify(message));
+					this.messageInput = ''; // 清空输入框
 				}
 			},
 			gotopofile() {

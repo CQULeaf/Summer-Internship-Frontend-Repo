@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view>
 		<view v-if="logined" v-model="this.user">
 			<view class="u-demo-wrap">
 				<view class="u-demo-area">
@@ -13,13 +13,13 @@
 			</view>
 
 			<u-grid :col="8" :border="false">
-				<u-grid-item @click="gotoconcern">
+				<u-grid-item  @click="gotoconcern('friends')">
 					<view class="grid-text">朋友</view>
 				</u-grid-item>
-				<u-grid-item @click="gotoconcern">
+				<u-grid-item  @click="gotoconcern('follows')">
 					<view class="grid-text">关注</view>
 				</u-grid-item>
-				<u-grid-item @click="gotoconcern">
+				<u-grid-item  @click="gotoconcern('fans')">
 					<view class="grid-text">粉丝</view>
 				</u-grid-item>
 				<u-grid-item></u-grid-item>
@@ -29,34 +29,14 @@
 				<u-grid-item>
 					<u-icon name="setting" :size="50" @click="gotoSetting"></u-icon>
 				</u-grid-item>
-				
-				
 			</u-grid>
-			<view class="slot-wrap"><!-- 通过自定义slot传入的内容 -->
-				<u-tabs :list="sublist" :is-scroll="false" :current="subcurrent" @change="change" active-color="#000000"
-					inactive-color="#606266" item-width=140 bg-color="#ffc7cb" :bold="false"></u-tabs>
+			
+			<view class="u-p-t-20">
+				<view class="all-reply-top">全部帖子</view>
+				<view class="list-item" v-for="(item, index) in postList" :key="index" @click="goToPost(item)">
+					<text class="item-title">{{postList[2].title}}{{item.title}}</text>
+				</view>
 			</view>
-			<swiper class="swiper" :current="swiperCurrent">
-				<swiper-item v-for="(tab, tabindex) in pagelist" :key="tabindex">
-					<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
-						<view class="list">
-							<!-- 用户发布的帖子列表 -->
-							<view v-if="pagelist[pagecurrent].type === 'post'">
-								<view class="list-item" v-for="(item, index) in postList" :key="index" @click="goToPost(item)">
-									<text class="item-title">{{item.title}}</text>
-								</view>
-								<u-divider>完了...</u-divider>
-							</view>
-							
-							<!-- 用户的点赞列表 -->
-							<view v-if="pagelist[pagecurrent].type === 'liked'">222
-							
-							<u-divider>完了...</u-divider>
-							</view>
-						</view>
-					</scroll-view>
-				</swiper-item>
-			</swiper>
 		</view>
 		<view v-else>
 			<u-navbar :is-back="false" title="　" :border-bottom="false">
@@ -96,7 +76,7 @@
 					avatar: '',
 					nickname: '1111',
 					username: '',
-					userId:1,
+					userId: ''
 				},
 				pic: 'https://uviewui.com/common/logo.png',
 				show: true,
@@ -104,16 +84,18 @@
 				logined: true,
 				list: '',
 				current: 4,
-				sublist: [
+				pagelist: [
 					// 标签数据
 					{
 						name: '帖子',
-
+						type: 'post',
+						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/ccPost/mypost'
 					},
 					{
 						name: '点赞',
-
-					}
+						type: 'liked',
+						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/follow/getFollowedPosts'
+					},
 				],
 				pagecurrent: 0, //变量名：变量值
 				swiperCurrent: 0,
@@ -125,12 +107,9 @@
 				touchStartX: 0,
 				touchEndX: 0,
 				touchThreshold: 30 ,//处理滑动
+				
 				postList:[{
 					title:''
-				}], //发布帖子的数据
-				
-				likeList:[{
-					
 				}]
 			};
 		},
@@ -138,6 +117,7 @@
 			const value = uni.getStorageSync('nowAccount');
 			this.user = value.data
 			this.logined = (value.code == 200)
+			console.log(value.code)
 			this.list = [{
 					iconPath: "/static/newhomeg.png",
 					selectedIconPath: "/static/newhomep.png",
@@ -198,6 +178,7 @@
 						success:(res)=>{
 							console.log(res.data.data);
 							this.postList=res.data.data
+							console.log(this.postList);
 						},
 						fail(res2) {
 							console.log(ret.data.data.userId)
@@ -245,7 +226,6 @@
 
 		methods: {
 			goToPost(item) {
-				// 跳转到聊天界面，假设聊天界面的路径为 '/pages/home/reply'
 				uni.setStorage({
 					key:"postData",
 					data:item,
@@ -262,11 +242,6 @@
 					url: '/pages/me/myliked?post_id=' + item.post_id // 假设用户有一个 id 属性
 				});
 			},
-			goToProfile() {
-				uni.navigateTo({
-					url: '/pages/me/setting'
-				});
-			},
 			login() {
 				console.log("登录")
 				//跳转到登录页面
@@ -279,11 +254,11 @@
 					url: "/pages/me/setting/setting"
 				})
 			},
-			gotoconcern() {
-				uni.navigateTo({
-					url: "/pages/me/concern"
-				})
-			},
+		 gotoconcern(type) {  
+		        uni.navigateTo({  
+		            url: `/pages/me/concern?type=${type}` // 传递用户类别  
+		        });  
+		    }, 
 			quit() {
 				console.log("退出"),
 					this.logined = false
@@ -314,26 +289,9 @@
 </script>
 
 <style lang="scss">
-	.u-demo-wrap {
-		display: flex;
-		align-items: center;
-		background: #fff3f4;
-	}
-
-	.myinfo {
-		display: flex;
-		align-items: center;
-		padding: 50rpx;
-		background-image: linear-gradient(to top left, #ffcbcc, #ffe4e6);
-	}
 
 	.grid {
 		background-color: #ffcbcc;
-	}
-
-	.custom-style {
-		color: #606266;
-		width: 400rpx;
 	}
 
 	.myavatar {
@@ -347,11 +305,6 @@
 		font-size: 32rpx;
 		margin-top: 4rpx;
 		color: $u-type-info;
-	}
-
-	.mynickname {
-		font-size: 28rpx;
-		color: #333;
 	}
 
 	page {
@@ -375,8 +328,6 @@
 		width: 150rpx;
 		height: 150rpx;
 		border-radius: 100rpx;
-		align-items: center;
-
 	}
 
 	.u-avatar-wrap {
@@ -384,38 +335,25 @@
 		overflow: hidden;
 		margin-bottom: 80rpx;
 		text-align: center;
-		margin-left: 299rpx;
 	}
 
-
-
-	.content {
-		flex: 1;
-		overflow-y: auto;
-	}
-
-	.list {
+	.list-item {
 		display: flex;
-		flex-direction: column;
-		/* 垂直排列列表项 */
-		background-color: #ffffff;
-		flex: 1;
-		/* 占据剩余空间 */
-		overflow-y: auto;
-		/* 启用垂直滚动 */
+		align-items: center;
+		padding: 25px;
 		border-bottom: 1px solid #f0dddf;
-		background: #fff3f4;
-	}
-
-	.useravatar {
-		width: 300rpx;
-		height: 300rpx;
-		border-radius: 10%;
-		margin-right: 10px;
 	}
 
 	.item-title {
 		font-size: 13px;
 		color: #333;
+	}
+	
+	.all-reply-top {
+		margin-left: 20rpx;
+		padding-left: 20rpx;
+		border-left: solid 4rpx #f0dddf;
+		font-size: 30rpx;
+		font-weight: bold;
 	}
 </style>

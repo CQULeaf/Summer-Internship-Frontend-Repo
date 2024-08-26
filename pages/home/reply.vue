@@ -20,6 +20,11 @@
 			<image v-if="comment.cover" :src="comment.cover" mode=""></image>
 		</view>
 		
+		<view class="input-container">
+			<input v-model="messageInput" placeholder="编辑你的内容..." />
+			<button @click="sendMessage">发送</button>
+		</view>
+		
 		<!-- 回复 -->
 		<view class="all-reply">
 			<view class="all-reply-top">全部回复</view>
@@ -71,37 +76,65 @@ export default {
 				nickname:'',
 				userId:''
 			}],
+			addComment:{
+				userId: 1,
+				content: "This is a comment.",
+				createdAt: "1997-04-21T10:08:46",
+				updatedAt: "1997-04-21T10:08:46",
+				deletedAt: "1997-04-21T10:08:46",
+				likeCount:0,
+				postId: 2
+			},
+			messageInput:'',
 		};
 	},
 	onLoad() {
 		this.getComment();
 	},
 	
-	onShow(){
-	},
-	
 	methods: {
+		// 发送信息(评论)
+		sendMessage(){
+			uni.getStorage({
+				key:"nowAccount",
+				success: (res) => {
+					this.addComment.userId=res.data.data.userId
+					this.addComment.content=this.messageInput
+					var now = new Date().toISOString(); 
+					this.addComment.createdAt=now
+					this.addComment.postId=this.comment.postId
+					console.log(this.addComment);
+					uni.request({
+						url:"http://localhost:1234/comment/add",
+						data:this.addComment,
+						method:"POST",
+						success(res) {
+							console.log(res)
+						}
+					})
+				}
+			})
+			
+		},
+		
+		// 获取所有的评论信息
 		getComment(){
 			uni.getStorage({
 				key: 'postData',
 				success:(res) => {
 					this.comment=res.data
-					//console.log(this.comment.commentCount);
 					
 					// 请求获得所有的回复数据
 					uni.request({
-						url:"http://localhost:1234/home/getReply",
+						url:"http://localhost:1234/comment/getReply",
 						data:res.data,
 						success:(respones) =>{
-							//console.log(respones);
 							this.commentList=respones.data.data
-							console.log(this.commentList);
 							for(let key in this.commentList) {
 							    uni.request({
 							    	url:"http://localhost:1234/user/getUserInfo",
 									data:this.commentList[key],
 									success:(res2) => {
-										//console.log(res2.data);
 										this.commentList[key].avatar=res2.data.data.avatar
 										this.commentList[key].nickname=res2.data.data.nickname
 										this.commentList[key].userId=res2.data.data.userId
@@ -126,6 +159,7 @@ export default {
 			})
 		},
 		
+		//跳转到发帖人用户界面
 		gotoUserPage(){
 			uni.getStorage({
 				key:"nowAccount",
@@ -144,7 +178,7 @@ export default {
 		},
 		
 		
-		// 跳转到评论页面
+		// 跳转到评论者用户界面页面
 		gotoUserPage2(userId){
 			console.log(userId)
 			uni.request({
@@ -176,6 +210,7 @@ export default {
 				},
 			})
 		},
+		
 		// 点赞
 		getLike(index) {
 			if (index === 0 || index > 0) {
@@ -203,6 +238,13 @@ export default {
 page {
 	background-color: #f2f2f2;
 }
+.input-container {
+	background-color: #e2ece9;
+	  display: flex;
+	  margin-left: 10px;
+	  margin-bottom: 10px;
+	}
+
 .comment {
 	padding: 30rpx;
 	font-size: 32rpx;

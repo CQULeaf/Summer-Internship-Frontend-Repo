@@ -5,7 +5,7 @@
         <text class="label">问题或请求</text>
         <textarea class="input" v-model="message" placeholder="请输入您的问题或请求"></textarea>
       </view>
-      <button type="submit" class="submit-button">提交</button>
+      <button type="submit" class="submit-button" @tap="submitForm()">提交</button>
     </form>
   </view>
 </template>
@@ -26,6 +26,8 @@ export default {
       });
       // 清空输入框
       this.message = '';
+	  
+	  
     }
   }
 };
