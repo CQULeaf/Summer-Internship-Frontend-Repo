@@ -55,7 +55,7 @@
 					{
 						name: '关注',
 						type: 'like',
-						api: 'http://47.120.1.65:8080/corner/superWordNameRecommend'
+						api: 'http://localhost:1234/corner/superWordNameRecommend'
 						//api连接
 						//为什么两个url都能用？之后可能要修改
 						
@@ -63,7 +63,7 @@
 					{
 						name: '推荐',
 						type: 'recommend',
-						api: 'http://47.120.1.65:8080/corner/superWordNameRecommend'
+						api: 'http://localhost:1234/corner/superWordNameRecommend'
 					}
 				],
 				current: 0,
@@ -92,7 +92,7 @@
 				//------------------------------------------跳转以及获取想要信息
 			            goToContent(postId) {
 							uni.request({
-								url: "http://47.120.1.65:8080/corner/superWordNameConcern",//api
+								url: "http://localhost:1234/corner/superWordNameConcern",//api
 								data: this.user,//自己定义的 变量，包含api中需要传递的信息
 								method: 'GET',//方法类型
 								success: (res) => {

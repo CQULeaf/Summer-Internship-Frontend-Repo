@@ -207,7 +207,7 @@
 			"path" : "pages/userPage",
 			"style" : 
 			{
-				"navigationStyle" : "custom"
+				"navigationBarTitleText" : "用户主页"
 			}
 		},
 		{
