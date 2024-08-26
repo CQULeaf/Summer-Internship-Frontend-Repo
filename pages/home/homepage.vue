@@ -13,21 +13,20 @@
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;">
-						
-						<view class="post" v-for="(res, index) in postList" :key="res.id">
+						<view class="post" v-for="(res, index) in postList" :key="res.userId">
 							<view class="right">
 								<view class="content" @click="toReply(res)">{{ res.title }}</view>
 								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
 								<view v-if="res.cover">
 									<u-image width="100%" height="300rpx" :src="res.cover" @tap="preAvatar(res.cover)"></u-image>
 								</view>
-								<view class="like" :class="{ highlight: res.isLike }">
+								<view class="like" :class="{ highlight: res.likeCount }">
 									<view class="num">{{ res.likeCount }}</view>
 									<u-icon v-if="!res.isLike" name="thumb-up" :size="30" color="#9a9a9a" @click="getLike(index)"></u-icon>
 									<u-icon v-if="res.isLike" name="thumb-up-fill" :size="30" @click="getLike(index)"></u-icon>
 								</view>
+								<u-button size="medium" shape="circle">评论</u-button>
 								<view class="top">
-									<view class="nickname">{{ res.nickname }}</view>
 									<view class="createdAt">{{ res.createdAt }}</view>
 								</view>
 							</view>
@@ -36,7 +35,7 @@
 				</swiper-item>
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;">
-						<view class="post" v-for="(res, index) in postList" :key="res.id" @search="search" @custom="custom">
+						<view class="post" v-for="(res, index) in postList" :key="res.userId" @search="search" @custom="custom">
 							<view class="right">
 								<view class="content" @click="toReply(res)">{{ res.title }}</view>
 								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
@@ -44,7 +43,7 @@
 									<u-image width="100%" height="300rpx" :src="res.cover"></u-image>
 									<u-image width="100%" height="400rpx" :src="res.cover"></u-image>
 								</view>
-								<view class="like" :class="{ highlight: res.isLike }">
+								<view class="like" :class="{ highlight: res.likeCount }">
 									<view class="num">{{ res.likeCount }}</view>
 									<u-icon v-if="!res.isLike" name="thumb-up" :size="30" color="#9a9a9a" @click="getLike(index)"></u-icon>
 									<u-icon v-if="res.isLike" name="thumb-up-fill" :size="30" @click="getLike(index)"></u-icon>
@@ -97,7 +96,7 @@ export default {
 				title:'',
 				cover:'',
 				likeCount:'',
-				isLike:'',
+				isLike:'0',
 			}]
 		};
 	},
@@ -108,12 +107,12 @@ export default {
 		
 		uni.request({
 			url:'http://localhost:1234/ccPost/getAllPosts',
-			success:(respones) => {
-				console.log(respones)
-				//this.postList = respones.data
+			success: (res) => {
+				console.log(res)
+				this.postList=res.data.data
 			}
 		})
-		
+				
 		this.list = [{
 				iconPath: "/static/newhomeg.png",
 				selectedIconPath: "/static/newhomep.png",
@@ -153,46 +152,6 @@ export default {
 				customIcon: false,
 				pagePath:'/pages/me/mypage'
 			},
-		],
-		
-		this.postList = [
-			{
-				id: 1,
-				nickname: '叶轻眉',
-				createdAt: '12-25 18:58',
-				postContent: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-				title:'不敢相信',
-				cover:'/static/c1.png',
-				likeCount: 33,
-				isLike: false,
-			},
-			{
-				id: 2,
-				nickname: '叶轻眉1',
-				createdAt: '01-25 13:58',
-				postContent: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-				title:'不敢相信',
-				likeCount: 33,
-				isLike: false,
-			},
-			{
-				id: 3,
-				nickname: '叶轻眉2',
-				createdAt: '03-25 13:58',
-				postContent: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-				title:'不敢相信',
-				likeCount: 33,
-				isLike: false,
-			},
-			{
-				id: 4,
-				nickname: '叶轻眉3',
-				createdAt: '06-20 13:58',
-				postContent: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-				title:'不敢相信',
-				likeCount: 33,
-				isLike: false,
-			}
 		]
 	},
 	
@@ -207,7 +166,6 @@ export default {
 		// 进入帖子的回复界面
 		toReply(index){
 			uni.setStorageSync("postData",index)
-			console.log(index)
 			uni.navigateTo({
 				url:'/pages/home/reply',
 				

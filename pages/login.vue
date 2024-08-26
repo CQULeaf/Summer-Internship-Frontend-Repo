@@ -39,7 +39,7 @@
 					return
 				}
 				uni.request({
-					url: 'http://localhost:8080/user/login',
+					url: 'http://47.120.1.65:8080/user/login',
 					data: this.user,
 					method: "POST",
 					header: {
@@ -52,17 +52,20 @@
 							data: res.data,
 							success: () => {
 								var value = uni.getStorageSync('nowAccount');
-								console.log("存储的账户",value)
-								if (value.code == 200) {
+								if (value.code==200){
 									uni.switchTab({
 										url: '/pages/me/mypage'
 									});
 								} else {
 									this.$u.toast("用户名或密码错误");
 								}
+							},
+							fail(res) {
+								this.$u.toast("请求失败");
 							}
 						});
-					}
+					},
+					
 				});
 
 			},

@@ -117,7 +117,9 @@
 			},
 			sent()
 			{
-				
+				// uni.request({
+				// 	url:"http://localhost:1234/"
+				// })
 			},
 			reUpload() {
 				this.$refs.uUpload.reUpload();

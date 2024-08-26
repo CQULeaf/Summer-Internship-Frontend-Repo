@@ -175,13 +175,7 @@
 				"navigationStyle" : "custom"
 			}
 		},
-		{
-			"path" : "pages/corner/maybe",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
-			}
-		},
+		
 		{
 			"path" : "pages/info/treecave/treepostpage",
 			"style" : 
@@ -190,12 +184,6 @@
 			}
 		},
 		{
-			"path" : "pages/userPage",
-			"style" : 
-			{
-				"navigationStyle" : "custom"
-			}},{
-
 			"path" : "pages/corner/postToCorner",
 			"style" : 
 			{
@@ -212,6 +200,13 @@
 			"path" : "pages/me/myliked",
 			"style" : 
 			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/userPage",
+			"style" : 
+			{
 				"navigationStyle" : "custom"
 			}
 		},
@@ -220,6 +215,11 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : ""
+			}},{
+			"path" : "pages/home/commentpage",
+			"style" : 
+			{
+				"navigationStyle": "custom"
 			}
 		}
 		
