@@ -225,7 +225,7 @@
 				const filePath = path;
 
 				uni.uploadFile({
-					url: 'http://47.120.1.65:1234/user/updateAvatar',
+					url: 'http://localhost:1234/user/updateAvatar',
 					filePath: filePath,
 					name: 'file', // 对应后端接收文件的字段名
 					formData: {
