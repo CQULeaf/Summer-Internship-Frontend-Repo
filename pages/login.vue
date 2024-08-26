@@ -51,7 +51,6 @@
 							data: res.data,
 							success: () => {
 								var value = uni.getStorageSync('nowAccount');
-								console.log(value)
 								if (value.code==200){
 									uni.switchTab({
 										url: '/pages/me/mypage'
@@ -61,9 +60,13 @@
 								{
 									this.$u.toast("用户名或密码错误");
 								}
+							},
+							fail(res) {
+								this.$u.toast("请求失败");
 							}
 						});
-					}
+					},
+					
 				});
 
 			},
