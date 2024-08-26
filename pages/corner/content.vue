@@ -39,7 +39,7 @@
 						</view>
 					</template>
 					
-					<!-- 右边 --><!-- 先不改形成对照，不太确定怎么改呢 -->
+					<!-- 右边 -->
 					<template v-slot:right="{rightList}">
 						<view class="demo-warter" v-for="(item, index) in rightList" :key="index" @click="goToPost(item.post_id)">
 							<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index"></u-lazy-load>

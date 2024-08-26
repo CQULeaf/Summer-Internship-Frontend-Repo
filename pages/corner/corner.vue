@@ -170,6 +170,7 @@ export default {
 
 	//------------------------------------------根据flag跳转以及获取想要信息
 	       toggleCategory(flag) {
+			   this.user.flag=flag
 				uni.request({
 					url: "http://localhost:8080/corner/getTopicsByFlag",//api
 					data: this.user,//自己定义的变量，包含api中需要传递的信息
@@ -178,13 +179,14 @@ export default {
 						console.log(res);
 						if (res.statusCode == 200) {
 							this.matchuser1 = res.data.data; // 假设 API 返回的数据格式包含用户信息
+							//console.log(res.data.data)
 							//获取想要的信息
-							console.log(res.data);//打印
+							//console.log(res.data);//打印
 							uni.setStorage({//缓存
 								key: 'matchuser1',//就是之前定义的变量
 								data: this.matchuser1,
 								success: function() {
-									console.log('噫，好了，我中了');//成功后打印这句话
+									//console.log('噫，好了，我中了');//成功后打印这句话
 									uni.navigateTo({
 									    url: '/pages/corner/superWordName',
 									})
