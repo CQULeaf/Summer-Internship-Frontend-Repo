@@ -147,13 +147,7 @@
 					"navigationBarTitleText": "聚"
 				}
 	},
-	{
-					"path" : "pages/corner/post",
-					"style" : 
-					{
-						"navigationBarTitleText": "聚"
-					}
-				},
+	
 	{
 				"path" : "pages/corner/superWordName",
 				"style" : 

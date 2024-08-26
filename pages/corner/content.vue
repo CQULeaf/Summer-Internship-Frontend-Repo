@@ -77,16 +77,13 @@
 							name: '元白超话   ',
 							description: '君埋泉下泥销骨,我寄人间雪满头',
 							follower_count : 8080,
-							post_count: 5678
+							post_count: 5678,
+							post_id:'',
 						},
 				//---------------超话的变量
 				loadStatus: 'loadmore',//加载状态
 				flowList: [],//瀑布流数据
-				//--------------------------------------------请求的帖子数据
-				post:{
-					post_id:''
-				},
-			
+				
 				//--------------------------------------------返回的帖子数据
 				list: [//需要api进行连接，生成不同的图片和标题，昵称，头像
 					{
@@ -111,7 +108,7 @@
 		onLoad() {
 			this.addRandomData();
 			uni.getStorage({
-				key:'matchuser',
+				key:'matchuser2',
 				success(res) {
 					uni.request({
 						url:'http://localhost:8080/ccPost/getPostsByTopicId',
@@ -159,13 +156,17 @@
 								if (res.statusCode == 200) {
 									const value = res.data.data; // 假设 API 返回的数据格式包含用户信息
 									//获取想要的信息
+									
 									console.log(res.data);//打印
 									uni.setStorage({//缓存
 										key: 'postData',//就是之前定义的变量
 										data: this.value,
 										success: function() {
-											console.log('噫，好了，我中了');//成功后打印这句话
-											url:'/pages/home/reply'
+											console.log('噫，好了，我中了');
+											uni.navigateTo({
+												url:'/pages/home/reply',
+											})
+											
 										}
 									});
 								} else {
