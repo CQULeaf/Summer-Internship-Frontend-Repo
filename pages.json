@@ -211,13 +211,17 @@
 			}
 		},
 		{
+			"path" : "pages/info/infotalk",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}},{
 			"path" : "pages/home/commentpage",
 			"style" : 
 			{
 				"navigationStyle": "custom"
 			}
 		}
-	
 		
 	],
 	"globalStyle": {
