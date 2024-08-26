@@ -117,7 +117,9 @@
 			},
 			sent()
 			{
-				
+				uni.switchTab({
+					url:"/pages/home/homepage"
+				})
 			},
 			reUpload() {
 				this.$refs.uUpload.reUpload();
