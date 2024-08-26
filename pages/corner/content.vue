@@ -114,7 +114,7 @@
 				key:'matchuser',
 				success(res) {
 					uni.request({
-						url:'http://localhost:8080/ccPost/getPostsByTopicId',
+						url:'http://localhost:1234/ccPost/getPostsByTopicId',
 						data:res,
 						success(suc) {
 							this.list=suc

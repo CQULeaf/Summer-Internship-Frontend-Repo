@@ -34,7 +34,7 @@
 			<view class="u-p-t-20">
 				<view class="all-reply-top">全部帖子</view>
 				<view class="list-item" v-for="(item, index) in postList" :key="index" @click="goToPost(item)">
-					<text class="item-title">{{postList[2].title}}{{item.title}}</text>
+					<text class="item-title">{{item.title}}</text>
 				</view>
 			</view>
 		</view>

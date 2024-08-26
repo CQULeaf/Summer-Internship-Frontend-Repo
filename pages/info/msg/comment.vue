@@ -116,7 +116,7 @@ export default {
 		gotouserpage(index)
 		{
 			uni.request({
-				url:"http://localhost:8080/user/getUserInfo",
+				url:"http://localhost:1234/user/getUserInfo",
 				data:index,
 				success: (res) => {
 					uni.setStorage({

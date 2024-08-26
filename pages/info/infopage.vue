@@ -180,7 +180,7 @@
 					return;
 				}
 				uni.request({
-					url: `http://localhost:8080/message/history?userId=${this.user.userId}`,
+					url: `http://localhost:1234/message/history?userId=${this.user.userId}`,
 					method: 'GET',
 					success: (res) => {
 						console.log('请求成功:', res);
@@ -213,7 +213,7 @@
 									processedUserIds.forEach(userId => {
 										userRequests.push(new Promise((resolve, reject) => {
 											uni.request({
-												url: `http://localhost:8080/user/getUserInfo?userId=${userId}`,
+												url: `http://localhost:1234/user/getUserInfo?userId=${userId}`,
 												method: 'GET',
 												success: (res) => {
 													console.log('用户ID:',

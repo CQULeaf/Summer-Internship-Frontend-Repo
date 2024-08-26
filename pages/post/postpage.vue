@@ -42,7 +42,7 @@
 	export default {
 		data() {
 			return {
-				action: 'http://localhost:1234/user/updateAvatar',
+				action: 'http://localhost:1234/user/updateAvatar?username=1',
 				// 背景颜色
 				 background: 
 				 {
@@ -186,10 +186,15 @@
 				}
 			},
 			upload() {
-				let files = [];
-				files = this.$refs.uUpload.lists;
-				console.log(files.url)
-				this.$refs.uUpload.upload();
+				uni.chooseImage({
+					count: 6, //默认9
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					sourceType: ['album'], //从相册选择
+					success: function (res) {
+						console.log(JSON.stringify(res.tempFilePaths));
+						this.addPost.cover=JSON.stringify(res.tempFilePaths)
+					}
+				});
 			},
 			deleteItem(index) {
 				this.$refs.uUpload.remove(index);
@@ -243,7 +248,7 @@
     background-color: #66b1ff;
 	border-radius: 40%;
     color: #ffffff;
-	},
+	}
 .form-item 
 {
 	margin-bottom: 20px;
@@ -257,11 +262,12 @@
   width: 100%;
   height: 150px;
   padding: 10px;
-  border: 1px solid #ccc;//框框
+  border: 1px solid #ccc;
   border-radius: 4px;
   /* 通过设置 margin-left 负值来向左移动输入框 */
   margin-left: -10px;
 }
+
 .help-container {
 	padding: 20px;
 	background-color: #fdfdfd;
@@ -276,11 +282,11 @@
 	
 	.u-add-wrap {
 		flex-direction: column;
-		color: $u-content-color;
+		color: u-content-color;
 		font-size: 28rpx;
 	}
 	
-	/deep/ .slot-btn {
+  .slot-btn {
 		width: 329rpx;
 		height: 140rpx;
 		display: flex;
@@ -329,7 +335,7 @@
 		top: 10rpx;
 		right: 10rpx;
 		z-index: 10;
-		background-color: $u-type-error;
+		background-color: u-type-error;
 		border-radius: 100rpx;
 		width: 44rpx;
 		height: 44rpx;
