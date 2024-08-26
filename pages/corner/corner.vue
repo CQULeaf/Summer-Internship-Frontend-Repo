@@ -28,17 +28,17 @@
           <text class="icon-text">专业</text>
         </view>
         <!-- 同乡 -->
-        <view class="icon1" @click="toggleCategory( '同乡')" style="background-color: #fed2e0; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+        <view class="icon1" @click="toggleCategory('同乡')" style="background-color: #fed2e0; display: flex; flex-direction: column; align-items: center; margin: 10px;">
           <image class="icon2" src="/static/homie.png" />
           <text class="icon-text">同乡</text>
         </view>
         <!-- MBTI -->
-        <view class="icon1" @click="toggleCategory( 'MBTI')" style="background-color: #f9e4e5; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+        <view class="icon1" @click="toggleCategory('MBTI')" style="background-color: #f9e4e5; display: flex; flex-direction: column; align-items: center; margin: 10px;">
           <image class="icon2" src="/static/mbti.png" />
           <text class="icon-text">MBTI</text>
         </view>
         <!-- 社团 -->
-        <view class="icon1" @click="toggleCategory( '社团')" style="background-color: #ffdfe6; display: flex; flex-direction: column; align-items: center; margin: 10px;">
+        <view class="icon1" @click="toggleCategory('社团')" style="background-color: #ffdfe6; display: flex; flex-direction: column; align-items: center; margin: 10px;">
           <image class="icon2" src="/static/society.png" />
           <text class="icon-text">社团</text>
         </view>

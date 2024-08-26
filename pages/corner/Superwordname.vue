@@ -50,7 +50,7 @@
 	export default {
 		data() {
 			return {
-				
+				//----------------------------------------------------------
 				list: [
 					{
 						name: '关注',
@@ -66,6 +66,7 @@
 						api: 'http://47.120.1.65:8080/corner/superWordNameRecommend'
 					}
 				],
+				//--------------------------------------------------------------
 				current: 0,
 				swiperCurrent: 0,
 				currentItems: [],
@@ -89,10 +90,10 @@
 		},
 		methods: {
 			
-				//------------------------------------------跳转以及获取想要信息
+				//------------------------------------------跳转到对应的超话
 			            goToContent(postId) {
 							uni.request({
-								url: "http://47.120.1.65:8080/corner/superWordNameConcern",//api
+								url: "http://localhost:8080/corner/superWordNameConcern",//根据id获取超话详细信息
 								data: this.user,//自己定义的 变量，包含api中需要传递的信息
 								method: 'GET',//方法类型
 								success: (res) => {
@@ -105,7 +106,11 @@
 											key: 'matchuser',//就是之前定义的变量
 											data: this.matchuser,
 											success: function() {
-												console.log('噫，好了，我中了');//成功后打印这句话
+												console.log('噫，好了，我中了');
+												//成功后打印这句话
+												uni.navigateTo({
+												    url: '/pages/corner/content', 
+												})
 											}
 										});
 									} else {
@@ -119,10 +124,7 @@
 									console.log(1111)
 								}
 							})
-			                // 跳转到内容页面，并传递帖子ID
-			                uni.navigateTo({
-			                    url: '/pages/corner/content?topic_id=' + this.topic_id 
-			                });
+			               
 			            },
 						//------------------------------------------跳转
 						

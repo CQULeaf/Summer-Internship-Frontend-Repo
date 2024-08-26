@@ -151,7 +151,7 @@
 			        goToPost(post_id) {
 			         
 						uni.request({
-							url: "http://47.120.1.65:8080/ccPost/getPost",//api
+							url: "http://localhost:8080/ccPost/getPost",//api
 							data: post_id,//自己定义的 变量，包含api中需要传递的信息
 							method: 'GET',//方法类型
 							success: (res) => {
@@ -165,7 +165,10 @@
 										data: this.value,
 										success: function() {
 											console.log('噫，好了，我中了');//成功后打印这句话
-											url:'/pages/home/reply'
+											uni.navigateTo({
+												url:'/pages/home/reply',
+											})
+											
 										}
 									});
 								} else {
