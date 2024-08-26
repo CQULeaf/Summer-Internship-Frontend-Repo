@@ -75,7 +75,9 @@
 			},
 			sent()
 			{
-				
+				uni.navigateTo({
+					url:"/pages/info/treecave/treepost"
+				})
 			},
 			reUpload() {
 				this.$refs.uUpload.reUpload();

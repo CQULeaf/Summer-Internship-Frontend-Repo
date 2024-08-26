@@ -117,9 +117,9 @@
 			},
 			sent()
 			{
-				// uni.request({
-				// 	url:"http://localhost:1234/"
-				// })
+				uni.switchTab({
+					url:"/pages/home/homepage"
+				})
 			},
 			reUpload() {
 				this.$refs.uUpload.reUpload();
