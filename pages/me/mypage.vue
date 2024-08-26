@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="container">
 		<view v-if="logined" v-model="this.user">
 			<view class="u-demo-wrap">
 				<view class="u-demo-area">
@@ -33,8 +33,8 @@
 				
 			</u-grid>
 			<view class="slot-wrap"><!-- 通过自定义slot传入的内容 -->
-				<u-tabs-swiper ref="uTabs" :list="pagelist" :current="pagecurrent" @change="tabsChange"
-					:is-scroll="false" :bold="false" bg-color="#ffc7cb" active-color="#000000"></u-tabs-swiper>
+				<u-tabs :list="sublist" :is-scroll="false" :current="subcurrent" @change="change" active-color="#000000"
+					inactive-color="#606266" item-width=140 bg-color="#ffc7cb" :bold="false"></u-tabs>
 			</view>
 			<swiper class="swiper" :current="swiperCurrent">
 				<swiper-item v-for="(tab, tabindex) in pagelist" :key="tabindex">
@@ -104,18 +104,16 @@
 				logined: true,
 				list: '',
 				current: 4,
-				pagelist: [
+				sublist: [
 					// 标签数据
 					{
 						name: '帖子',
-						type: 'post',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/ccPost/mypost'
+
 					},
 					{
 						name: '点赞',
-						type: 'liked',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/follow/getFollowedPosts'
-					},
+
+					}
 				],
 				pagecurrent: 0, //变量名：变量值
 				swiperCurrent: 0,
@@ -210,7 +208,8 @@
 			})
 			
 			const value = uni.getStorageSync('nowAccount');
-			
+			this.user = value.data
+			this.logined = (value.code == 200)
 		},
 		created() {
 			// 监听从裁剪页发布的事件，获得裁剪结果
@@ -226,7 +225,7 @@
 				const filePath = path;
 
 				uni.uploadFile({
-					url: 'http://localhost:1234/user/updateAvatar',
+					url: 'http://47.120.1.65:1234/user/updateAvatar',
 					filePath: filePath,
 					name: 'file', // 对应后端接收文件的字段名
 					formData: {
@@ -315,6 +314,12 @@
 </script>
 
 <style lang="scss">
+	.u-demo-wrap {
+		display: flex;
+		align-items: center;
+		background: #fff3f4;
+	}
+
 	.myinfo {
 		display: flex;
 		align-items: center;
@@ -370,6 +375,8 @@
 		width: 150rpx;
 		height: 150rpx;
 		border-radius: 100rpx;
+		align-items: center;
+
 	}
 
 	.u-avatar-wrap {
@@ -377,13 +384,34 @@
 		overflow: hidden;
 		margin-bottom: 80rpx;
 		text-align: center;
+		margin-left: 299rpx;
 	}
 
-	.list-item {
+
+
+	.content {
+		flex: 1;
+		overflow-y: auto;
+	}
+
+	.list {
 		display: flex;
-		align-items: center;
-		padding: 25px;
+		flex-direction: column;
+		/* 垂直排列列表项 */
+		background-color: #ffffff;
+		flex: 1;
+		/* 占据剩余空间 */
+		overflow-y: auto;
+		/* 启用垂直滚动 */
 		border-bottom: 1px solid #f0dddf;
+		background: #fff3f4;
+	}
+
+	.useravatar {
+		width: 300rpx;
+		height: 300rpx;
+		border-radius: 10%;
+		margin-right: 10px;
 	}
 
 	.item-title {

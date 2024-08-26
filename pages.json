@@ -175,13 +175,7 @@
 				"navigationStyle" : "custom"
 			}
 		},
-		{
-			"path" : "pages/corner/maybe",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
-			}
-		},
+		
 		{
 			"path" : "pages/info/treecave/treepostpage",
 			"style" : 
@@ -199,7 +193,7 @@
 			"path" : "pages/me/mypost",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle" : "custom"
 			}
 		},
 		{
@@ -213,7 +207,14 @@
 			"path" : "pages/userPage",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle" : "custom"
+			}
+		},
+		{
+			"path" : "pages/home/commentpage",
+			"style" : 
+			{
+				"navigationStyle": "custom"
 			}
 		}
 	
