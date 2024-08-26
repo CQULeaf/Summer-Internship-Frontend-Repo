@@ -214,7 +214,7 @@
 			"path" : "pages/info/infotalk",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle": "custom"
 			}},{
 			"path" : "pages/home/commentpage",
 			"style" : 

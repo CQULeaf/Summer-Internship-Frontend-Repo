@@ -13,13 +13,13 @@
 			</view>
 
 			<u-grid :col="8" :border="false">
-				<u-grid-item @click="gotoconcern">
+				<u-grid-item  @click="gotoconcern('friends')">
 					<view class="grid-text">朋友</view>
 				</u-grid-item>
-				<u-grid-item @click="gotoconcern">
+				<u-grid-item  @click="gotoconcern('follows')">
 					<view class="grid-text">关注</view>
 				</u-grid-item>
-				<u-grid-item @click="gotoconcern">
+				<u-grid-item  @click="gotoconcern('fans')">
 					<view class="grid-text">粉丝</view>
 				</u-grid-item>
 				<u-grid-item></u-grid-item>
@@ -279,11 +279,11 @@
 					url: "/pages/me/setting/setting"
 				})
 			},
-			gotoconcern() {
-				uni.navigateTo({
-					url: "/pages/me/concern"
-				})
-			},
+		 gotoconcern(type) {  
+		        uni.navigateTo({  
+		            url: `/pages/me/concern?type=${type}` // 传递用户类别  
+		        });  
+		    }, 
 			quit() {
 				console.log("退出"),
 					this.logined = false

@@ -39,7 +39,7 @@
 					return
 				}
 				uni.request({
-					url: 'http://47.120.1.65:8080/user/login',
+					url: 'http://localhost:8080/user/login',
 					data: this.user,
 					method: "POST",
 					header: {
