@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-		<u-form :model="user" ref="uForm">
+		<u-form :model="user">
             <div class="login-wrapper">
                 <div class="header">注册</div>
                 <div class="form-wrapper">
@@ -27,10 +27,17 @@
 				}
 			}
 		},
-        name:"Reg",
 		methods:{
 			register(){
 				console.log(this.user)
+				if(this.user.username==''){
+					this.$u.toast("注册失败，请输入用户名")
+					return
+				}
+				if(this.user.password1==''){
+					this.$u.toast("注册失败，请输入密码")
+					return
+				}
 				uni.request({
 					url:"http://47.120.1.65:8080/user/register",
 					data:this.user,
@@ -72,13 +79,13 @@
 }
 .login-wrapper {
     background-color: #fff;
-    width: 475rpx;
-    height: 1050rpx;
+    width: 400rpx;
+    height: 1100rpx;
     border-radius: 15rpx;
     padding: 0 50px;
     position: absolute;
     left: 50%;
-    top: 49%;
+    top: 50%;
     transform: translate(-50%, -50%);
 }
 .header {

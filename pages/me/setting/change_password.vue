@@ -75,28 +75,19 @@ export default {
         },
         success: (res) => {
           console.log(res)
-          if (res.statusCode === 200) {
-            uni.showToast({
-              title: '密码修改成功',
-              icon: 'success'
-            });
+          if (res.data.code == 200) {
+            this.$u.toast("修改成功");
 			uni.redirectTo({
 				url:'/pages/me/setting/setting'
 			})
           } else {
             // 处理其他情况，比如错误消息
-            uni.showToast({
-              title: res.data.message || '密码修改失败',
-              icon: 'none'
-            });
+           this.$u.toast(res.data.data);
           }
         },
         fail: (err) => {
           // 请求失败的处理逻辑
-          uni.showToast({
-            title: '请求失败，请稍后再试',
-            icon: 'none'
-          });
+          this.$u.toast("请求失败，请稍后再试");
         }
       });
     }

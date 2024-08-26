@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u-navbar :is-back="false" title="主页" :background="background" :customBack="backtohome" height="55" title-size=40 title-color=#262626>
+		<u-navbar :is-back="false" title="主页" :background="background" height="55" title-size=40 title-color=#262626>
 			
 		</u-navbar>
 		<view class="u-tabs-box">
@@ -10,9 +10,7 @@
 			<u-search placeholder="请输入标题关键字" v-model="keyword" @search="search" @custom="search" height=80 shape=round bg-color=#ededed input-align=center margin=10px></u-search>
 		</view>
 		<view class="wrap">
-			
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
-				
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;">
 						
@@ -21,6 +19,29 @@
 								<view class="content" @click="toReply(res)">{{ res.title }}</view>
 								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
 								<view v-if="res.cover">
+									<u-image width="100%" height="300rpx" :src="res.cover" @tap="preAvatar(res.cover)"></u-image>
+								</view>
+								<view class="like" :class="{ highlight: res.isLike }">
+									<view class="num">{{ res.likeCount }}</view>
+									<u-icon v-if="!res.isLike" name="thumb-up" :size="30" color="#9a9a9a" @click="getLike(index)"></u-icon>
+									<u-icon v-if="res.isLike" name="thumb-up-fill" :size="30" @click="getLike(index)"></u-icon>
+								</view>
+								<view class="top">
+									<view class="nickname">{{ res.nickname }}</view>
+									<view class="createdAt">{{ res.createdAt }}</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item>
+				<swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;">
+						<view class="post" v-for="(res, index) in postList" :key="res.id" @search="search" @custom="custom">
+							<view class="right">
+								<view class="content" @click="toReply(res)">{{ res.title }}</view>
+								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
+								<view v-if="res.cover">
+									<u-image width="100%" height="300rpx" :src="res.cover"></u-image>
 									<u-image width="100%" height="400rpx" :src="res.cover"></u-image>
 								</view>
 								<view class="like" :class="{ highlight: res.isLike }">
@@ -85,12 +106,13 @@ export default {
 		
 		// 请求帖子数据
 		
-		// uni.request({
-		// 	url:'',
-		// 	success:(respones) => {
-		// 		this.list = respones.data
-		// 	}
-		// })
+		uni.request({
+			url:'http://localhost:1234/ccPost/getAllPosts',
+			success:(respones) => {
+				console.log(respones)
+				//this.postList = respones.data
+			}
+		})
 		
 		this.list = [{
 				iconPath: "/static/newhomeg.png",
@@ -175,6 +197,13 @@ export default {
 	},
 	
 	methods: {
+		preAvatar(img) {
+			wx.previewImage({
+				current: '', // 当前显示图片的 http 链接
+				urls: [img] // 需要预览的图片 http 链接列表
+			})
+		},
+		
 		// 进入帖子的回复界面
 		toReply(index){
 			uni.setStorageSync("postData",index)
@@ -202,7 +231,6 @@ export default {
 		// tab栏切换
 		change(index) {
 			this.swiperCurrent = index;
-			this.getOrderList(index);
 		},
 		transition({ detail: { dx } }) {
 			this.$refs.tabs.setDx(dx);

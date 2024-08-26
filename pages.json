@@ -134,48 +134,40 @@
 		}
 	},
 	{
-			"path": "pages/register",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		},
+		"path": "pages/register",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	},
 		
-		{
+	{
 				"path" : "pages/corner/corner",
 				"style" : 
 				{
 					"navigationBarTitleText": "聚"
 				}
-			},
-			{
+	},
+	{
 					"path" : "pages/corner/post",
 					"style" : 
 					{
 						"navigationBarTitleText": "聚"
 					}
 				},
-		{
+	{
 				"path" : "pages/corner/superWordName",
 				"style" : 
 				{
 					"navigationBarTitleText": "聚"
 				}
-			},
-			{
+	},
+	{
 					"path" : "pages/corner/content",
 					"style" : 
 					{
 						"navigationBarTitleText": "聚"
 					}
-				},
-		
-		{
-			"path": "uview-ui/components/u-avatar-cropper/u-avatar-cropper",
-			"style": {
-				"navigationBarTitleText": "头像裁剪",
-				"navigationBarBackgroundColor": "#000000"
-			}
-		},
+	},
 		{
 			"path" : "pages/post/postpage",
 			"style" : 
@@ -192,6 +184,12 @@
 			}
 		},
 		{
+			"path" : "pages/userPage",
+			"style" : 
+			{
+				"navigationStyle" : "custom"
+			}},{
+
 			"path" : "pages/corner/postToCorner",
 			"style" : 
 			{
@@ -201,14 +199,14 @@
 			"path" : "pages/me/mypost",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle" : "custom"
 			}
 		},
 		{
 			"path" : "pages/me/myliked",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle" : "custom"
 			}
 		}
 	

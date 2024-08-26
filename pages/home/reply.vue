@@ -2,7 +2,7 @@
 	<view class="wrap">
 		<view class="comment">
 			<view class="top">
-				<view class="left">
+				<view class="left" @click="gotoUserPage">
 					<view class="heart-photo"><image :src="comment.pic" mode=""></image></view>
 					<view class="user-info">
 						<view class="name">{{ comment.nickname }}</view>
@@ -72,6 +72,11 @@ export default {
 	},
 	
 	methods: {
+		gotoUserPage(){
+			uni.navigateTo({
+				url:"/pages/userPage"
+			})
+		},
 		// 点赞
 		getLike(index) {
 			if (index === 0 || index > 0) {
