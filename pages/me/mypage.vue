@@ -29,27 +29,34 @@
 				<u-grid-item>
 					<u-icon name="setting" :size="50" @click="gotoSetting"></u-icon>
 				</u-grid-item>
+				
+				
 			</u-grid>
 			<view class="slot-wrap"><!-- 通过自定义slot传入的内容 -->
 				<u-tabs :list="sublist" :is-scroll="false" :current="subcurrent" @change="change" active-color="#000000"
 					inactive-color="#606266" item-width=140 bg-color="#ffc7cb" :bold="false"></u-tabs>
 			</view>
-			<scroll-view class="content" scroll-y>
-				<view v-if="subcurrent === 0" class="list">
-					<view v-if="posts.length === 0" class="loading">加载中...</view>
-					<view v-for="(post, index) in posts" :key="index" class="list-item">
-						<image class="useravatar" :src="post.avatar" />
-						<text class="nickname">{{ post.username }}</text>
-					</view>
-				</view>
-				<view v-else-if="subcurrent===1" class="list">
-					<view v-if="liked.length === 0" class="loading">加载中...</view>
-					<view v-for="(like, index) in liked" :key="index" class="list-item">
-						<image class="useravatar" :src="like.avatar" />
-						<text class="nickname">{{ like.username }}</text>
-					</view>
-				</view>
-			</scroll-view>
+			<swiper class="swiper" :current="swiperCurrent">
+				<swiper-item v-for="(tab, tabindex) in pagelist" :key="tabindex">
+					<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
+						<view class="list">
+							<!-- 用户发布的帖子列表 -->
+							<view v-if="pagelist[pagecurrent].type === 'post'">
+								<view class="list-item" v-for="(item, index) in postList" :key="index" @click="goToPost(item)">
+									<text class="item-title">{{item.title}}</text>
+								</view>
+								<u-divider>完了...</u-divider>
+							</view>
+							
+							<!-- 用户的点赞列表 -->
+							<view v-if="pagelist[pagecurrent].type === 'liked'">222
+							
+							<u-divider>完了...</u-divider>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item>
+			</swiper>
 		</view>
 		<view v-else>
 			<u-navbar :is-back="false" title="　" :border-bottom="false">
@@ -89,7 +96,7 @@
 					avatar: '',
 					nickname: '1111',
 					username: '',
-					userId: ''
+					userId:1,
 				},
 				pic: 'https://uviewui.com/common/logo.png',
 				show: true,
@@ -108,16 +115,29 @@
 
 					}
 				],
-				subcurrent: 0,
-				posts: [],
-				liked: [],
+				pagecurrent: 0, //变量名：变量值
+				swiperCurrent: 0,
+				currentItems: [], // 当前用户列表数据
+				dataCache: {},
+				loading: false,
+				page: 1, // 当前页码
+				hasMore: true, // 是否还有更多数据
+				touchStartX: 0,
+				touchEndX: 0,
+				touchThreshold: 30 ,//处理滑动
+				postList:[{
+					title:''
+				}], //发布帖子的数据
+				
+				likeList:[{
+					
+				}]
 			};
 		},
 		onLoad() {
 			const value = uni.getStorageSync('nowAccount');
 			this.user = value.data
 			this.logined = (value.code == 200)
-			console.log(value.code)
 			this.list = [{
 					iconPath: "/static/newhomeg.png",
 					selectedIconPath: "/static/newhomep.png",
@@ -160,7 +180,33 @@
 			]
 		},
 		onShow() {
-			//判断用户是否登录
+			uni.getStorage({
+				key:'nowAccount',
+				success: (ret) => {
+					//console.log(ret.data.data.userId);
+					this.user = ret.data.data
+					
+					//判断用户是否登录
+					this.logined = (ret.data.code == 200)
+					console.log(this.user);
+					// //获取用户帖子信息
+					uni.request({
+						url:"http://localhost:1234/ccPost/mypost",
+						data: {
+						    user_id: ret.data.data.userId
+						},
+						success:(res)=>{
+							console.log(res.data.data);
+							this.postList=res.data.data
+						},
+						fail(res2) {
+							console.log(ret.data.data.userId)
+							console.log(res2);
+						}
+					})
+				}
+			})
+			
 			const value = uni.getStorageSync('nowAccount');
 			this.user = value.data
 			this.logined = (value.code == 200)
@@ -198,6 +244,24 @@
 		},
 
 		methods: {
+			goToPost(item) {
+				// 跳转到聊天界面，假设聊天界面的路径为 '/pages/home/reply'
+				uni.setStorage({
+					key:"postData",
+					data:item,
+					success() {
+						uni.navigateTo({
+							url:"/pages/home/reply"
+						})
+					}
+				})
+			},
+			goToLiked(item) {
+				// 跳转到聊天界面，假设聊天界面的路径为 '/pages/info/treecave/treetalk'
+				uni.navigateTo({
+					url: '/pages/me/myliked?post_id=' + item.post_id // 假设用户有一个 id 属性
+				});
+			},
 			goToProfile() {
 				uni.navigateTo({
 					url: '/pages/me/setting'
@@ -237,92 +301,15 @@
 					}
 				})
 			},
-			change(index) {
-				this.subcurrent = index;
-				if (index === 0) { // 如果点击的是“朋友”
-					this.getposts(); // 获取朋友列表
-				} else if (index === 1) {
-					this.getliked();
-				}
+			tabsChange(index) {
+				this.swiperCurrent = index;
+				this.pagecurrent = index;
+				this.page = 1; // 重置页码
+				this.hasMore = true; // 重新设置有更多数据标志
+				this.currentItems = []; // 清空当前用户列表
+				this.loading = true; // 开始加载
 			},
-			getposts() {
-				uni.request({
-					url: 'http://localhost:8080/ccPost/mypost',
-					data: this.user,
-					method: 'GET',
-					success: (res) => {
-						console.log(res)
-						if (res.statusCode === 200) {
-							this.posts = res.data.data
-						} else {
-							console.error('获取帖子列表失败:', res);
-						}
-					},
-					fail: (err) => {
-						console.error('请求失败:', err);
-					}
-				})
-			},
-			getliked() {
-				uni.request({
-					url: 'http://localhost:8080/user/getFollowedPosts',
-					data: this.user,
-					method: 'GET',
-					success: (res) => {
-						console.log(res)
-						if (res.statusCode === 200) {
-							this.liked = res.data.data
-							this.fetchUserLiked(this.liked);
-						} else {
-							console.error('获取点赞列表失败:', res);
-						}
-					},
-					fail: (err) => {
-						console.error('请求失败:', err);
-					}
-				})
-			},
-			fetchUserLiked(users) {
-				const promises = users.map(user => {
-					return new Promise((resolve, reject) => {
-						uni.request({
-							url: `http://localhost:8080/user/getUserInfo?userId=${userId}`, // 假设你有一个获取用户信息的 API
-							method: 'GET',
-							success: (res) => {
-								if (res.statusCode === 200) {
-									resolve(res.data); // 返回用户信息
-								} else {
-									reject('获取用户信息失败');
-								}
-							},
-							fail: (err) => {
-								reject(err);
-							}
-						});
-					});
-				});
-			
-				Promise.all(promises)
-					.then(userInfos => {
-						// 处理获取到的用户信息
-						console.log(userInfos);
-						// 这里可以更新界面或存储用户信息
-					})
-					.catch(error => {
-						console.error('请求用户信息出错:', error);
-					});
-			}
 		},
-		mounted() {
-			const value = uni.getStorageSync('nowAccount');
-
-			// 提取 userId
-			if (value && value.data) {
-				this.user.userId = value.data.userId;
-			}
-
-			console.log(this.user.userId);
-		}
 	};
 </script>
 

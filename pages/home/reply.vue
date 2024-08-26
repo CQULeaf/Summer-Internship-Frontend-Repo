@@ -3,9 +3,9 @@
 		<view class="comment">
 			<view class="top">
 				<view class="left" @click="gotoUserPage">
-					<view class="heart-photo"><image :src="comment.pic" mode=""></image></view>
+					<view class="heart-photo"><image :src="user.avatar" mode=""></image></view>
 					<view class="user-info">
-						<view class="name">{{ comment.nickname }}</view>
+						<view class="name">{{ user.nickname }}</view>
 						<view class="date">{{comment.createdAt}}</view>
 					</view>
 				</view>
@@ -17,17 +17,17 @@
 			</view>
 			<view class="content u-font-40">{{ comment.title}}</view>
 			<view class="content u-p-t-30" >{{ comment.postContent }}</view>
-			<image v-if="comment.pic" :src="comment.pic" mode=""></image>
+			<image v-if="comment.cover" :src="comment.cover" mode=""></image>
 		</view>
 		
 		<!-- 回复 -->
 		<view class="all-reply">
-			<view class="all-reply-top">全部回复{{ comment.allReply }}</view>
+			<view class="all-reply-top">全部回复</view>
 			<view class="item" v-for="(item, index) in commentList" :key="index">
 				<view class="comment">
 					<view class="top">
 						<view class="left">
-							<view class="heart-photo"><image :src="item.url" mode=""></image></view>
+							<view class="heart-photo" @click="gotoUserPage2(item)"><image :src="item.avatar" mode=""></image></view>
 							<view class="user-info">
 								<view class="name">{{ item.nickname }}</view>
 								<view class="date">{{ item.createdAt }}</view>
@@ -39,7 +39,7 @@
 							<u-icon v-if="item.isLike" name="thumb-up-fill" class="like" :size="30" @click="getLike(index)"></u-icon>
 						</view>
 					</view>
-					<view class="content">{{ item.contentText }}</view>
+					<view class="content">{{ item.content }}</view>
 				</view>
 			</view>
 		</view>
@@ -47,34 +47,133 @@
 </template>
 
 <script>
+import colorGradient from '../../uview-ui/libs/function/colorGradient';
 export default {
 	data() {
 		return {
+			user:{
+				userId:'',
+				avatar:'',
+				nickname:''
+			},
 			comment:{
 				userId:'',
 				nickname: '',
 				date: '',
 				postContent: '',
 				title:'',
-				pic:'',
+				cover:'',
 				likeCount:'',
 				isLike:'',
 				},
-			commentList: [],
+			commentList: [{
+				avatar:'',
+				nickname:'',
+				userId:''
+			}],
 		};
 	},
 	onLoad() {
-		this.getReply();
+		this.getComment();
 	},
 	
 	onShow(){
-		this.comment=uni.getStorageSync('postData');
 	},
 	
 	methods: {
+		getComment(){
+			uni.getStorage({
+				key: 'postData',
+				success:(res) => {
+					this.comment=res.data
+					//console.log(this.comment.commentCount);
+					
+					// 请求获得所有的回复数据
+					uni.request({
+						url:"http://localhost:1234/home/getReply",
+						data:res.data,
+						success:(respones) =>{
+							//console.log(respones);
+							this.commentList=respones.data.data
+							console.log(this.commentList);
+							for(let key in this.commentList) {
+							    uni.request({
+							    	url:"http://localhost:1234/user/getUserInfo",
+									data:this.commentList[key],
+									success:(res2) => {
+										//console.log(res2.data);
+										this.commentList[key].avatar=res2.data.data.avatar
+										this.commentList[key].nickname=res2.data.data.nickname
+										this.commentList[key].userId=res2.data.data.userId
+									},
+							    })
+							}
+						}
+					})
+				}
+			});
+			
+			uni.request({
+				url:"http://localhost:1234/user/getUserInfo",
+				data:this.comment,
+				success:(res)=>{
+					this.user=res.data.data
+					uni.setStorage({
+						key:"userPost",
+						data:res.data.data
+					})
+				},
+			})
+		},
+		
 		gotoUserPage(){
-			uni.navigateTo({
-				url:"/pages/userPage"
+			uni.getStorage({
+				key:"nowAccount",
+				success:(res)=>{
+					if(res.data.data.userId!=this.comment.userId){
+						uni.navigateTo({
+							url:"/pages/userPage"
+						})
+					}else{
+						uni.navigateTo({
+							url:"/pages/me/myinfo/Information"
+						})
+					}
+				},
+			})
+		},
+		
+		
+		// 跳转到评论页面
+		gotoUserPage2(userId){
+			console.log(userId)
+			uni.request({
+				url:"http://localhost:1234/user/getUserInfo",
+				data:userId,
+				success:(res)=>{
+					console.log(userId);
+					uni.setStorage({
+						key:"userPost",
+						data:res.data.data,
+						success() {
+							console.log(res);
+							uni.getStorage({
+								key:"nowAccount",
+								success:(res)=>{
+									if(res.data.data.userId!=res.userId){
+										uni.navigateTo({
+											url:"/pages/userPage"
+										})
+									}else{
+										uni.navigateTo({
+											url:"/pages/me/myinfo/Information"
+										})
+									}
+								},
+							})
+						}
+					})
+				},
 			})
 		},
 		// 点赞
@@ -96,49 +195,6 @@ export default {
 				}
 			}
 		},
-
-		// 回复列表
-		getReply() {
-			
-			this.commentList = [
-				{
-					name: '新八几',
-					date: '12-25 18:58',
-					contentText: '不要乱打广告啊喂！虽然是真的超好用',
-					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-					likeCount: 33,
-					isLike: false,
-				},
-				{
-					name: '叶轻眉1',
-					date: '01-25 13:58',
-					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-					contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-					allReply: 0,
-					likeCount: 11,
-					isLike: false,
-				},
-				{
-					name: '叶轻眉2',
-					date: '03-25 13:58',
-					contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-					allReply: 0,
-					likeCount: 21,
-					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-					isLike: false,
-					allReply: 2,
-				},
-				{
-					name: '叶轻眉3',
-					date: '06-20 13:58',
-					contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-					allReply: 0,
-					likeCount: 150,
-					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-					isLike: false
-				}
-			];
-		}
 	}
 };
 </script>

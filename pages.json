@@ -184,12 +184,6 @@
 			}
 		},
 		{
-			"path" : "pages/userPage",
-			"style" : 
-			{
-				"navigationStyle" : "custom"
-			}},{
-
 			"path" : "pages/corner/postToCorner",
 			"style" : 
 			{
@@ -204,6 +198,13 @@
 		},
 		{
 			"path" : "pages/me/myliked",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/userPage",
 			"style" : 
 			{
 				"navigationStyle" : "custom"

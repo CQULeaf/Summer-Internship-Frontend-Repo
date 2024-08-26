@@ -52,17 +52,20 @@
 							data: res.data,
 							success: () => {
 								var value = uni.getStorageSync('nowAccount');
-								console.log("存储的账户",value)
-								if (value.code == 200) {
+								if (value.code==200){
 									uni.switchTab({
 										url: '/pages/me/mypage'
 									});
 								} else {
 									this.$u.toast("用户名或密码错误");
 								}
+							},
+							fail(res) {
+								this.$u.toast("请求失败");
 							}
 						});
-					}
+					},
+					
 				});
 
 			},

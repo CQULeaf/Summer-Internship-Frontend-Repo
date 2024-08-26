@@ -76,7 +76,7 @@
 							cover: "/static/demodemo.jpg",
 							name: '元白超话   ',
 							description: '君埋泉下泥销骨,我寄人间雪满头',
-							follower_count : 1234,
+							follower_count : 8080,
 							post_count: 5678
 						},
 				//---------------超话的变量
