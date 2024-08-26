@@ -3,31 +3,37 @@
 		<view>
 			<u-navbar height=60 back-text="" title="" :background="background" is-back=true :customBack="gotopofile">
 				<view class="slot-wrap"><!-- 通过自定义slot传入的内容 -->
-					<u-tabs-swiper ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false"
-						swiper-Width="100" :bold="false" bg-color="#ffc7cb" active-color="#ffa6af"></u-tabs-swiper>
+					<u-tabs :list="list" :is-scroll="false" :current="current" @change="change" active-color="#000000"
+						inactive-color="#606266" item-width=140 bg-color="#ffc7cb"></u-tabs>
 				</view>
-
 			</u-navbar>
 		</view>
-
-		<!-- 用户列表部分 -->
-		<swiper class="swiper" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
-			<swiper-item v-for="(tab, tabindex) in list" :key="tabindex">
-				<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
-					<view class="list">
-						<!-- 用户列表 -->
-						<view class="list-item" v-for="(item, index) in currentItems" :key="index">
-							<image class="useravatar" :src="item.avatar"></image>
-							<text class="item-title">{{item.username}}</text>
-						</view>
-					</view>
-				</scroll-view>
-			</swiper-item>
-		</swiper>
+		<view v-if="current === 0" class="list">
+			<view v-if="userlist.length === 0" class="loading">还没有朋友喔...</view>
+			<view v-for="(friend, index) in userlist" :key="index" class="list-item">
+				<image class="useravatar" :src="friend.avatar" />
+				<text class="nickname">{{ friend.username }}</text>
+			</view>
+		</view>
+		<view v-else-if="current===1" class="list">
+			<view v-if="userlist.length === 0" class="loading">还没有关注的人喔...</view>
+			<view v-for="(follow, index) in userlist" :key="index" class="list-item">
+				<image class="useravatar" :src="follow.avatar" />
+				<text class="nickname">{{ follow.username }}</text>
+			</view>
+		</view>
+		<view v-else-if="current===2" class="list">
+			<view v-if="userlist.length === 0" class="loading">还没有粉丝喔...</view>
+			<view v-for="(fan, index) in userlist" :key="index" class="list-item">
+				<image class="useravatar" :src="fan.avatar" />
+				<text class="nickname">{{ fan.username }}</text>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
+import { type } from 'os';
 	export default {
 		data() {
 			return { //专门写变量   在模板里面写 ：herf 表示herf是变量
@@ -38,147 +44,194 @@
 					// 标签数据
 					{
 						name: '朋友',
-						type: 'users',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/user/friends'
+
 					},
 					{
 						name: '关注',
-						type: 'users',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/user/follwing'
+
 					},
 					{
 						name: '粉丝',
-						type: 'users',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/user/fans'
+
 					}
 				],
-				current: 0, //变量名：变量值
-				swiperCurrent: 0,
-				currentItems: [], // 当前用户列表数据
-				// user: {
-				// 	avatar: '/static/image/1.png',
-				// 	nickname: 'MyNickname'
-				// },
-				dataCache: {},
-				loading: false,
-				page: 1, // 当前页码
-				hasMore: true, // 是否还有更多数据
-				touchStartX: 0,
-				touchEndX: 0,
-				touchThreshold: 30 //处理滑动
+				current: '',
+				type:'',
+				user: {
+					avatar: '',
+					username: '',
+					userId: ''
+				},
+				friends: [],
+				follows: [],
+				fans: [],
+				userlist: []
 			};
 		},
-
 		methods: { //写自定义方法
-
-			//    goToPost(postId){
-			// 	uni.navigateTo({
-			// 		url:'/'
-			// 	})
-			// },
 			gotopofile() {
 				uni.switchTab({
 					url: '/pages/me/mypage' // 返回上一页面
 				});
 			},
-			onreachBottom() {
-				if (this.loading || !this.hasMore) return; // 正在加载中或没有更多数据则不执行
-				this.page++;
-				this.fetchUserList(this.list[this.current].api, this.page);
+			change(index) {
+				this.current = index;
+				if (index === 0) { // 如果点击的是“朋友”
+					this.getfriends(); // 获取朋友列表
+				} else if (index === 1) {
+					this.getfollows();
+				} else if (index === 2) {
+					this.getfans();
+				}
 			},
-			//发送请求
-			fetchUserList(apiEndpoint, page) {
-				this.loading = true;
-				uni.request({
-					url: `${apiEndpoint}?page=${page}`, //在fetchUserList方法中的请求URL使用了'${apiEndpoint}?page=${page}'，这会导致字符串直接拼接而非动态生成变量。正确的做法应该是使用模板字符串的语法来动态替换变量
-					method: 'GET',
+			getfriends() {
+				uni.getStorage({
+					key: 'nowAccount',
 					success: (res) => {
-						console.log('请求成功:', res);
-						console.log('返回的数据:', res.data.data);
-						if (res.statusCode === 200) {
-							if (res.data.length === 0) {
-								this.hasMore = false; // 没有更多数据
-							} else {
-
-								// 处理用户数据
-								this.currentItems = [...this.currentItems, ...res.data.data];
-
-								// 处理帖子数据
-
-
-								this.dataCache[apiEndpoint] = this.currentItems;
+						this.user.userId = res.data.data.userId,
+							console.log('获取到的 userId:', this.user.userId); // 打印 userId
+						uni.request({
+							url: `http://localhost:8080/user/friends?userId=${this.user.userId}`,
+							// data: this.user.userId, 请求体
+							method: 'GET',
+							success: (res) => {
+								console.log(res)
+								if (res.statusCode === 200) {
+									this.friends = res.data.data
+									console.log('用户列表:', this.friends)
+									this.fetchUserInfos(this.friends);
+								} else {
+									console.error('获取朋友列表失败:', res);
+								}
+							},
+							fail: (err) => {
+								console.error('请求失败:', err);
 							}
-						} else {
-							uni.showToast({
-								title: '获取数据失败',
-								icon: 'none'
+						})
+					}
+				})
+
+			},
+			getfollows() {
+				uni.getStorage({
+					key: 'nowAccount',
+					success: (res) => {
+						this.user.userId = res.data.data.userId,
+							console.log('获取到的 userId:', this.user.userId); // 打印 userId
+						uni.request({
+							url: `http://localhost:8080/user/followers?userId=${this.user.userId}`,
+							// data: this.user.userId, 请求体
+							method: 'GET',
+							success: (res) => {
+								console.log(res)
+								if (res.statusCode === 200) {
+									this.follows = res.data.data
+									console.log('用户列表:', this.follows)
+									this.fetchUserInfos(this.follows);
+								} else {
+									console.error('获取朋友列表失败:', res);
+								}
+							},
+							fail: (err) => {
+								console.error('请求失败:', err);
+							}
+						})
+					}
+				})
+			},
+			getfans() {
+				uni.getStorage({
+					key: 'nowAccount',
+					success: (res) => {
+						this.user.userId = res.data.data.userId,
+							console.log('获取到的 userId:', this.user.userId); // 打印 userId
+						uni.request({
+							url: `http://localhost:8080/user/following?userId=${this.user.userId}`,
+							// data: this.user.userId, 请求体
+							method: 'GET',
+							success: (res) => {
+								console.log(res)
+								if (res.statusCode === 200) {
+									this.fans = res.data.data
+									console.log('用户列表:', this.fans)
+									this.fetchUserInfos(this.fans);
+								} else {
+									console.error('获取朋友列表失败:', res);
+								}
+							},
+							fail: (err) => {
+								console.error('请求失败:', err);
+							}
+						})
+					}
+				})
+			},
+			fetchUserInfos(users) { // users 朋友的信息-id  
+				console.log('获取到的 users:', users);
+				console.log('获取到的长度:', users.length);
+				const userIds = users.map(user => user.user_id); // 使用 user_id 属性  
+				console.log('提取的用户ID:', userIds); // 输出提取的 userId 列表 
+
+				const userRequests = [];
+
+				userIds.forEach(userId => {
+					console.log('请求的用户ID:', userId); // 打印用户 ID  
+					if (userId) { // 确保 userId 不为空  
+						userRequests.push(new Promise((resolve, reject) => {
+							uni.request({
+								url: `http://localhost:8080/user/getUserInfo?userId=${userId}`,
+								method: 'GET',
+								success: (res) => {
+									console.log('完整的响应:', res);
+									if (res.statusCode === 200) {
+										if (res.data && res.data.data) {
+											console.log('返回的数据:', res.data.data);
+											resolve(res.data.data);
+										} else {
+											reject('返回的数据格式不正确');
+										}
+									} else {
+										reject(`获取用户信息失败: ${res.statusCode}`);
+									}
+								},
+								fail: (err) => {
+									reject('请求失败');
+								}
 							});
-						}
-					},
-					fail: (err) => {
-						uni.showToast({
-							title: '请求失败',
-							icon: 'none'
-						});
-					},
-					complete: () => {
-						this.loading = false;
+						}));
+					} else {
+						console.error('无效的用户ID:', userId); // 处理无效的 userId  
 					}
 				});
-			},
-			handleTouchStart(e) {
-				this.touchStartX = e.touches[0].clientX;
-			},
-			handleTouchEnd(e) {
-				this.touchEndX = e.changedTouches[0].clientX;
-				let swipeDistance = this.touchEndX - this.touchStartX;
-				if (Math.abs(swipeDistance) > this.touchThreshold) {
-					this.swiperCurrent = swipeDistance > 0 ? Math.max(0, this.swiperCurrent - 1) : Math.min(this.list
-						.length - 1, this.swiperCurrent + 1);
-				}
-			},
-			tabsChange(index) {
-				this.swiperCurrent = index;
-				this.current = index;
-				this.page = 1; // 重置页码
-				this.hasMore = true; // 重新设置有更多数据标志
-				this.currentItems = []; // 清空当前用户列表
-				this.loading = true; // 开始加载
-				this.fetchUserList(this.list[index].api, this.page);
-			},
 
-
-			transition(e) {
-				this.handleTouchEnd(e); // 处理滑动
-				let dx = e.detail.dx;
-				this.$refs.uTabs.setDx(dx);
+				Promise.all(userRequests)
+					.then(userInfos => {
+						this.userlist = userInfos;
+						console.log('当前用户列表:', this.userlist);
+					})
+					.catch(error => {
+						console.error(error);
+						uni.showToast({
+							title: '获取部分用户信息失败',
+							icon: 'none'
+						});
+					});
 			},
-
-			animationfinish(e) {
-				let current = e.detail.current;
-				if (current < 0) {
-					current = 0;
-				} else if (current >= this.list.length) {
-					current = this.list.length - 1;
-				}
-				this.$refs.uTabs.setFinishCurrent(current);
-				this.swiperCurrent = current;
-				this.current = current;
-
-				if (!this.dataCache[this.list[current].api]) {
-					this.loading = true; // 开始加载
-					this.fetchUserList(this.list[current].api, this.page);
-				} else {
-					this.currentUsers = this.dataCache[this.list[current].api];
-					this.loading = false; // 数据已缓存，无需再次加载
-				}
-			}
-
 		},
-		mounted() {
-			this.fetchUserList(this.list[this.current].api, this.page);
-		}
-	};
+		mounted() {  
+				const type = this.$route.query.type; // 获取URL参数  
+				if (type === 'friends') {  
+					this.current = 0;  
+					this.getfriends(); // 获取朋友列表  
+				} else if (type === 'follows') {  
+					this.current = 1;  
+					this.getfollows(); // 获取关注列表  
+				} else if (type === 'fans') {  
+					this.current = 2;  
+					this.getfans(); // 获取粉丝列表  
+				}  
+			}  
+	}
 </script>
 <style>
 	.container {
@@ -189,24 +242,7 @@
 	}
 
 	.slot-wrap {
-		padding: 0 150rpx;
-	}
-
-	.swiper {
-		flex: 1;
-		/* 占据剩余的空间 */
-	}
-
-	.swiper-item {
-		height: 100%;
-		/* 确保 swiper-item 填满父容器 */
-		background-color: #ffffff;
-	}
-
-	.scroll-view {
-		width: 100%;
-		height: 100%;
-		/* 确保 scroll-view 填满 swiper-item */
+		padding: 0 90rpx;
 	}
 
 	.list {
@@ -234,9 +270,12 @@
 	}
 
 	.nickname {
-		font-size: 16px;
+		font-size: 28rpx;
+		/* 示例字体大小 */
 		color: #333;
+		/* 示例字体颜色 */
 	}
+
 
 	.loading {
 		text-align: center;

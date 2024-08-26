@@ -4,10 +4,10 @@
 		</u-navbar>
 
 		<view class="comment" v-for="(res, index) in commentList" :key="res.id">
-			<view class="left"><image :src="res.url" mode="aspectFill"></image></view>
+			<view class="left"><image :src="res.url" mode="aspectFill" @click="gotouserpage(res.id)"></image></view>
 			<view class="right">
 				<view class="top">
-					<view class="name">{{ res.name }}</view>
+					<view class="name" @click="gotouserpage(res.id)">{{ res.name }}</view>
 				</view>
 				<view class="content">{{ res.contentText }}</view>
 				<view class="reply-box">
@@ -114,6 +114,22 @@ export default {
 					url: 'https://cdn.uviewui.com/uview/template/niannian.jpg',
 				}
 			];
+		},
+		gotouserpage(index){
+			uni.request({
+				url:"http://localhost:8080/user/getUserInfo",
+				data:index,
+				method:"GET",
+				success: (res) => {
+					uni.setStorage({
+						data:res,
+						key:"userPost"
+					})
+				}
+			})
+			uni.navigateTo({
+				url:"/pages/userPage"
+			})
 		}
 	}
 };

@@ -11,23 +11,6 @@
 					</view>
 				</view>
 			</view>
-
-			<!-- <u-grid :col="8" :border="false" >
-				<u-grid-item>
-					<view class="grid-text">朋友</view>
-				</u-grid-item>
-				<u-grid-item>
-					<view class="grid-text">关注</view>
-				</u-grid-item>
-				<u-grid-item>
-					<view class="grid-text">粉丝</view>
-				</u-grid-item>
-				<u-grid-item></u-grid-item>
-				<u-grid-item></u-grid-item>
-				<u-grid-item></u-grid-item>
-				<u-grid-item></u-grid-item>
-				<u-grid-item></u-grid-item>
-			</u-grid> -->
 			<view class="slot-wrap"><!-- 通过自定义slot传入的内容 -->
 				<u-tabs-swiper ref="uTabs" :list="pagelist" :current="current" @change="tabsChange" :is-scroll="false"
 					 :bold="false" bg-color="#ffc7cb"  active-color="#000000"></u-tabs-swiper>
@@ -56,7 +39,8 @@
 				user: {
 					avatar: '',
 					nickname: '1111',
-					username:''
+					username:'',
+					userId:''
 				},
 				show: true,
 				// 定义一个变量
@@ -87,17 +71,31 @@
 					hasMore: true, // 是否还有更多数据
 					touchStartX: 0,
 					touchEndX: 0,
-					touchThreshold: 30 //处理滑动
+					touchThreshold: 30 ,//处理滑动
+					
+					updateData:{
+						userId:'',
+						followableId:'',
+						followableType:"user",
+						isFollow:'',
+					}
 				};
 			},
 
 		onShow() {
 			//获取用户信息
-			const value = uni.getStorageSync('nowAccount');
-			this.user=value.data
-			
+			uni.getStorage({
+				key:"userPost",
+				success: (res) =>{
+					this.user=res.data
+				}
+			})
 			//获取用户关注信息
-			
+			if(this.followSta==false){
+				this.followText="关注"
+			}else{
+				this.followText="已关注"
+			}
 		},
 		
 		methods: {
@@ -108,6 +106,25 @@
 				}else{
 					this.followText="已关注"
 				}
+				
+				uni.getStorage({
+					key:"nowAccount",
+					success(res){
+						this.updateData.followableId=this.user.userId
+						this.updateData.userId=res.data.data.userId
+						this.updateData.isFollow=this.followSta
+						console.log(this.updateData);
+						uni.request({
+							url:"http://localhost:1234/user/followOrUnfollow",
+							data:this.updateData,
+							method:"POST",
+							success(res2) {
+								console.log(res2);
+							}
+						})
+					}
+				})
+				
 			},
 			onreachBottom() {
 					if (this.loading || !this.hasMore) return; // 正在加载中或没有更多数据则不执行

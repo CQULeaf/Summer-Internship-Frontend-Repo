@@ -1,6 +1,6 @@
 <template>
-	<view>
-		<view v-if="logined" v-model="this.user">
+	<view >
+		<view v-if="logined" v-model="this.user" >
 			<view class="u-demo-wrap">
 				<view class="u-demo-area">
 					<u-toast ref="uToast"></u-toast>
@@ -13,13 +13,13 @@
 			</view>
 
 			<u-grid :col="8" :border="false">
-				<u-grid-item @click="gotoconcern">
+				<u-grid-item @click="gotoconcern('friends')">
 					<view class="grid-text">朋友</view>
 				</u-grid-item>
-				<u-grid-item @click="gotoconcern">
+				<u-grid-item @click="gotoconcern('follows')">
 					<view class="grid-text">关注</view>
 				</u-grid-item>
-				<u-grid-item @click="gotoconcern">
+				<u-grid-item @click="gotoconcern('fans')">
 					<view class="grid-text">粉丝</view>
 				</u-grid-item>
 				<u-grid-item></u-grid-item>
@@ -30,32 +30,13 @@
 					<u-icon name="setting" :size="50" @click="gotoSetting"></u-icon>
 				</u-grid-item>
 			</u-grid>
-			<view class="slot-wrap"><!-- 通过自定义slot传入的内容 -->
-				<u-tabs-swiper ref="uTabs" :list="pagelist" :current="pagecurrent" @change="tabsChange"
-					:is-scroll="false" :bold="false" bg-color="#ffc7cb" active-color="#000000"></u-tabs-swiper>
-			</view>
-			<swiper class="swiper" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
-				<swiper-item v-for="(tab, tabindex) in pagelist" :key="tabindex">
-					<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
-						<view class="list">
-							<!-- 用户列表 -->
-							<view v-if="pagelist[pagecurrent].type === 'post'">
-								<view class="list-item" v-for="(item, index) in currentItems" :key="index"
-									@click="goToPost(item)">
-									<text class="item-title">{{item.title}}</text>
-								</view>
-							</view>
-							<view v-if="pagelist[pagecurrent].type === 'liked'">
-								<view class="list-item" v-for="(item, index) in currentItems" :key="index"
-									@click="goToLiked(item)">
-									<text class="item-title">{{item.title}}</text>
-								</view>
-							</view>
 
-						</view>
-					</scroll-view>
-				</swiper-item>
-			</swiper>
+			<view class="u-p-t-20">
+				<view class="all-reply-top">全部帖子</view>
+				<view class="list-item" v-for="(item, index) in postList" :key="index" @click="goToPost(item)">
+					<text class="item-title">{{item.title}}</text>
+				</view>
+			</view>
 		</view>
 		<view v-else>
 			<u-navbar :is-back="false" title="　" :border-bottom="false">
@@ -119,17 +100,17 @@
 				pagecurrent: 0, //变量名：变量值
 				swiperCurrent: 0,
 				currentItems: [], // 当前用户列表数据
-				// user: {
-				// 	avatar: '/static/image/1.png',
-				// 	nickname: 'MyNickname'
-				// },
 				dataCache: {},
 				loading: false,
 				page: 1, // 当前页码
 				hasMore: true, // 是否还有更多数据
 				touchStartX: 0,
 				touchEndX: 0,
-				touchThreshold: 30 //处理滑动
+				touchThreshold: 30, //处理滑动
+
+				postList: [{
+					title: ''
+				}]
 			};
 		},
 		onLoad() {
@@ -179,14 +160,37 @@
 			]
 		},
 		onShow() {
-			//判断用户是否登录
+			uni.getStorage({
+				key: 'nowAccount',
+				success: (ret) => {
+					//console.log(ret.data.data.userId);
+					this.user = ret.data.data
+
+					//判断用户是否登录
+					this.logined = (ret.data.code == 200)
+					console.log(this.user);
+					// //获取用户帖子信息
+					uni.request({
+						url:"http://localhost:8080/ccPost/mypost",
+						data: {
+							user_id: ret.data.data.userId
+						},
+						success: (res) => {
+							console.log(res.data.data);
+							this.postList = res.data.data
+							console.log(this.postList);
+						},
+						fail(res2) {
+							console.log(ret.data.data.userId)
+							console.log(res2);
+						}
+					})
+				}
+			})
+
 			const value = uni.getStorageSync('nowAccount');
 			this.user = value.data
 			this.logined = (value.code == 200)
-			// const avatarData = uni.getStorageSync('avatarData')
-			// this.user.avatar=avatarData
-			// uni.removeStorageSync('avatarData')
-			//console.log(this.user.avatar)
 		},
 		created() {
 			// 监听从裁剪页发布的事件，获得裁剪结果
@@ -202,7 +206,7 @@
 				const filePath = path;
 
 				uni.uploadFile({
-					url: 'http://localhost:1234/user/updateAvatar',
+					url: 'http://localhost:8080/user/updateAvatar',
 					filePath: filePath,
 					name: 'file', // 对应后端接收文件的字段名
 					formData: {
@@ -222,20 +226,20 @@
 
 		methods: {
 			goToPost(item) {
-				// 跳转到聊天界面，假设聊天界面的路径为 '/pages/me/mypost'
-				uni.navigateTo({
-					url: '/pages/me/mypost?post_id=' + item.postId // 假设用户有一个 id 属性
-				});
+				uni.setStorage({
+					key: "postData",
+					data: item,
+					success() {
+						uni.navigateTo({
+							url: "/pages/home/reply"
+						})
+					}
+				})
 			},
 			goToLiked(item) {
 				// 跳转到聊天界面，假设聊天界面的路径为 '/pages/info/treecave/treetalk'
 				uni.navigateTo({
 					url: '/pages/me/myliked?post_id=' + item.post_id // 假设用户有一个 id 属性
-				});
-			},
-			goToProfile() {
-				uni.navigateTo({
-					url: '/pages/me/setting'
 				});
 			},
 			login() {
@@ -250,10 +254,10 @@
 					url: "/pages/me/setting/setting"
 				})
 			},
-			gotoconcern() {
+			gotoconcern(type) {
 				uni.navigateTo({
-					url: "/pages/me/concern"
-				})
+					url: `/pages/me/concern?type=${type}` // 传递用户类别  
+				});
 			},
 			quit() {
 				console.log("退出"),
@@ -272,97 +276,6 @@
 					}
 				})
 			},
-			onreachBottom() {
-				if (this.loading || !this.hasMore) return; // 正在加载中或没有更多数据则不执行
-				this.page++;
-				this.fetchUserList(this.pagelist[this.pagecurrent].api, this.page);
-			},
-			//发送请求
-			fetchUserList(apiEndpoint, page) {
-				this.loading = true;
-				uni.request({
-					url: `${apiEndpoint}?page=${page}`, //在fetchUserList方法中的请求URL使用了'${apiEndpoint}?page=${page}'，这会导致字符串直接拼接而非动态生成变量。正确的做法应该是使用模板字符串的语法来动态替换变量
-					method: 'GET',
-					success: (res) => {
-						console.log('请求成功:', res);
-						console.log('返回的数据:', res.data.data);
-						if (res.statusCode === 200) {
-							if (res.data.length === 0) {
-								this.hasMore = false; // 没有更多数据
-							} else {
-								if (this.pagelist[this.pagecurrent].type === 'post') {
-									// 处理用户数据
-									this.currentItems = [...this.currentItems, ...res.data.data];
-								} else if (this.pagelist[this.pagecurrent].type === 'liked') {
-									this.currentItems = [...this.currentItems, ...res.data.data];
-									// 使用帖子 ID 请求帖子的其他信息
-									this.fetchPostDetails(res.data.data.map(post => post.postId));
-								}
-								// 处理帖子数据
-								this.dataCache[apiEndpoint] = this.currentItems;
-							}
-						} else {
-							uni.showToast({
-								title: '获取数据失败',
-								icon: 'none'
-							});
-						}
-					},
-					fail: (err) => {
-						uni.showToast({
-							title: '请求失败',
-							icon: 'none'
-						});
-					},
-					complete: () => {
-						this.loading = false;
-					}
-				});
-			},
-			fetchPostDetails(postIds) {
-			        const fetchPromises = postIds.map(postId => {
-			            return new Promise((resolve, reject) => {
-			                uni.request({
-			                    url: `http://127.0.0.1:4523/m1/5010181-4669608-default/ccPost/getPost/${postId}`,
-			                    method: 'GET',
-			                    success: (res) => {
-									console.log('返回的数据:', res.data.data);
-			                        if (res.statusCode === 200) {
-			                            resolve(res.data.data);
-			                        } else {
-			                            reject(new Error('获取帖子详情失败'));
-			                        }
-			                    },
-			                    fail: (err) => {
-			                        reject(err);
-			                    }
-			                });
-			            });
-			        });
-			
-			        Promise.all(fetchPromises)
-			            .then(detailsArray => {
-			                this.currentItems = this.currentItems.map(item => {
-			                    const detail = detailsArray.find(post => post.postId === item.postId);
-			                    return detail ? { ...item, ...detail } : item;
-			                });
-			            })
-			            .catch(error => {
-			                uni.showToast({ title: '详细信息请求失败', icon: 'none' });
-			                console.error(error);
-			            });
-			    },
-			handleTouchStart(e) {
-				this.touchStartX = e.touches[0].clientX;
-			},
-			handleTouchEnd(e) {
-				this.touchEndX = e.changedTouches[0].clientX;
-				let swipeDistance = this.touchEndX - this.touchStartX;
-				if (Math.abs(swipeDistance) > this.touchThreshold) {
-					this.swiperCurrent = swipeDistance > 0 ? Math.max(0, this.swiperCurrent - 1) : Math.min(this.list
-						.length - 1, this.swiperCurrent + 1);
-				}
-			},
 			tabsChange(index) {
 				this.swiperCurrent = index;
 				this.pagecurrent = index;
@@ -370,56 +283,14 @@
 				this.hasMore = true; // 重新设置有更多数据标志
 				this.currentItems = []; // 清空当前用户列表
 				this.loading = true; // 开始加载
-				this.fetchUserList(this.pagelist[index].api, this.page);
 			},
-			transition(e) {
-				this.handleTouchEnd(e); // 处理滑动
-				let dx = e.detail.dx;
-				this.$refs.uTabs.setDx(dx);
-			},
-
-			animationfinish(e) {
-				let pagecurrent = e.detail.pagecurrent;
-				if (pagecurrent < 0) {
-					pagecurrent = 0;
-				} else if (pagecurrent >= this.pagelist.length) {
-					pagecurrent = this.pagelist.length - 1;
-				}
-				this.$refs.uTabs.setFinishCurrent(pagecurrent);
-				this.swiperCurrent = pagecurrent;
-				this.pagecurrent = pagecurrent;
-
-				if (!this.dataCache[this.pagelist[pagecurrent].api]) {
-					this.loading = true; // 开始加载
-					this.fetchUserList(this.pagelist[pagecurrent].api, this.page);
-				} else {
-					this.currentUsers = this.dataCache[this.pagelist[pagecurrent].api];
-					this.loading = false; // 数据已缓存，无需再次加载
-				}
-			}
-
 		},
-		mounted() {
-			this.fetchUserList(this.pagelist[this.pagecurrent].api, this.page);
-		}
 	};
 </script>
 
 <style lang="scss">
-	.myinfo {
-		display: flex;
-		align-items: center;
-		padding: 50rpx;
-		background-image: linear-gradient(to top left, #ffcbcc, #ffe4e6);
-	}
-
-	.grid {
-		background-color: #ffcbcc;
-	}
-
-	.custom-style {
-		color: #606266;
-		width: 400rpx;
+	.container {
+		background-color: #ffc9d3;
 	}
 
 	.myavatar {
@@ -432,12 +303,7 @@
 	.grid-text {
 		font-size: 32rpx;
 		margin-top: 4rpx;
-		color: $u-type-info;
-	}
-
-	.mynickname {
-		font-size: 28rpx;
-		color: #333;
+		color: u-type-info;
 	}
 
 	page {
@@ -448,13 +314,19 @@
 		width: 54px;
 		height: 44px;
 
-		&:active {
+    :active {
 			background-color: #ededed;
 		}
 	}
 
 	.user-box {
 		background-color: #fff;
+	}
+
+	.u-demo-wrap {
+		background-color: #ffd2d9;
+		padding: 5px;
+		
 	}
 
 	.u-avatar-demo {
@@ -464,10 +336,11 @@
 	}
 
 	.u-avatar-wrap {
-		margin-top: 80rpx;
+		padding: 5px;
 		overflow: hidden;
 		margin-bottom: 80rpx;
 		text-align: center;
+		margin-top: 40px;
 	}
 
 	.list-item {
@@ -475,10 +348,19 @@
 		align-items: center;
 		padding: 25px;
 		border-bottom: 1px solid #f0dddf;
+		background-color: #ffeff2;
 	}
 
 	.item-title {
 		font-size: 13px;
 		color: #333;
+	}
+
+	.all-reply-top {
+		margin-left: 20rpx;
+		padding-left: 20rpx;
+		border-left: solid 4rpx #f0dddf;
+		font-size: 30rpx;
+		font-weight: bold;
 	}
 </style>

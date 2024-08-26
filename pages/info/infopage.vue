@@ -3,9 +3,10 @@
 		<view class="container">
 			<view>
 				<u-navbar class="wrap" height=60 title="" :background="background" :is-back=false>
-					<view  class="subwrap">
-						<u-tabs-swiper font-size="40" ref="uTabs" :list="pagelist" :current="pagecurrent" @change="tabsChange" :is-scroll="false" swiper-Width="100" height=100 :bold="false"
-							bg-color="rgba(255, 255, 255, 0)" :subackground="transparentBackground" active-color="#000000"></u-tabs-swiper>
+					<view class="subwrap">
+						<u-tabs-swiper font-size="40" ref="uTabs" :list="pagelist" :is-scroll="false" swiper-Width="100"
+							height=100 :bold="false" bg-color="rgba(255, 255, 255, 0)"
+							active-color="#000000"></u-tabs-swiper>
 					</view>
 					<view>
 						<text class="subwarp1" @click="goToPageTreeCave">树洞</text>
@@ -13,7 +14,7 @@
 				</u-navbar>
 			</view>
 			<!-- 用户列表部分 -->
-			<swiper class="swiper" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
+			<swiper class="swiper">
 				<swiper-item v-for="(tab, tabindex) in pagelist" :key="tabindex">
 					<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
 						<view class="subinfolist" @click="gotopofile(index)" v-for="(subinfo, index) in subinfolist"
@@ -29,9 +30,6 @@
 									<image class="useravatar" :src="item.avatar"></image>
 									<text class="username">{{item.username}}</text>
 								</view>
-							</view>
-							<!-- 树洞跳转 -->
-							<view v-if="pagelist[pagecurrent].type === 'treehole'" @click="treecave">
 							</view>
 						</view>
 					</scroll-view>
@@ -51,9 +49,9 @@
 			return { //专门写变量   在模板里面写 ：herf 表示herf是变量
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(255, 217, 220),rgb(255, 193, 199),rgb(255, 193, 199),rgb(255, 188, 195),rgb(159, 209, 177),rgb(112, 215, 164))',
-				// 导航栏背景图
-									background: 'url(static/navigatorbackground1.jpg) no-repeat',
-									backgroundSize: 'cover',
+					// 导航栏背景图
+					background: 'url(static/navigatorbackground1.jpg) no-repeat',
+					backgroundSize: 'cover',
 				}, //导航栏的颜色
 				list: '',
 				current: 4,
@@ -87,10 +85,10 @@
 				dataCache: {},
 				loading: false,
 				page: 1, // 当前页码
-				hasMore: true, // 是否还有更多数据
-				touchStartX: 0,
-				touchEndX: 0,
-				touchThreshold: 30 //处理滑动
+				hasMore: true, // 是否还有更多数
+				user: [],
+				userlist: [],
+				userlist1: []
 			};
 		},
 		onLoad() {
@@ -136,11 +134,11 @@
 			]
 		},
 		methods: { //写自定义方法
-		goToPageTreeCave(){
-			uni.navigateTo({
-				url: "/pages/info/treecave/treecave"
-			})
-		},
+			goToPageTreeCave() {
+				uni.navigateTo({
+					url: "/pages/info/treecave/treecave"
+				})
+			},
 			gotopofile(index) {
 				// 根据 index 跳转到不同的页面
 				switch (index) {
@@ -166,48 +164,95 @@
 						break;
 				}
 			},
-			goToChat(user) {
+			goToChat(item) {
 				uni.navigateTo({
-					url: `/pages/chat/chatpage?userId=${user.sender_id}` // 修改为你聊天页面的实际路径
+					url: `/pages/info/infotalk?userId=${item.userId}` // 修改为你聊天页面的实际路径
 				});
-			},
-			treecave() {
-				console.log("当前列表:", this.pagelist),
-					console.log("当前索引:", this.pagecurrent),
-					console.log("跳转到树洞页面"),
-					uni.navigateTo({
-						url: "/pages/info/treecave"
-					})
 			},
 			onreachBottom() {
 				if (this.loading || !this.hasMore) return; // 正在加载中或没有更多数据则不执行
 				this.page++;
-				this.fetchUserList(this.pagelist[this.pagecurrent].api, this.page);
+				this.fetchUserList();
 			},
 			//发送请求
-			fetchUserList(apiEndpoint, page) {
-				this.loading = true;
+			fetchUserList() {
+				if (!this.user.userId) {
+					console.warn('userId is not set');
+					return;
+				}
 				uni.request({
-					url: `${apiEndpoint}?page=${page}`, //在fetchUserList方法中的请求URL使用了'${apiEndpoint}?page=${page}'，这会导致字符串直接拼接而非动态生成变量。正确的做法应该是使用模板字符串的语法来动态替换变量
+					url: `http://localhost:8080/message/history?userId=${this.user.userId}`,
 					method: 'GET',
 					success: (res) => {
 						console.log('请求成功:', res);
-						console.log('返回的数据:', res.data.data);
+						console.log('返回的数据0:', res.data.data);
 						if (res.statusCode === 200) {
 							if (res.data.data.length === 0) {
-								this.hasMore = false; // 没有更多数据
+								this.hasMore = false;
 							} else {
 								if (this.pagelist[this.pagecurrent].type === 'msg') {
-									// 处理用户数据
-									this.currentItems = [...this.currentItems, ...res.data.data];
-								}
-								//else if (this.pagelist[this.pagecurrent].type === 'posts') {
-								// 	// 处理帖子数据
-								// 	this.currentItems = [...this.currentItems, ...res.data];
-								// }
-								this.dataCache[apiEndpoint] = this.currentItems;
-								console.log('当前用户列表:', this.currentItems);
+									this.userlist = res.data.data;
+									console.log(this.userlist.length);
 
+									const processedUserIds = new Set(); // 使用 Set 来跟踪已处理的用户 ID  
+									const userRequests = []; // 存储所有用户请求的数组  
+
+									// 遍历用户列表，提取 senderId 和 receiverId  
+									this.userlist.forEach(user => {
+										const senderId = user.senderId;
+										const receiverId = user.receiverId;
+
+										// 判断当前用户是发送者还是接收者，并添加对方的 ID  
+										if (senderId === this.user.userId && receiverId) {
+											processedUserIds.add(receiverId); // 添加接收者 ID  
+										} else if (receiverId === this.user.userId && senderId) {
+											processedUserIds.add(senderId); // 添加发送者 ID  
+										}
+									});
+
+									// 遍历去重后的用户 ID，发起请求  
+									processedUserIds.forEach(userId => {
+										userRequests.push(new Promise((resolve, reject) => {
+											uni.request({
+												url: `http://localhost:8080/user/getUserInfo?userId=${userId}`,
+												method: 'GET',
+												success: (res) => {
+													console.log('用户ID:',
+														userId);
+													console.log('返回的数据:', res
+														.data.data);
+													if (res.statusCode ===
+														200) {
+														resolve(res.data
+															.data); // 解析成功数据  
+													} else {
+														reject(
+															`获取用户信息失败: ${res.statusCode}`
+															);
+													}
+												},
+												fail: (err) => {
+													reject('请求失败');
+												}
+											});
+										}));
+									});
+
+									// 等待所有用户请求完成  
+									Promise.all(userRequests)
+										.then(userInfos => {
+											this.currentItems = [...this.currentItems, ...userInfos];
+											this.dataCache = this.currentItems;
+											console.log('当前用户列表:', this.currentItems);
+										})
+										.catch(error => {
+											console.error(error);
+											uni.showToast({
+												title: '获取部分用户信息失败',
+												icon: 'none'
+											});
+										});
+								}
 							}
 						} else {
 							uni.showToast({
@@ -227,59 +272,25 @@
 					}
 				});
 			},
-			handleTouchStart(e) {
-				this.touchStartX = e.touches[0].clientX;
-			},
-			handleTouchEnd(e) {
-				this.touchEndX = e.changedTouches[0].clientX;
-				let swipeDistance = this.touchEndX - this.touchStartX;
-				if (Math.abs(swipeDistance) > this.touchThreshold) {
-					this.swiperCurrent = swipeDistance > 0 ? Math.max(0, this.swiperCurrent - 1) : Math.min(this.list
-						.length - 1, this.swiperCurrent + 1);
-				}
-			},
-			tabsChange(index) {
-				if (index >= 0 && index < this.pagelist.length) {
-					this.pagecurrent = index; // 只在有效范围内更新
-					this.swiperCurrent = index;
-					this.page = 1; // 重置页码
-					this.hasMore = true; // 重新设置有更多数据标志
-					this.currentItems = []; // 清空当前用户列表
-					this.loading = true; // 开始加载
-					this.fetchUserList(this.pagelist[index].api, this.page);
-				}
-			},
-
-
-			transition(e) {
-				this.handleTouchEnd(e); // 处理滑动
-				let dx = e.detail.dx;
-				this.$refs.uTabs.setDx(dx);
-			},
-
-			animationfinish(e) {
-				let pagecurrent = e.detail.pagecurrent;
-				if (pagecurrent < 0) {
-					pagecurrent = 0;
-				} else if (pagecurrent >= this.pagelist.length) {
-					pagecurrent = this.pagelist.length - 1;
-				}
-				this.$refs.uTabs.setFinishCurrent(pagecurrent);
-				this.swiperCurrent = pagecurrent;
-				this.pagecurrent = pagecurrent;
-
-				if (!this.dataCache[this.pagelist[pagecurrent].api]) {
-					this.loading = true; // 开始加载
-					this.fetchUserList(this.pagelist[pagecurrent].api, this.page);
-				} else {
-					this.currentUsers = this.dataCache[this.pagelist[pagecurrent].api];
-					this.loading = false; // 数据已缓存，无需再次加载
-				}
+			loadUserIdAndFetch() {
+				uni.getStorage({
+					key: 'nowAccount',
+					success: (res) => {
+						this.user.userId = res.data.data.userId;
+						console.log('获取到的 userId:', this.user.userId);
+						this.fetchUserList(); // 在获取到 userId 后再调用 fetchUserList
+					},
+					fail: (err) => {
+						uni.showToast({
+							title: '无法获取用户信息',
+							icon: 'none'
+						});
+					}
+				});
 			}
-
 		},
 		mounted() {
-			this.fetchUserList(this.pagelist[this.pagecurrent].api, this.page);
+			this.loadUserIdAndFetch();
 		}
 	};
 </script>
@@ -342,7 +353,8 @@
 		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 		/* 阴影效果 */
 	}
-	.subwrap{
+
+	.subwrap {
 		margin-left: 120px;
 	}
 

@@ -1,11 +1,15 @@
 <template>
   <view class="help-container">
+	<view>
+		<u-navbar :is-back="true" title="评论" :background="background" :customBack="backtohome" height="55" title-size=40>
+		</u-navbar>
+	</view>
     <form @submit.prevent="submitForm">
       <view class="form-item">
-        <text class="label">问题或请求</text>
-        <textarea class="input" v-model="message" placeholder="请输入您的问题或请求"></textarea>
+
+        <textarea class="input" v-model="message" placeholder="留下你的想法吧..."></textarea>
       </view>
-      <button type="submit" class="submit-button" @tap="submitForm()">提交</button>
+      <button type="submit" class="sent-button">发送</button>
     </form>
   </view>
 </template>
@@ -14,7 +18,10 @@
 export default {
   data() {
     return {
-      message: ''//变量
+      background:
+       {
+       	backgroundColor:'#fed6dc'
+      },
     };
   },
   methods: {
@@ -26,9 +33,14 @@ export default {
       });
       // 清空输入框
       this.message = '';
-	  
-	  
-    }
+    },
+	backtohome()
+	{
+		uni.switchTab({
+			url:"/pages/home/homepage"
+		})
+		
+	}
   }
 };
 </script>
@@ -36,23 +48,19 @@ export default {
 <style>
 .help-container {
   padding: 20px;
-    width: 100%;
-	
+    
 }
 
 .form-item {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  margin-top: 15px;
   /* 添加一个左右边距，使输入框居中 */
   margin-left: auto;
   margin-right: auto;
   width: 90%; /* 设置一个固定宽度，使左右边距生效 */
+  
 }
 
-.label {
-  display: block;
-  margin-bottom: 10px;
-  font-size: 16px;
-}
 
 .input {
   width: 100%;
@@ -64,12 +72,13 @@ export default {
   margin-left: -10px;
 }
 
-.submit-button {
+.sent-button {
   width: 95%;
-  height: 40px;
-  background-color: #ffd7dd;
+  height: 45px;
+  background-color: #fed1da;
   color: white;
-  border: none;
-  border-radius: 4px;
+  border: #feb2c3;
+  border-radius: 10px;
+  margin-top: 10%;
 }
 </style>

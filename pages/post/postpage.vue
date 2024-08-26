@@ -1,10 +1,13 @@
 <template>
 	<view class="help-container">
 		<u-navbar :is-back="true" title="发帖子" :background="background" :customBack="backtohome" height="55">
-			<div class="btn" @click="sent">发送</div>
+			<div class="btn" @click="sendPost()">发送</div>
 		</u-navbar>
 		<view class="form-item">
-		  <textarea class="input" v-model="message" placeholder="分享新鲜事..."></textarea>
+		  <textarea class="input1" v-model="title" placeholder="标题"></textarea>
+		</view>
+		<view class="form-item">
+		  <textarea class="input2" v-model="message" placeholder="分享新鲜事..."></textarea>
 		</view>
 		<view class="u-demo">
 			<view class="u-demo-wrap">
@@ -20,7 +23,7 @@
 							 :percent="item.progress"></u-line-progress>
 						</view>
 					</view>
-					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action" :auto-upload="autoUpload" :file-list="fileList"
+					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action" :auto-upload="false" :file-list="fileList"
 					 :show-progress="showProgress" :deletable="deletable" :max-count="maxCount" @on-list-change="onListChange">
 						<view v-if="customBtn" slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
@@ -28,7 +31,6 @@
 					</u-upload>
 					<u-button :custom-style="{marginTop: '20rpx'}" @click="upload">上传</u-button>
 					<u-button :custom-style="{marginTop: '40rpx'}" @click="clear">清空列表</u-button>
-					<!-- <u-button :custom-style="{marginTop: '40rpx'}" @click="reUpload">重新上传</u-button> -->
 				</view>
 			</view>
 		</view>
@@ -40,19 +42,16 @@
 	export default {
 		data() {
 			return {
+				action: 'http://localhost:1234/user/updateAvatar',
 				// 背景颜色
 				 background: 
 				 {
 				 	backgroundColor:'#fed6dc'
 				},
-				action: 'http://127.0.0.1:7001/upload',
 				// 预置上传列表
 				fileList: [],
-				// fileList: [{
-				// 	url: 'http://pics.sc.chinaz.com/files/pic/pic9/201912/hpic1886.jpg',
-				// 	error: false,
-				// 	progress: 100
-				// }],
+				message:'',
+				title:"",
 				showUploadList: true,
 				customBtn: false,
 				autoUpload: false,
@@ -62,7 +61,23 @@
 				maxCount: 2,
 				lists: [], // 组件内部的文件列表
 				list:'',
-				current: 4
+				current: 4,
+				title:"",
+				message:"",
+				
+				addPost:{
+					userId: 1,
+					title: "",
+					postContent: "",
+					commentCount: 0,
+					likeCount: 0,
+					createdAt: "1973-09-28T11:03:46",
+					updatedTime: "1972-06-18T15:34:22",
+					updatedAt: "1998-04-10T00:15:49",
+					deletedAt: "1977-04-30T01:20:14",
+					cover: null,
+					topicId: 13
+				}
 			}
 		},
 		onLoad() {
@@ -115,10 +130,43 @@
 				})
 				
 			},
-			sent()
-			{
-				
-			},
+			
+			sendPost() {
+							uni.getStorage({
+								key:"nowAccount",
+								success:(res)=>{
+									this.addPost.userId=res.data.data.userId
+									this.addPost.title=this.title
+									this.addPost.postContent=this.message
+									var now=new Date().toISOString();
+									this.addPost.createdAt=now
+									this.addPost.topicld=0
+								}
+							})
+			
+							// 发起请求
+							uni.request({
+								url: 'http://localhost:8080/ccPost/publish',
+								data:this.addPost,
+								method: 'POST',
+								header: { 'Content-Type': 'application/json' },
+								success: (res) => {
+									console.log('发布成功', res.data);
+									uni.showToast({ title: '发布成功', icon: 'success' });
+									// 清空输入框内容
+									this.title = "";
+									this.message = "";
+									this.backtohome(); // 返回首页
+								},
+								fail: (err) => {
+									console.error('发布失败', err);
+									uni.showToast({ title: '发布失败', icon: 'none' });
+								}
+							});
+							uni.switchTab({
+								url:"/pages/home/homepage"
+							})
+						},
 			reUpload() {
 				this.$refs.uUpload.reUpload();
 			},
@@ -151,6 +199,9 @@
 				}
 			},
 			upload() {
+				let files = [];
+				files = this.$refs.uUpload.lists;
+				console.log(files.url)
 				this.$refs.uUpload.upload();
 			},
 			deleteItem(index) {
@@ -206,16 +257,27 @@
 	border-radius: 40%;
     color: #ffffff;
 	},
-.form-item 
+
+.form-item
 {
-	margin-bottom: 20px;
+	margin-bottom: 15px;
 	/* 添加一个左右边距，使输入框居中 */
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 10px;
 	width: 90%; /* 设置一个固定宽度，使左右边距生效 */
 }
-.input 
+.input1
+{
+  width: 100%;
+  height: 25px;
+  padding: 10px;
+  border: 1px solid #ccc;//框框
+  border-radius: 4px;
+  /* 通过设置 margin-left 负值来向左移动输入框 */
+  margin-left: -10px;
+}
+.input2 
 {
   width: 100%;
   height: 150px;

@@ -1,6 +1,5 @@
-
 <!-- 点击里面的帖子跳转到post -->
-
+<!-- 超话里面具体内容要看数据库 -->
 <template>
 				<view class="wrap">
 						<!-- 新增的板块，用于展示头像、标题、描述、关注数和帖子数 -->
@@ -26,16 +25,12 @@
 								{{item.title}}
 							</view>
 							<view class="demo_user_id">
-								<!-- 注意一下这个哈，是发布者 -->
+								<!--发布者 -->
 								{{item.user_id}}
 							</view>
 							<!-- 点赞评论 -->
 							<view class="post-actions">
-							  <!-- <button class="like-btn" @click="handleLike">
-							    <uni-icons type="heart" size="5" :color="isLiked ? '#ff6c60' : '#ccc'"></uni-icons>
-							    <text class="action-text">点赞</text>
-							  </button> -->
-							  <view class="comment-btn" @click="handleComment">
+							  <view class="comment-btn">
 							    <uni-icons type="chat" size="5" color="#2196f3"></uni-icons>
 							    <text class="action-text">评论</text>
 							  </view>
@@ -44,24 +39,18 @@
 						</view>
 					</template>
 					
-					<!-- 右边 --><!-- 先不改形成对照，不太确定怎么改呢 -->
+					<!-- 右边 -->
 					<template v-slot:right="{rightList}">
 						<view class="demo-warter" v-for="(item, index) in rightList" :key="index" @click="goToPost(item.post_id)">
 							<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index"></u-lazy-load>
 							<view class="demo-title">
 								{{item.title}}
 							</view>
-							
-							
 							<view class="demo_user_id">
 								{{item.user_id}}
 							</view>
 							<view class="post-actions">
-							 <!-- <button class="like-btn" @click="handleLike">
-							    <uni-icons type="heart" size="5" :color="isLiked ? '#ff6c60' : '#ccc'"></uni-icons>
-							    <text class="action-text">点赞</text>
-							  </button> -->
-							  <view class="comment-btn" @click="handleComment">
+							  <view class="comment-btn">
 							    <uni-icons type="chat" size="5" color="#2196f3"></uni-icons>
 							    <text class="action-text">评论</text>
 							  </view>
@@ -87,23 +76,24 @@
 							cover: "/static/demodemo.jpg",
 							name: '元白超话   ',
 							description: '君埋泉下泥销骨,我寄人间雪满头',
-							follower_count : 1234,
-							post_count: 5678
+							follower_count : 8080,
+							post_count: 5678,
+							post_id:'',
 						},
-				//---------------超话
+				//---------------超话的变量
 				loadStatus: 'loadmore',//加载状态
 				flowList: [],//瀑布流数据
-				//------------------------------------------------------
-				//需要api进行连接，生成不同的图片和标题，昵称，头像
-				list: [
+				
+				//--------------------------------------------返回的帖子数据
+				list: [//需要api进行连接，生成不同的图片和标题，昵称，头像
 					{
-						
+						post_id:'',
 						title: '我今因病魂颠倒,唯梦闲人不梦君',
 						user_id: '元稹',
 						image: "/static/demodemo.jpg",
 					},
 					{
-						
+						post_id:'',
 						title: '不知忆我因何事,昨夜三回梦见君',
 						user_id: '白居易',
 						image: 'http://pic.sc.chinaz.com/Files/pic/pic9/202002/zzpic23325_s.jpg',
@@ -111,12 +101,24 @@
 					
 					
 				],
-				//------------------------------------------------------
+				//--------------------------------------------返回的帖子数据
 				 isLiked: false, 
 			}
 		},
 		onLoad() {
 			this.addRandomData();
+			uni.getStorage({
+				key:'matchuser2',
+				success(res) {
+					uni.request({
+						url:'http://localhost:8080/ccPost/getPostsByTopicId',
+						data:res,
+						success(suc) {
+							this.list=suc
+						}
+					})
+				}
+			})
 		},
 		onReachBottom() {
 			this.loadStatus = 'loading';
@@ -127,35 +129,7 @@
 			}, 1000)
 		},
 		methods: {
-			//-----------------------------获取想要的信息
-			fetchRandomMatch() {
-							uni.request({
-								url: "http://127.0.0.1:4523/m1/5010181-4669608-default/info/treetalk",//api
-								data: this.user,//自己定义的 变量，包含api中需要传递的信息
-								method: 'GET',//方法类型
-								success: (res) => {
-									console.log(res);
-									if (res.statusCode == 200) {
-										this.matchuser = res.data.data; // 假设 API 返回的数据格式包含用户信息
-										//获取想要的信息
-										console.log(res.data);//打印
-										uni.setStorage({//缓存
-											key: 'matchuser',//就是之前定义的变量
-											data: this.matchuser,
-											success: function() {
-												console.log('Match user data stored successfully.');//成功后打印这句话
-											}
-										});
-									} else {
-										uni.showToast({
-											title: '获取数据失败',
-											icon: 'none'
-										});
-									}
-								}
-							})
-						},
-						//-----------------------------------获取想要的信息
+
 			addRandomData() {
 				for(let i = 0; i < 10; i++) {
 					let index = this.$u.random(0, this.list.length - 1);
@@ -169,38 +143,41 @@
 			remove(id) {
 				this.$refs.uWaterfall.remove(id);
 			},//删除
-			// 点击帖子，跳转到帖子详情页面
-			//-------------------------------------------------------------------------------------------------------
-			        goToPost(postId) {
-			            // 跳转到帖子详情页面，并传递帖子ID
-						//只要按这个帖子就能进去
-			            uni.navigateTo({
-			                url: '/pages/corner/post' ,
-							//加上就去不了了
-			            });
+
+			//-----------------------------点击帖子，跳转到帖子详情页面+获取想要的信息
+			        goToPost(post_id) {
+			         
+						uni.request({
+							url: "http://localhost:8080/ccPost/getPost",//api
+							data: post_id,//自己定义的 变量，包含api中需要传递的信息
+							method: 'GET',//方法类型
+							success: (res) => {
+								console.log(res);
+								if (res.statusCode == 200) {
+									const value = res.data.data; // 假设 API 返回的数据格式包含用户信息
+									//获取想要的信息
+									
+									console.log(res.data);//打印
+									uni.setStorage({//缓存
+										key: 'postData',//就是之前定义的变量
+										data: this.value,
+										success: function() {
+											console.log('噫，好了，我中了');
+											uni.navigateTo({
+												url:'/pages/home/reply',
+											})
+											
+										}
+									});
+								} else {
+									uni.showToast({
+										title: '获取数据失败',
+										icon: 'none'
+									});
+								}
+							}
+						})
 			        },
-			        
-			        handleLike() {
-			          // 点赞逻辑
-			          this.isLiked = !this.isLiked;
-			          // 更新点赞数量或者状态
-			          console.log('点赞');
-			        },
-			        handleComment() {
-			          console.log('评论');
-			          
-			        },
-					// handleComment() {
-					//   // 评论逻辑
-					//   console.log('评论');
-					//   //跳转试试？
-					//   uni.navigateTo({
-					//           url: '/pages/home/reply?post_id=' + post_id
-					// 		  //是不是还要传参数
-					//         });
-					  
-					// },
-			  //------------------------------------------------------------------      
 			
 		}
 	}
@@ -316,5 +293,5 @@
 		  padding: 1px;
 		  font-size:1px;
 		}
-			//-------------
+	   //-------------
 </style>

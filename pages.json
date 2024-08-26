@@ -28,7 +28,6 @@
 		{
 			"path": "pages/me/mypage",
 			"style": {
-				"navigationBarTitleText": "我的",
 				"navigationStyle": "custom"
 			}
 		},
@@ -147,13 +146,7 @@
 					"navigationBarTitleText": "聚"
 				}
 	},
-	{
-					"path" : "pages/corner/post",
-					"style" : 
-					{
-						"navigationBarTitleText": "聚"
-					}
-				},
+	
 	{
 				"path" : "pages/corner/Superwordname",
 				"style" : 
@@ -175,13 +168,7 @@
 				"navigationStyle" : "custom"
 			}
 		},
-		{
-			"path" : "pages/corner/maybe",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
-			}
-		},
+		
 		{
 			"path" : "pages/info/treecave/treepostpage",
 			"style" : 
@@ -190,12 +177,6 @@
 			}
 		},
 		{
-			"path" : "pages/userPage",
-			"style" : 
-			{
-				"navigationStyle" : "custom"
-			}},{
-
 			"path" : "pages/corner/postToCorner",
 			"style" : 
 			{
@@ -205,7 +186,7 @@
 			"path" : "pages/me/mypost",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle" : "custom"
 			}
 		},
 		{
@@ -214,8 +195,26 @@
 			{
 				"navigationBarTitleText" : ""
 			}
+		},
+		{
+			"path" : "pages/userPage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "用户主页"
+			}
+		},
+		{
+			"path" : "pages/info/infotalk",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}},{
+			"path" : "pages/home/commentpage",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}
 		}
-	
 		
 	],
 	"globalStyle": {
