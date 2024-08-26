@@ -34,7 +34,8 @@ export default {
 <style>
 .help-container {
   padding: 20px;
-    
+    width: 100%;
+	
 }
 
 .form-item {
