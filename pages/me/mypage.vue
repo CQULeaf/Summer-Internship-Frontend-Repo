@@ -171,7 +171,7 @@
 					console.log(this.user);
 					// //获取用户帖子信息
 					uni.request({
-						url: "http://localhost:8080/ccPost/mypost",
+						url:"http://localhost:8080/ccPost/mypost",
 						data: {
 							user_id: ret.data.data.userId
 						},
