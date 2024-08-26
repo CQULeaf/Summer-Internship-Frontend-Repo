@@ -32,7 +32,7 @@
 			login:function(){
 				console.log(this.user)
 				uni.request({
-					url:'http://localhost:8080/user/login',
+					url:'http://47.120.1.65:8080/user/login',
 					data:this.user,
 					method:"POST",
 					header:{

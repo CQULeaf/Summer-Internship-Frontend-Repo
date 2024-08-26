@@ -183,13 +183,7 @@
 				"navigationStyle" : "custom"
 			}
 		},
-		{
-			"path" : "pages/corner/maybe",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
-			}
-		},
+		
 		{
 			"path" : "pages/info/treecave/treepostpage",
 			"style" : 

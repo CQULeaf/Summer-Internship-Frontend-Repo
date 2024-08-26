@@ -32,7 +32,7 @@
 			register(){
 				console.log(this.user)
 				uni.request({
-					url:"http://localhost:8080/user/register",
+					url:"http://47.120.1.65:8080/user/register",
 					data:this.user,
 					method:'POST',
 					success: (res) => {
