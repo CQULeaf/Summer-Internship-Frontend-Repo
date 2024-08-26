@@ -1,13 +1,13 @@
 <template>
 	<view class="help-container">
-		<u-navbar :is-back="false" title="发帖子" :background="background" height="55">
-			<div class="btn" @click="sent">发送</div>
+		<u-navbar :is-back="true" title="发帖子" :background="background" :customBack="backtohome" height="55">
+			<div class="btn" @click="sendPost()">发送</div>
 		</u-navbar>
 		<view class="form-item">
-		  <textarea class="input" v-model="title" placeholder="标题"></textarea>
+		  <textarea class="input1" v-model="title" placeholder="标题"></textarea>
 		</view>
 		<view class="form-item">
-		  <textarea class="input" v-model="message" placeholder="分享新鲜事..."></textarea>
+		  <textarea class="input2" v-model="message" placeholder="分享新鲜事..."></textarea>
 		</view>
 		<view class="u-demo">
 			<view class="u-demo-wrap">
@@ -123,37 +123,50 @@
 			]
 		},
 		methods: {
-			sent()
+			backtohome()
 			{
-				uni.getStorage({
-					key:"nowAccount",
-					success: (res) => {
-						this.addPost.userId=res.data.data.userId
-						this.addPost.title=this.title
-						this.addPost.postContent=this.message
-						var now = new Date().toISOString(); 
-						this.addPost.createdAt=now
-						this.addPost.topicId=0
-						uni.request({
-							url:"http://localhost:1234/ccPost/publish",
-							data:this.addPost,
-							method:"POST",
-							success(res2) {
-								console.log(res2);
-								if(res2.data.code==200){
-									uni.showToast({
-										title:'发布成功',
-										icon:'success'
-									})
-									uni.switchTab({
-										url:"/pages/home/homepage"
-									})
-								}
-							}
-						})
-					}
+				uni.switchTab({
+					url:"/pages/home/homepage"
 				})
+				
 			},
+			
+			sendPost() {
+							uni.getStorage({
+								key:"nowAccount",
+								success:(res)=>{
+									this.addPost.userId=res.data.data.userId
+									this.addPost.title=this.title
+									this.addPost.postContent=this.message
+									var now=new Date().toISOString();
+									this.addPost.createdAt=now
+									this.addPost.topicld=0
+								}
+							})
+			
+							// 发起请求
+							uni.request({
+								url: 'http://localhost:8080/ccPost/publish',
+								data:this.addPost,
+								method: 'POST',
+								header: { 'Content-Type': 'application/json' },
+								success: (res) => {
+									console.log('发布成功', res.data);
+									uni.showToast({ title: '发布成功', icon: 'success' });
+									// 清空输入框内容
+									this.title = "";
+									this.message = "";
+									this.backtohome(); // 返回首页
+								},
+								fail: (err) => {
+									console.error('发布失败', err);
+									uni.showToast({ title: '发布失败', icon: 'none' });
+								}
+							});
+							uni.switchTab({
+								url:"/pages/home/homepage"
+							})
+						},
 			reUpload() {
 				this.$refs.uUpload.reUpload();
 			},
@@ -244,15 +257,27 @@
 	border-radius: 40%;
     color: #ffffff;
 	},
-.form-item 
+
+.form-item
 {
-	margin-bottom: 20px;
+	margin-bottom: 15px;
+	/* 添加一个左右边距，使输入框居中 */
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 10px;
 	width: 90%; /* 设置一个固定宽度，使左右边距生效 */
 }
-.input 
+.input1
+{
+  width: 100%;
+  height: 25px;
+  padding: 10px;
+  border: 1px solid #ccc;//框框
+  border-radius: 4px;
+  /* 通过设置 margin-left 负值来向左移动输入框 */
+  margin-left: -10px;
+}
+.input2 
 {
   width: 100%;
   height: 150px;

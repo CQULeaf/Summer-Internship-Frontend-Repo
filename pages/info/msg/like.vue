@@ -7,7 +7,7 @@
 			<view class="left"><image :src="res.url" mode="aspectFill" @click="gotouserpage(res.id)"></image></view>
 			<view class="right">
 				<view class="top">
-					<view class="name">{{ res.name }}</view>
+					<view class="name" @click="gotouserpage(res.id)">{{ res.name }}</view>
 				</view>
 				<view class="content">{{ res.contentText }}</view>
 				<view class="reply-box">

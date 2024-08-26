@@ -49,12 +49,12 @@
 				pagelist: [
 					{
 						type: 'like',
-						name: '关注',
-						url: "http://localhost:8080/corner/getTopicsByFlagAndUser",
+						api: 'http://localhost:8080/corner/superWordNameRecommend'
 					},
 					{
 						name: '推荐',
 						type: 'recommend',
+						api: 'http://localhost:8080/corner/superWordNameRecommend',
 						url: "http://localhost:8080/corner/getTopicsByFlagAndUser",
 					}
 				],
