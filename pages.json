@@ -207,14 +207,14 @@
 			"path" : "pages/userPage",
 			"style" : 
 			{
-				"navigationStyle" : "custom"
+				"navigationBarTitleText" : "用户主页"
 			}
 		},
 		{
 			"path" : "pages/info/infotalk",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle": "custom"
 			}},{
 			"path" : "pages/home/commentpage",
 			"style" : 

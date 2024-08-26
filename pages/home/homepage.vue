@@ -21,11 +21,8 @@
 									<u-image width="100%" height="300rpx" :src="res.cover" @tap="preAvatar(res.cover)"></u-image>
 								</view>
 								<view class="like" :class="{ highlight: res.likeCount }">
-									<view class="num">{{ res.likeCount }}</view>
-									<u-icon v-if="!res.isLike" name="thumb-up" :size="30" color="#9a9a9a" @click="getLike(index)"></u-icon>
-									<u-icon v-if="res.isLike" name="thumb-up-fill" :size="30" @click="getLike(index)"></u-icon>
-								</view>
-								<u-button size="medium" shape="circle">评论</u-button>
+									<view class="num">点赞数：{{ res.likeCount }}</view>
+									</view>
 								<view class="top">
 									<view class="createdAt">{{ res.createdAt }}</view>
 								</view>
@@ -156,6 +153,11 @@ export default {
 	},
 	
 	methods: {
+		// 评论
+		gotoCommentpage(){
+			
+		},
+		
 		preAvatar(img) {
 			wx.previewImage({
 				current: '', // 当前显示图片的 http 链接

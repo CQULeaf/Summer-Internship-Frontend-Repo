@@ -23,7 +23,7 @@
 							 :percent="item.progress"></u-line-progress>
 						</view>
 					</view>
-					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action" :auto-upload="autoUpload" :file-list="fileList"
+					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action" :auto-upload="false" :file-list="fileList"
 					 :show-progress="showProgress" :deletable="deletable" :max-count="maxCount" @on-list-change="onListChange">
 						<view v-if="customBtn" slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
@@ -31,7 +31,6 @@
 					</u-upload>
 					<u-button :custom-style="{marginTop: '20rpx'}" @click="upload">上传</u-button>
 					<u-button :custom-style="{marginTop: '40rpx'}" @click="clear">清空列表</u-button>
-					<!-- <u-button :custom-style="{marginTop: '40rpx'}" @click="reUpload">重新上传</u-button> -->
 				</view>
 			</view>
 		</view>
@@ -43,19 +42,16 @@
 	export default {
 		data() {
 			return {
+				action: 'http://localhost:1234/user/updateAvatar',
 				// 背景颜色
 				 background: 
 				 {
 				 	backgroundColor:'#fed6dc'
 				},
-				action: 'http://127.0.0.1:7001/upload',
 				// 预置上传列表
 				fileList: [],
-				// fileList: [{
-				// 	url: 'http://pics.sc.chinaz.com/files/pic/pic9/201912/hpic1886.jpg',
-				// 	error: false,
-				// 	progress: 100
-				// }],
+				message:'',
+				title:"",
 				showUploadList: true,
 				customBtn: false,
 				autoUpload: false,
@@ -66,19 +62,21 @@
 				lists: [], // 组件内部的文件列表
 				list:'',
 				current: 4,
+				title:"",
+				message:"",
 				
 				addPost:{
-					userId:1,
-					title:"",
-					postContent:"",
-					commentCount:0,
-					likeCount:0,
-					createdAt:"1973-09-28T11:03:46",
-					updatedTime:"1972-0-18T15:34:22",
-					updatedAt:"1998-04-10T00:15:49",
-					deletedAt:"1977-04-30T01:20:14",
-					cover:null,
-					topicld:13
+					userId: 1,
+					title: "",
+					postContent: "",
+					commentCount: 0,
+					likeCount: 0,
+					createdAt: "1973-09-28T11:03:46",
+					updatedTime: "1972-06-18T15:34:22",
+					updatedAt: "1998-04-10T00:15:49",
+					deletedAt: "1977-04-30T01:20:14",
+					cover: null,
+					topicId: 13
 				}
 			}
 		},
@@ -198,6 +196,9 @@
 				}
 			},
 			upload() {
+				let files = [];
+				files = this.$refs.uUpload.lists;
+				console.log(files.url)
 				this.$refs.uUpload.upload();
 			},
 			deleteItem(index) {

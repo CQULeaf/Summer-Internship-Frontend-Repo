@@ -9,22 +9,22 @@
 			</u-navbar>
 		</view>
 		<view v-if="current === 0" class="list">
-			<view v-if="info.length === 0" class="loading">加载中...</view>
-			<view v-for="(friend, index) in info" :key="index" class="list-item">
+			<view v-if="userlist.length === 0" class="loading">还没有朋友喔...</view>
+			<view v-for="(friend, index) in userlist" :key="index" class="list-item">
 				<image class="useravatar" :src="friend.avatar" />
 				<text class="nickname">{{ friend.username }}</text>
 			</view>
 		</view>
 		<view v-else-if="current===1" class="list">
-			<view v-if="follows.length === 0" class="loading">加载中...</view>
-			<view v-for="(follow, index) in follows" :key="index" class="list-item">
+			<view v-if="userlist.length === 0" class="loading">还没有关注的人喔...</view>
+			<view v-for="(follow, index) in userlist" :key="index" class="list-item">
 				<image class="useravatar" :src="follow.avatar" />
 				<text class="nickname">{{ follow.username }}</text>
 			</view>
 		</view>
 		<view v-else-if="current===2" class="list">
-			<view v-if="fans.length === 0" class="loading">加载中...</view>
-			<view v-for="(fan, index) in fans" :key="index" class="list-item">
+			<view v-if="userlist.length === 0" class="loading">还没有粉丝喔...</view>
+			<view v-for="(fan, index) in userlist" :key="index" class="list-item">
 				<image class="useravatar" :src="fan.avatar" />
 				<text class="nickname">{{ fan.username }}</text>
 			</view>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { type } from 'os';
 	export default {
 		data() {
 			return { //专门写变量   在模板里面写 ：herf 表示herf是变量
@@ -54,7 +55,8 @@
 
 					}
 				],
-				current: 0,
+				current: '',
+				type:'',
 				user: {
 					avatar: '',
 					username: '',
@@ -63,10 +65,9 @@
 				friends: [],
 				follows: [],
 				fans: [],
-				info: [],
+				userlist: []
 			};
 		},
-
 		methods: { //写自定义方法
 			gotopofile() {
 				uni.switchTab({
@@ -112,69 +113,124 @@
 
 			},
 			getfollows() {
-				uni.request({
-					url: 'http://127.0.0.1:4523/m1/5010181-4669608-default/follow/friends1',
-					data: this.user,
-					method: 'GET',
+				uni.getStorage({
+					key: 'nowAccount',
 					success: (res) => {
-						console.log(res)
-						if (res.statusCode === 200) {
-							this.follows = res.data.data
-						} else {
-							console.error('获取关注列表失败:', res);
-						}
-					},
-					fail: (err) => {
-						console.error('请求失败:', err);
+						this.user.userId = res.data.data.userId,
+							console.log('获取到的 userId:', this.user.userId); // 打印 userId
+						uni.request({
+							url: `http://localhost:8080/user/followers?userId=${this.user.userId}`,
+							// data: this.user.userId, 请求体
+							method: 'GET',
+							success: (res) => {
+								console.log(res)
+								if (res.statusCode === 200) {
+									this.follows = res.data.data
+									console.log('用户列表:', this.follows)
+									this.fetchUserInfos(this.follows);
+								} else {
+									console.error('获取朋友列表失败:', res);
+								}
+							},
+							fail: (err) => {
+								console.error('请求失败:', err);
+							}
+						})
 					}
 				})
 			},
 			getfans() {
-				uni.request({
-					url: 'http://127.0.0.1:4523/m1/5010181-4669608-default/follow/friends1',
-					data: this.user,
-					method: 'GET',
+				uni.getStorage({
+					key: 'nowAccount',
 					success: (res) => {
-						console.log(res)
-						if (res.statusCode === 200) {
-							this.fans = res.data.data
-						} else {
-							console.error('获取粉丝列表失败:', res);
-						}
-					},
-					fail: (err) => {
-						console.error('请求失败:', err);
+						this.user.userId = res.data.data.userId,
+							console.log('获取到的 userId:', this.user.userId); // 打印 userId
+						uni.request({
+							url: `http://localhost:8080/user/following?userId=${this.user.userId}`,
+							// data: this.user.userId, 请求体
+							method: 'GET',
+							success: (res) => {
+								console.log(res)
+								if (res.statusCode === 200) {
+									this.fans = res.data.data
+									console.log('用户列表:', this.fans)
+									this.fetchUserInfos(this.fans);
+								} else {
+									console.error('获取朋友列表失败:', res);
+								}
+							},
+							fail: (err) => {
+								console.error('请求失败:', err);
+							}
+						})
 					}
 				})
 			},
-			fetchUserInfos(users) {
-				console.log('获取到的 users', users);
-				console.log('获取到的 users', users.length);
-				// 打印 userId
-				for (let i = 0; i < users.length; i++) {
-					const userId = users.user_id; // 获取每个用户的 user_id
-					console.log('获取到的 userId:', userId);
-					uni.request({
-						url: `http://localhost:8080/user/getUserInfo`,
-						data:{
-							userId:userId
-						},
-						method: 'GET',
-						success: (res) => {
-							console.log('获取到的 info:', res)
-							if (res.statusCode === 200) {
-								this.info = res.data.data
-							} else {
-								console.error('获取失败:', res);
-							}
-						},
-						fail: (err) => {
-							console.error('请求失败:', err);
-						}
+			fetchUserInfos(users) { // users 朋友的信息-id  
+				console.log('获取到的 users:', users);
+				console.log('获取到的长度:', users.length);
+				const userIds = users.map(user => user.user_id); // 使用 user_id 属性  
+				console.log('提取的用户ID:', userIds); // 输出提取的 userId 列表 
+
+				const userRequests = [];
+
+				userIds.forEach(userId => {
+					console.log('请求的用户ID:', userId); // 打印用户 ID  
+					if (userId) { // 确保 userId 不为空  
+						userRequests.push(new Promise((resolve, reject) => {
+							uni.request({
+								url: `http://localhost:8080/user/getUserInfo?userId=${userId}`,
+								method: 'GET',
+								success: (res) => {
+									console.log('完整的响应:', res);
+									if (res.statusCode === 200) {
+										if (res.data && res.data.data) {
+											console.log('返回的数据:', res.data.data);
+											resolve(res.data.data);
+										} else {
+											reject('返回的数据格式不正确');
+										}
+									} else {
+										reject(`获取用户信息失败: ${res.statusCode}`);
+									}
+								},
+								fail: (err) => {
+									reject('请求失败');
+								}
+							});
+						}));
+					} else {
+						console.error('无效的用户ID:', userId); // 处理无效的 userId  
+					}
+				});
+
+				Promise.all(userRequests)
+					.then(userInfos => {
+						this.userlist = userInfos;
+						console.log('当前用户列表:', this.userlist);
 					})
-				}
+					.catch(error => {
+						console.error(error);
+						uni.showToast({
+							title: '获取部分用户信息失败',
+							icon: 'none'
+						});
+					});
 			},
 		},
+		mounted() {  
+				const type = this.$route.query.type; // 获取URL参数  
+				if (type === 'friends') {  
+					this.current = 0;  
+					this.getfriends(); // 获取朋友列表  
+				} else if (type === 'follows') {  
+					this.current = 1;  
+					this.getfollows(); // 获取关注列表  
+				} else if (type === 'fans') {  
+					this.current = 2;  
+					this.getfans(); // 获取粉丝列表  
+				}  
+			}  
 	}
 </script>
 <style>
