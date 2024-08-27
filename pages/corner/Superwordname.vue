@@ -14,15 +14,16 @@
 								<view class="list-item" v-for="(item, index) in list" :key="index" @click="goToContent(item.topic_id)">
 									<!-- 这里可以显示item的相关属性 -->
 									<text class="item-title">{{item.name}}</text>
-									
+									<view>{{ item.cover }}</view>
 								</view>
 							</view>
 							
 							<view v-if="pagelist[pagecurrent].type === 'like'">
 								<view class="list-item" v-for="(item, index) in currentItems" :key="index" @click="goToContent(item.topic_id)">
 									<!-- 这里可以显示item的相关属性 -->
+									<text class="item-title">{{item.name}}</text>
 									<view>{{ item.cover }}</view>
-									<view>{{ item.description }}</view>
+									
 								</view>
 							</view>
 						</view>
@@ -49,12 +50,11 @@
 				pagelist: [
 					{name: '关注',
 						type: 'like',
-						api: 'http://localhost:8080/corner/superWordNameRecommend'
+						url: "http://localhost:8080/corner/getTopicsByFlagAndUser",
 					},
 					{
 						name: '推荐',
 						type: 'recommend',
-						api: 'http://localhost:8080/corner/superWordNameRecommend',
 						url: "http://localhost:8080/corner/getTopicsByFlagAndUser",
 					}
 				],
@@ -102,34 +102,32 @@
 				});
 			},
 			
-			 getLike() {
-			            uni.request({
-			                url: "http://localhost:8080/corner/getTopicsByFlagAndUser",
-			                data: { user_id: this.currentUserId, flag: '专业' }, // 发送user_id和flag
-			                method: 'GET',
-			                success: (res) => {
-			                    if (res.statusCode == 200) {
-			                        this.currentItems = res.data.data;
-									console.log('噫，好了，我中了');
-									console.log( this.currentItems);
-									// 用实际数据格式替换
-			                    } else {
-			                        uni.showToast({
-			                            title: '获取数据失败',
-			                            icon: 'none'
-			                        });
-			                    }
-			                },
-			                fail: () => {
-			                    console.log('请求失败');
-			                }
-			            });
+			getLike() {
+			    uni.request({
+			        url: "http://localhost:8080/corner/getTopicsByFlag",
+			        data: { flag: '专业'  }, // 获取推荐的内容
+			        method: 'GET',
+			        success: (res) => {
+			            if (res.statusCode == 200) {
+							console.log('噫，好了，我中了');
+			                this.currentItems = res.data.data; // 用实际数据格式替换
+			            } else {
+			                uni.showToast({
+			                    title: '获取推荐内容失败',
+			                    icon: 'none'
+			                });
+			            }
 			        },
+			        fail: () => {
+			            console.log('请求失败');
+			        }
+			    });
+			},
 			
 			        getRecommendations() {
 			            uni.request({
 			                url: "http://localhost:8080/corner/getTopicsByFlag",
-			                data: { flag: '专业'  }, // 获取推荐的内容
+			                data: { flag: '社团'  }, // 获取推荐的内容
 			                method: 'GET',
 			                success: (res) => {
 			                    if (res.statusCode == 200) {
