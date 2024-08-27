@@ -90,9 +90,9 @@
 				addComment: {
 					userId: 1,
 					content: "This is a comment.",
-					createdAt: "1997-04-21T10:08:46",
-					updatedAt: "1997-04-21T10:08:46",
-					deletedAt: "1997-04-21T10:08:46",
+					createdAt: "",
+					updatedAt: "",
+					deletedAt: "",
 					likeCount: 0,
 					postId: 2
 				},
@@ -111,12 +111,12 @@
 					success: (res) => {
 						this.addComment.userId = res.data.data.userId
 						this.addComment.content = this.messageInput
-						var now = new Date().toISOString();
-						this.addComment.createdAt = now
+						// var now = new Date().toISOString();
+						// this.addComment.createdAt = now
 						this.addComment.postId = this.comment.postId
 						console.log(this.addComment);
 						uni.request({
-							url: "http://localhost:1234/comment/add",
+							url: "http://localhost:8080/comment/add",
 							data: this.addComment,
 							method: "POST",
 							success(res) {
@@ -137,13 +137,13 @@
 
 						// 请求获得所有的回复数据
 						uni.request({
-							url: "http://localhost:1234/comment/getReply",
+							url: "http://localhost:8080/comment/getReply",
 							data: res.data,
 							success: (respones) => {
 								this.commentList = respones.data.data
 								for (let key in this.commentList) {
 									uni.request({
-										url: "http://localhost:1234/user/getUserInfo",
+										url: "http://localhost:8080/user/getUserInfo",
 										data: this.commentList[key],
 										success: (res2) => {
 											this.commentList[key].avatar = res2.data
@@ -161,7 +161,7 @@
 				});
 
 				uni.request({
-					url: "http://localhost:1234/user/getUserInfo",
+					url: "http://localhost:8080/user/getUserInfo",
 					data: this.comment,
 					success: (res) => {
 						this.user = res.data.data
@@ -196,7 +196,7 @@
 			gotoUserPage2(userId) {
 				console.log(userId)
 				uni.request({
-					url: "http://localhost:1234/user/getUserInfo",
+					url: "http://localhost:8080/user/getUserInfo",
 					data: userId,
 					success: (res) => {
 						console.log(userId);
