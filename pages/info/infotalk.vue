@@ -54,7 +54,7 @@
 					console.log('STOMP连接成功:', frame);
 
 					// 订阅私人消息队列
-					this.stompClient.subscribe('/user/' + this.currentUserId + '/queue/messages', message => {
+					this.stompClient.subscribe('/user/' + this.currentUserId + '/private', message => {
 						console.log(message.body);
 						this.messages.push(JSON.parse(message.body)); // 将消息添加到消息列表
 						// 自动滚动到底部
@@ -77,9 +77,10 @@
 						content: this.messageInput, // 消息内容
 						createdAt: new Date() // 创建时间
 					};
-					this.messages.push(message)
-					this.stompClient.send('/app/private', {}, message); // 通过 STOMP 发送消息
-					this.messageInput = ''; // 清空输入框
+					console.log('发送的消息:', message); // 打印消息内容
+					this.messages.push(message);
+					this.stompClient.send('/app/private', {}, JSON.stringify(message)); // 确保消息被序列化为 JSON 字符串
+					this.messageInput = '';
 				}
 			},
 
@@ -97,7 +98,7 @@
 			},
 			getMessage() {
 				uni.request({
-					url: `http://localhost:8080/message/historyWithUser?userId=${this.currentUserId}&targetUserId=${this.receiverId}`,
+					url: `http://127.0.0.1:8080/message/historyWithUser?userId=${this.currentUserId}&targetUserId=${this.receiverId}`,
 					method: 'GET',
 					success: (res) => {
 						if (res.statusCode === 200) {

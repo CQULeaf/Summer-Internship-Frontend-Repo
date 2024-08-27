@@ -39,7 +39,7 @@
 					return
 				}
 				uni.request({
-					url:"http://localhost:8080/user/register",
+					url:"http://127.0.0.1:8080/user/register",
 					data:this.user,
 					method:'POST',
 					success: (res) => {

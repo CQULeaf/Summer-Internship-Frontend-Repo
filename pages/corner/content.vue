@@ -116,7 +116,7 @@
 				key:'matchuser2',
 				success(res) {
 					uni.request({
-						url:'http://localhost:1234/ccPost/getPostsByTopicId',
+						url:'http://127.0.0.1:1234/ccPost/getPostsByTopicId',
 						data:res,
 						success(suc) {
 							this.list=suc
@@ -158,7 +158,7 @@ handleClick()
 			        goToPost(post_id) {
 			         
 						uni.request({
-							url: "http://localhost:1234/ccPost/getPost",//api
+							url: "http://127.0.0.1:1234/ccPost/getPost",//api
 							data: post_id,//自己定义的 变量，包含api中需要传递的信息
 							method: 'GET',//方法类型
 							success: (res) => {

@@ -187,7 +187,7 @@
 				}
 				const pageSize = 3;
 				uni.request({
-					url: `http://localhost:8080/message/history?userId=${this.user.userId}`,
+					url: `http://127.0.0.1:8080/message/history?userId=${this.user.userId}`,
 					method: 'GET',
 					header:{
 						'Content-Type': 'application/json'
@@ -230,7 +230,7 @@
 									processedUserIds.forEach(userId => {
 										userRequests.push(new Promise((resolve, reject) => {
 											uni.request({
-												url: `http://localhost:8080/user/getUserInfo?userId=${userId}`,
+												url: `http://127.0.0.1:8080/user/getUserInfo?userId=${userId}`,
 												method: 'GET',
 												success: (res) => {
 													console.log('返回的数据:', res

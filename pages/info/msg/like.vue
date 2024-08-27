@@ -117,7 +117,7 @@ export default {
 		},
 		gotouserpage(index){
 			uni.request({
-				url:"http://localhost:1234/user/getUserInfo",
+				url:"http://127.0.0.1:1234/user/getUserInfo",
 				data:index,
 				method:"GET",
 				success: (res) => {
