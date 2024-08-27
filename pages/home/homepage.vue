@@ -119,7 +119,7 @@ export default {
 		this.keyword='',
 		// 请求帖子数据
 		uni.request({
-			url:'http://localhost:8080/ccPost/getAllPosts',
+			url:'http://localhost:1234/ccPost/getAllPosts',
 			success: (res) => {
 				this.postList=res.data.data
 				this.originalPostList = this.postList
@@ -127,7 +127,7 @@ export default {
 		})
 		//请求用户数据
 		uni.request({
-			url:'http://localhost:8080/user/getUserByNickname',
+			url:'http://localhost:1234/user/getUserByNickname',
 			data:this.user,
 			success:(res)=>{
 				console.log(res)

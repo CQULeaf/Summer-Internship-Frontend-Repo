@@ -152,7 +152,8 @@
 				"path" : "pages/corner/superWordName",
 				"style" : 
 				{
-					"navigationStyle" : "custom"
+					"navigationBarTitleText" : "",
+					"navigationBarBackgroundColor": "#ffc7cb"
 				}
 	},
 	{
