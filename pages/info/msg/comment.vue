@@ -44,6 +44,28 @@ export default {
 	onLoad() {
 		this.getComment();
 	},
+	
+	onShow() {
+		uni.getStorage({
+			key:"nowAccount",
+			success(res) {
+				console.log(res);
+				uni.request({
+					url:"http://localhost:1234/ccPost/mypost",
+					data:res.data.data,
+					success: (res2) => {
+						console.log(res2);
+					},fail(resf) {
+						console.log(resf);
+					}
+				})
+			},fail(res) {
+				console.log(res);
+			}
+		})
+		
+	},
+	
 	methods: {
 		backtoinfo()
 		{
@@ -116,7 +138,7 @@ export default {
 		gotouserpage(index)
 		{
 			uni.request({
-				url:"http://localhost:8080/user/getUserInfo",
+				url:"http://localhost:1234/user/getUserInfo",
 				data:index,
 				success: (res) => {
 					uni.setStorage({

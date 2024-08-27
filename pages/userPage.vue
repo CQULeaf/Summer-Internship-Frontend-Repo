@@ -115,7 +115,7 @@
 						this.updateData.isFollow=this.followSta
 						console.log(this.updateData);
 						uni.request({
-							url:"http://localhost:1234/user/followOrUnfollow",
+							url:"http://localhost:8080/user/followOrUnfollow",
 							data:this.updateData,
 							method:"POST",
 							success(res2) {

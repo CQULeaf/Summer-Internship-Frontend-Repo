@@ -99,12 +99,25 @@ export default {
 		};
 	},
 	
+	onLoad: function (options) {
+		setTimeout(function () {
+			console.log('start pulldown');
+		}, 1000);
+		uni.startPullDownRefresh();
+	},
+		onPullDownRefresh() {
+		console.log('refresh');
+		setTimeout(function () {
+			uni.stopPullDownRefresh();
+		}, 1000);
+	},
+	
 	onShow() {
 		
 		// 请求帖子数据
 		this.keyword='',
 		uni.request({
-			url:'http://localhost:8080/ccPost/getAllPosts',
+			url:'http://localhost:1234/ccPost/getAllPosts',
 			success: (res) => {
 				console.log(res)
 				this.postList=res.data.data

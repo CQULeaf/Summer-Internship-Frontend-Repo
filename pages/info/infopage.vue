@@ -28,7 +28,12 @@
 								<view class="list-item" v-for="(item, index) in currentItems" :key="index"
 									@click="goToChat(item)">
 									<image class="useravatar" :src="item.avatar"></image>
-									<text class="username">{{item.username}}</text>
+									<view class="usermessage">
+										<text class="username">{{item.nickname}}</text>
+										<text class="content">{{item.content}}</text>
+										<text class="time">{{item.createdAt}}</text>
+									</view>
+
 								</view>
 							</view>
 						</view>
@@ -180,34 +185,45 @@
 					console.warn('userId is not set');
 					return;
 				}
+				const pageSize = 3;
 				uni.request({
 					url: `http://localhost:8080/message/history?userId=${this.user.userId}`,
 					method: 'GET',
+					header:{
+						'Content-Type': 'application/json'
+					},
 					success: (res) => {
 						console.log('请求成功:', res);
-						console.log('返回的数据0:', res.data.data);
 						if (res.statusCode === 200) {
 							if (res.data.data.length === 0) {
 								this.hasMore = false;
 							} else {
+								 this.hasMore = res.data.data.length === pageSize;
 								if (this.pagelist[this.pagecurrent].type === 'msg') {
 									this.userlist = res.data.data;
 									console.log(this.userlist.length);
 
 									const processedUserIds = new Set(); // 使用 Set 来跟踪已处理的用户 ID  
 									const userRequests = []; // 存储所有用户请求的数组  
+									const contentMap = new Map(); // 使用 Map 来存储 content 和 createdAt  
 
 									// 遍历用户列表，提取 senderId 和 receiverId  
 									this.userlist.forEach(user => {
 										const senderId = user.senderId;
 										const receiverId = user.receiverId;
+										const content = user.content;
+										const createdAt = user.createdAt;
 
-										// 判断当前用户是发送者还是接收者，并添加对方的 ID  
-										if (senderId === this.user.userId && receiverId) {
-											processedUserIds.add(receiverId); // 添加接收者 ID  
-										} else if (receiverId === this.user.userId && senderId) {
-											processedUserIds.add(senderId); // 添加发送者 ID  
-										}
+										// 将 content 和 createdAt 存储到 Map 中，以便后续使用  
+										const userKey = senderId === this.user.userId ? receiverId :
+											senderId;
+										contentMap.set(userKey, {
+											content,
+											createdAt
+										});
+
+										// 添加对方的 ID  
+										processedUserIds.add(userKey);
 									});
 
 									// 遍历去重后的用户 ID，发起请求  
@@ -217,14 +233,15 @@
 												url: `http://localhost:8080/user/getUserInfo?userId=${userId}`,
 												method: 'GET',
 												success: (res) => {
+													console.log('返回的数据:', res
+														.data);
 													console.log('用户ID:',
 														userId);
-													console.log('返回的数据:', res
-														.data.data);
+
+
 													if (res.statusCode ===
 														200) {
-														resolve(res.data
-															.data); // 解析成功数据  
+														resolve(res.data.data); // 解析成功数据  
 													} else {
 														reject(
 															`获取用户信息失败: ${res.statusCode}`
@@ -239,26 +256,45 @@
 									});
 
 									// 等待所有用户请求完成  
-									Promise.all(userRequests)
-										.then(userInfos => {
-											this.currentItems = [...this.currentItems, ...userInfos];
-											this.dataCache = this.currentItems;
-											console.log('当前用户列表:', this.currentItems);
-										})
-										.catch(error => {
-											console.error(error);
-											uni.showToast({
-												title: '获取部分用户信息失败',
-												icon: 'none'
-											});
-										});
+								Promise.all(userRequests)  
+								    .then(userInfos => {  
+								        console.log('所有用户信息:', userInfos); // 打印所有用户信息  
+								        const uniqueUserInfos = new Map();  
+								        
+								        userInfos.forEach(userInfo => {  
+								            console.log('用户信息:', userInfo); // 打印每个用户信息  
+								            if (userInfo && userInfo.userId) {  
+								                console.log('有效用户信息:', userInfo);  
+								                const userContent = contentMap.get(userInfo.userId) || {};  
+								                uniqueUserInfos.set(userInfo.userId, {  
+								                    ...userInfo,  
+								                    ...userContent  
+								                });  
+								            } else {  
+								                console.warn('无效的用户信息或用户不存在:', userInfo);  
+								            }  
+								        });  
+								
+								        console.log('唯一用户信息数量:', uniqueUserInfos.size); // 打印唯一用户数量  
+								        
+								        // 将新用户合并到 currentItems  
+								        this.currentItems = [...this.currentItems, ...Array.from(uniqueUserInfos.values())];  
+								        console.log('合并后的用户列表:', this.currentItems); // 打印合并后的用户列表  
+								        
+								        uni.setStorage({  
+								            key: 'usermessage',  
+								            data: this.currentItems  
+								        });  
+								    })  
+								    .catch(error => {  
+								        console.error('请求失败:', error);  
+								        uni.showToast({  
+								            title: '获取部分用户信息失败',  
+								            icon: 'none'  
+								        });  
+								    });
 								}
 							}
-						} else {
-							uni.showToast({
-								title: '获取数据失败',
-								icon: 'none'
-							});
 						}
 					},
 					fail: (err) => {
@@ -337,6 +373,18 @@
 		align-items: center;
 		padding: 10px;
 		border-bottom: 1px solid #f0dddf;
+		/* 使用 Flexbox 布局 */
+
+	}
+
+	.usermessage {
+		display: flex;
+		flex-direction: column;
+		/* 垂直方向排列子元素 */
+		align-items: flex-start;
+		/* 左对齐 */
+		margin-bottom: 10px;
+		
 	}
 
 	.wrap {
@@ -393,8 +441,8 @@
 	}
 
 	.useravatar {
-		width: 100rpx;
-		height: 100rpx;
+		width: 120rpx;
+		height: 120rpx;
 		border-radius: 50%;
 		margin-top: 3px;
 		margin-right: 20px;
@@ -402,8 +450,21 @@
 	}
 
 	.username {
-		font-size: 16px;
+		font-size: 19px;
 		color: #333;
+		margin-bottom: 8px;
+		font-weight: bold;
+	}
+
+	.content {
+		font-size: 17px;
+		color: #333;
+	}
+
+	.time {
+		font-size: 4px;
+		color: #333;
+
 	}
 
 	.loading {

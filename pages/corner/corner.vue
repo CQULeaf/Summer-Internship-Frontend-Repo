@@ -109,6 +109,44 @@ export default {
     };
   },
 
+	//------------------------------------------根据flag跳转以及获取想要信息
+	       toggleCategory(flag) {
+				uni.request({
+					url: "http://localhost:1234/corner/getTopicsByFlag",//api
+					data: this.user,//自己定义的 变量，包含api中需要传递的信息
+					method: 'GET',//方法类型
+					success: (res) => {
+						console.log(res);
+						if (res.statusCode == 200) {
+							this.matchuser1 = res.data.data; // 假设 API 返回的数据格式包含用户信息
+							//获取想要的信息
+							console.log(res.data);//打印
+							uni.setStorage({//缓存
+								key: 'matchuser1',//就是之前定义的变量
+								data: this.matchuser1,
+								success: function() {
+									console.log('噫，好了，我中了');//成功后打印这句话
+									uni.navigateTo({
+									    url: '/pages/corner/superWordName',
+									})
+								}
+							});
+						} else {
+							uni.showToast({
+								title: '获取数据失败',
+								icon: 'none'
+							});
+						}
+					},
+					fail:()=>{
+						console.log(1111)
+					}
+				})
+				
+	        },
+			//------------------------------------------跳转
+	//---------------------------------------------
+	//重点！！！之后要和后端连接
   onLoad() {
     this.list = [
       {

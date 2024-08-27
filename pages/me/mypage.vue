@@ -106,10 +106,11 @@
 				hasMore: true, // 是否还有更多数据
 				touchStartX: 0,
 				touchEndX: 0,
-				touchThreshold: 30, //处理滑动
-
-				postList: [{
-					title: ''
+				touchThreshold: 30 ,//处理滑动
+				
+				postList:[{
+					title:'',
+					
 				}]
 			};
 		},
@@ -171,7 +172,7 @@
 					console.log(this.user);
 					// //获取用户帖子信息
 					uni.request({
-						url:"http://localhost:8080/ccPost/mypost",
+						url:"http://localhost:1234/ccPost/mypost",
 						data: {
 							user_id: ret.data.data.userId
 						},
@@ -206,7 +207,7 @@
 				const filePath = path;
 
 				uni.uploadFile({
-					url: 'http://localhost:8080/user/updateAvatar',
+					url: 'http://localhost:1234/user/updateAvatar',
 					filePath: filePath,
 					name: 'file', // 对应后端接收文件的字段名
 					formData: {
