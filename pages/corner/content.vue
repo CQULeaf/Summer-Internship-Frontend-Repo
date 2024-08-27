@@ -148,7 +148,7 @@
 			        goToPost(post_id) {
 			         
 						uni.request({
-							url: "http://localhost:8080/ccPost/getPost",//api
+							url: "http://localhost:1234/ccPost/getPost",//api
 							data: post_id,//自己定义的 变量，包含api中需要传递的信息
 							method: 'GET',//方法类型
 							success: (res) => {

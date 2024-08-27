@@ -23,7 +23,9 @@
 							 :percent="item.progress"></u-line-progress>
 						</view>
 					</view>
-					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action" :auto-upload="false" :file-list="fileList"
+					
+					<!-- 图片选择 -->
+					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action" :auto-upload="false"
 					 :show-progress="showProgress" :deletable="deletable" :max-count="maxCount" @on-list-change="onListChange">
 						<view v-if="customBtn" slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
@@ -48,8 +50,6 @@
 				 {
 				 	backgroundColor:'#fed6dc'
 				},
-				// 预置上传列表
-				fileList: [],
 				message:'',
 				title:"",
 				showUploadList: true,
@@ -80,6 +80,12 @@
 				}
 			}
 		},
+		
+		onReady() {
+			// 得到整个组件对象，内部图片列表变量为"lists"
+			this.lists = this.$refs.uUpload.lists;
+		},
+		
 		onLoad() {
 			this.list = [{
 					iconPath: "/static/newhomeg.png",
@@ -186,15 +192,8 @@
 				}
 			},
 			upload() {
-				uni.chooseImage({
-					count: 6, //默认9
-					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-					sourceType: ['album'], //从相册选择
-					success: function (res) {
-						console.log(JSON.stringify(res.tempFilePaths));
-						this.addPost.cover=JSON.stringify(res.tempFilePaths)
-					}
-				});
+				this.$refs.uUpload.upload();
+				console.log(this.lists)
 			},
 			deleteItem(index) {
 				this.$refs.uUpload.remove(index);
