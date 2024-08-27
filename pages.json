@@ -143,15 +143,15 @@
 				"path" : "pages/corner/corner",
 				"style" : 
 				{
-					"navigationBarTitleText": "聚"
+					"navigationStyle": "custom"
 				}
 	},
 	
 	{
-				"path" : "pages/corner/superWordName",
+				"path" : "pages/corner/Superwordname",
 				"style" : 
 				{
-					"navigationBarTitleText": "聚"
+					"navigationBarTitleText": ""
 				}
 	},
 	{

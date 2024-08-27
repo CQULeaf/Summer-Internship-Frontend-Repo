@@ -66,6 +66,7 @@
 					{
 						name: '消息',
 						type: 'msg',
+						api: 'http://127.0.0.1:8080/message/history'
 					}
 				],
 				subinfolist: [

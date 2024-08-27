@@ -1,8 +1,21 @@
 <template>
   <view class="container">
-    <view class="search-container">
-      <u-search placeholder="搜索" v-model="searchText" border-color=#dddddd  @search="search"></u-search>
-    </view>
+	  <u-navbar :is-back="false" title="聚" :background="background" :customBack="backtoinfo" height="50" title-size=40 title-color=#3e3e3e>
+	  </u-navbar>
+	  
+   <view class="search-container">
+       <u-search 
+         placeholder="搜索" 
+         v-model="searchText" 
+         border-color="#dddddd"  
+         @search="search" 
+         margin="15px"
+       ></u-search>
+       <view v-if="filteredTopics.length === 0">没有找到相关的超话</view>
+       <ul>
+         <li v-for="topic in filteredTopics" :key="topic.id">{{ topic.title }}</li>
+       </ul>
+     </view>
 
     <view class="container">
       <!-- 轮播图 -->
@@ -54,169 +67,168 @@
 
 <script>
 export default {
-	components: {},
   data() {
-	  
     return {
-		searchText:"搜索你想要的",
-		info: [
-				{
-					colorClass: 'uni-bg-blue',
-					url: 'https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/shuijiao.jpg',
-					//小角标
-				}
-			],
-			//-------------------------
-			user:{//传给后台的信息
-				flag:''
-			},
-			matchuser1:{//超话信息
-				topicId:'',
-				      name: '',
-				      cover:'',
-				      description:'',
-				      postCount:'',
-				      followerCount:'',
-				      flag: ''
-			},
-			//-------------------------
-			list:'',
-			current: 4,
-			//-------------------------
-		
-			modeIndex: -1,
-			styleIndex: -1,
-			current: 0,
-			mode: 'default',
-			dotsStyles: {},
-			swiperDotIndex: 0,
-			swiperImages: [
-			      '/static/MBTIb.png',
-				  '/static/chinas.png',
-				  '/static/joinUss.png',
-				  '/static/study.png'
-			    ],
+      searchText: '',  // 搜索输入框的内容
+      allTopics: [],   // 存储从API获取的所有超话
+      filteredTopics: [],  // 存储过滤后的超话
+      background: {
+        backgroundColor: '#fed6dc'
+      },
+      info: [
+        {
+          colorClass: 'uni-bg-blue',
+          url: 'https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/shuijiao.jpg',
+        }
+      ],
+      user: { // 传给后台的信息
+        flag: ''
+      },
+      matchuser1: { // 超话信息
+        topicId: '',
+        name: '',
+        cover: '',
+        description: '',
+        postCount: '',
+        followerCount: '',
+        flag: ''
+      },
+      list: '',
+      current: 0,
+      modeIndex: -1,
+      styleIndex: -1,
+      mode: 'default',
+      dotsStyles: {},
+      swiperDotIndex: 0,
+      swiperImages: [
+        '/static/MBTIb.png',
+        '/static/chinas.png',
+        '/static/joinUss.png',
+        '/static/study.png'
+      ],
     };
   },
-  
-  //--------------------------------------------
-  onLoad() {
-  	this.list = [{
-  			iconPath: "/static/newhomeg.png",
-  			selectedIconPath: "/static/newhomep.png",
-  			text: '家',
-  			isDot: true,
-  			customIcon: false,
-  			pagePath:'/pages/home/homepage'
-  		},
-  		{
-  			iconPath:  "/static/happygrey.png",
-  			selectedIconPath:"/static/happierp.png",
-  			text: '聚',
-  			isDot: true,
-  			customIcon: false,
-  			pagePath:'/pages/corner/corner'
-  		},
-  		{
-  			iconPath: "/static/yanblack.png",
-  			selectedIconPath: "/static/yanpink.png",
-  			text: '言',
-  			midButton: true,
-  			customIcon: false,
-  			pagePath:'/pages/post/postpage'
-  		},
-  		{
-  			iconPath:  "/static/messagegrey.png",
-  			selectedIconPath:"/static/messagep.png",
-  			text: '讯',
-  			customIcon: false,
-  			pagePath:'/pages/info/infopage'
-  		},
-  		{
-  			iconPath:  "/static/megrey.png",
-  			selectedIconPath:"/static/mep.png",
-  			text: '我',
-  			isDot: false,
-  			customIcon: false,
-  			pagePath:'/pages/me/mypage'
-  		},
-  	]
-  },
-  
-  
-  
-  
-  //--------------------------------------------
-  methods: {
-	  change(e) {
-	  	this.current = e.detail.current
-	  },
-	  selectStyle(index) {
-	  	this.dotsStyles = this.dotStyle[index]
-	  	this.styleIndex = index
-	  },
-	  selectMode(mode, index) {
-	  	this.mode = mode
-	  	this.modeIndex = index
-	  	this.styleIndex = -1
-	  	this.dotsStyles = this.dotStyle[0]
-	  },
-	  clickItem(e) {
-	  	this.swiperDotIndex = e
-	  },
-	  onBanner(index) {
-	  	console.log(22222, index);
-	  },
 
-	//------------------------------------------根据flag跳转以及获取想要信息
-	       toggleCategory(flag) {
-			   this.user.flag=flag
-				uni.request({
-					url: "http://localhost:8080/corner/getTopicsByFlag",//api
-					data: this.user,//自己定义的变量，包含api中需要传递的信息
-					method: 'GET',//方法类型
-					success: (res) => {
-						console.log(res);
-						if (res.statusCode == 200) {
-							this.matchuser1 = res.data.data; // 假设 API 返回的数据格式包含用户信息
-							//console.log(res.data.data)
-							//获取想要的信息
-							//console.log(res.data);//打印
-							uni.setStorage({//缓存
-								key: 'matchuser1',//就是之前定义的变量
-								data: this.matchuser1,
-								success: function() {
-									//console.log('噫，好了，我中了');//成功后打印这句话
-									uni.navigateTo({
-									    url: '/pages/corner/superWordName',
-									})
-								}
-							});
-						} else {
-							uni.showToast({
-								title: '获取数据失败',
-								icon: 'none'
-							});
-						}
-					},
-					fail:()=>{
-						console.log(1111)
-					}
-				})
-				
-	        },
-			//------------------------------------------跳转
-	//---------------------------------------------
-	//重点！！！之后要和后端连接
+  onLoad() {
+    this.list = [
+      {
+        iconPath: "/static/newhomeg.png",
+        selectedIconPath: "/static/newhomep.png",
+        text: '家',
+        isDot: true,
+        customIcon: false,
+        pagePath: '/pages/home/homepage'
+      },
+      {
+        iconPath: "/static/happygrey.png",
+        selectedIconPath: "/static/happierp.png",
+        text: '聚',
+        isDot: true,
+        customIcon: false,
+        pagePath: '/pages/corner/corner'
+      },
+      {
+        iconPath: "/static/yanblack.png",
+        selectedIconPath: "/static/yanpink.png",
+        text: '言',
+        midButton: true,
+        customIcon: false,
+        pagePath: '/pages/post/postpage'
+      },
+      {
+        iconPath: "/static/messagegrey.png",
+        selectedIconPath: "/static/messagep.png",
+        text: '讯',
+        customIcon: false,
+        pagePath: '/pages/info/infopage'
+      },
+      {
+        iconPath: "/static/megrey.png",
+        selectedIconPath: "/static/mep.png",
+        text: '我',
+        isDot: false,
+        customIcon: false,
+        pagePath: '/pages/me/mypage'
+      },
+    ]
+  },
+
+  methods: {
+    change(e) {
+      this.current = e.detail.current
+    },
+    selectStyle(index) {
+      this.dotsStyles = this.dotStyle[index]
+      this.styleIndex = index
+    },
+    selectMode(mode, index) {
+      this.mode = mode
+      this.modeIndex = index
+      this.styleIndex = -1
+      this.dotsStyles = this.dotStyle[0]
+    },
+    clickItem(e) {
+      this.swiperDotIndex = e
+    },
+    onBanner(index) {
+      console.log(22222, index);
+    },
+
+    toggleCategory(flag) {
+      this.user.flag = flag
+      uni.request({
+        url: "http://localhost:8080/corner/getTopicsByFlag", // API
+        data: this.user, // 传递信息
+        method: 'GET',
+        success: (res) => {
+          console.log(res);
+          if (res.statusCode == 200) {
+            this.matchuser1 = res.data.data; 
+            uni.setStorage({
+              key: 'matchuser1',
+              data: this.matchuser1,
+              success: function() {
+                uni.navigateTo({
+                  url: '/pages/corner/superWordName',
+                })
+              }
+            });
+          } else {
+            uni.showToast({
+              title: '获取数据失败',
+              icon: 'none'
+            });
+          }
+        },
+        fail: () => {
+          console.log(1111)
+        }
+      })
+    },
+
+    async fetchTopics() {
+      try {
+        const response = await fetch('http://localhost:8080/corner/topics');
+        this.allTopics = await response.json();
+        this.filteredTopics = this.allTopics; // 初始化显示所有超话
+      } catch (error) {
+        console.error('获取超话失败:', error);
+      }
+    },
+
     search() {
-      // 搜索逻辑
-     
-	  
-	  
-	  
+      if (this.searchText) {
+        this.filteredTopics = this.allTopics.filter(topic => 
+          topic.title.includes(this.searchText) 
+        );
+      } else {
+        this.filteredTopics = this.allTopics; // 如果搜索框为空，显示所有超话
+      }
     }
-	//--------------------------------------------
-	
+  },
+
+  mounted() {
+    this.fetchTopics(); // 组件加载时获取超话
   }
 };
 </script>
@@ -237,7 +249,7 @@ export default {
 	.container {
 	  display: flex;
 	  flex-direction: column;
-	  
+	  background-color:#fcfcfa;
 	 
 	}
 	
@@ -325,6 +337,7 @@ export default {
 		border-color: #007aff;
 		border-width: 1px;
 	}
+	
 </style>
 <style>
 //四个框框
@@ -369,13 +382,10 @@ export default {
  /* margin-top: 40px;
     padding: 40px; */
 }
-//搜索框
-.search-container {
-  display: flex;
-  justify-content: center;
-    bg-color:#007bff;
-	 border-color:#007bff;
-	/* 使搜索框水平居中 */
-}
 
+</style>
+<style scoped>
+.search-container {
+  padding: 16px;
+}
 </style>

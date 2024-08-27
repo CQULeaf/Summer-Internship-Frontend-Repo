@@ -3,7 +3,7 @@
 		<view>
 			<view class="slot-wrap">
 				<u-tabs-swiper ref="uTabs" :list="pagelist" :current="pagecurrent" @change="tabsChange"
-					:is-scroll="false" :bold="false" bg-color="#ffc7cb" active-color="#000000"></u-tabs-swiper>
+					:is-scroll="false" :bold="false" bg-color="#ffc7cb" height=120 active-color="#000000"></u-tabs-swiper>
 			</view>
 			<swiper class="swiper" :current="swiperCurrent">
 				<swiper-item v-for="(tab, tabindex) in pagelist" :key="tabindex">
@@ -47,7 +47,7 @@
 					  },],
 				current: 4,
 				pagelist: [
-					{
+					{name: '关注',
 						type: 'like',
 						api: 'http://localhost:8080/corner/superWordNameRecommend'
 					},
