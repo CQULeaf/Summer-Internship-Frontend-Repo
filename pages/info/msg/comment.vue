@@ -51,7 +51,7 @@ export default {
 			success(res) {
 				console.log(res);
 				uni.request({
-					url:"http://localhost:1234/ccPost/mypost",
+					url:"http://127.0.0.1:1234/ccPost/mypost",
 					data:res.data.data,
 					success: (res2) => {
 						console.log(res2);
@@ -138,7 +138,7 @@ export default {
 		gotouserpage(index)
 		{
 			uni.request({
-				url:"http://localhost:1234/user/getUserInfo",
+				url:"http://127.0.0.1:1234/user/getUserInfo",
 				data:index,
 				success: (res) => {
 					uni.setStorage({

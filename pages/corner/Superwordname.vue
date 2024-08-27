@@ -151,7 +151,7 @@
 			        },
 			goToContent(topicId) {
 				uni.request({
-					url: "http://localhost:1234/corner/superWordNameConcern",
+					url: "http://127.0.0.1:1234/corner/superWordNameConcern",
 					data: { topic_id: topicId },
 					method: 'GET',
 					success: (res) => {

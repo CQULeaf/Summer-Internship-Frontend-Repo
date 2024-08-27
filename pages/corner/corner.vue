@@ -112,7 +112,7 @@ export default {
 	//------------------------------------------根据flag跳转以及获取想要信息
 	       toggleCategory(flag) {
 				uni.request({
-					url: "http://localhost:1234/corner/getTopicsByFlag",//api
+					url: "http://127.0.0.1:1234/corner/getTopicsByFlag",//api
 					data: this.user,//自己定义的 变量，包含api中需要传递的信息
 					method: 'GET',//方法类型
 					success: (res) => {

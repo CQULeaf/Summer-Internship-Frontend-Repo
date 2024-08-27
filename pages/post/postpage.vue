@@ -44,7 +44,7 @@
 	export default {
 		data() {
 			return {
-				action: 'http://localhost:1234/user/updateAvatar?username=1',
+				action: 'http://127.0.0.1:1234/user/updateAvatar?username=1',
 				// 背景颜色
 				 background: 
 				 {

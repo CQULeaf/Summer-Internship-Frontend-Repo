@@ -42,7 +42,7 @@
 	export default {
 		data() {
 			return {
-				action: 'http://localhost:1234/user/updateAvatar',
+				action: 'http://127.0.0.1:1234/user/updateAvatar',
 				// 背景颜色
 				 background: 
 				 {

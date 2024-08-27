@@ -116,7 +116,7 @@ export default {
 		// 请求帖子数据
 		
 		uni.request({
-			url:'http://localhost:1234/ccPost/getAllPosts',
+			url:'http://127.0.0.1:1234/ccPost/getAllPosts',
 			success: (res) => {
 				console.log(res)
 				this.postList=res.data.data
