@@ -152,7 +152,7 @@
 			
 							// 发起请求
 							uni.request({
-								url: 'http://localhost:8080/ccPost/publish',
+								url: 'http://localhost:1234/ccPost/publish',
 								data:this.addPost,
 								method: 'POST',
 								header: { 'Content-Type': 'application/json' },

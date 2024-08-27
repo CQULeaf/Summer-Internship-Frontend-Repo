@@ -215,7 +215,7 @@ export default {
     toggleCategory(flag) {
       this.user.flag = flag
       uni.request({
-        url: "http://localhost:8080/corner/getTopicsByFlag", // API
+        url: "http://localhost:1234/corner/getTopicsByFlag", // API
         data: this.user, // 传递信息
         method: 'GET',
         success: (res) => {
@@ -246,7 +246,7 @@ export default {
 
     async fetchTopics() {
       try {
-        const response = await fetch('http://localhost:8080/corner/topics');
+        const response = await fetch('http://localhost:1234/corner/topics');
         this.allTopics = await response.json();
         this.filteredTopics = this.allTopics; // 初始化显示所有超话
       } catch (error) {

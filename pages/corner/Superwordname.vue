@@ -51,13 +51,13 @@
 						type: 'like',
 						name: '关注',
 						url: "http://localhost:1234/corner/getTopicsByFlagAndUser",
-						api: 'http://localhost:8080/corner/superWordNameRecommend'
+						api: 'http://localhost:1234/corner/superWordNameRecommend'
 					},
 					{
 						name: '推荐',
 						type: 'recommend',
-						api: 'http://localhost:8080/corner/superWordNameRecommend',
-						url: "http://localhost:8080/corner/getTopicsByFlagAndUser",
+						api: 'http://localhost:1234/corner/superWordNameRecommend',
+						url: "http://localhost:1234/corner/getTopicsByFlagAndUser",
 					}
 				],
 				pagecurrent: 0,
@@ -106,7 +106,7 @@
 			
 			 getLike() {
 			            uni.request({
-			                url: "http://localhost:8080/corner/getTopicsByFlagAndUser",
+			                url: "http://localhost:1234/corner/getTopicsByFlagAndUser",
 			                data: { user_id: this.currentUserId, flag: '专业' }, // 发送user_id和flag
 			                method: 'GET',
 			                success: (res) => {
@@ -130,7 +130,7 @@
 			
 			        getRecommendations() {
 			            uni.request({
-			                url: "http://localhost:8080/corner/getTopicsByFlag",
+			                url: "http://localhost:1234/corner/getTopicsByFlag",
 			                data: { flag: '专业'  }, // 获取推荐的内容
 			                method: 'GET',
 			                success: (res) => {

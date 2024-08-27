@@ -13,7 +13,7 @@ export default {
   methods: {
     connectWebSocket() {
       uni.connectSocket({
-        url: 'ws://127.0.0.1:8080/endpoint-websocket',
+        url: 'ws://127.0.0.1:1234/endpoint-websocket',
         header: {
           'content-type': 'application/json',
         },
