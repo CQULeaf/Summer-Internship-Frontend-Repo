@@ -90,9 +90,9 @@
 				addComment: {
 					userId: 1,
 					content: "This is a comment.",
-					createdAt: "1997-04-21T10:08:46",
-					updatedAt: "1997-04-21T10:08:46",
-					deletedAt: "1997-04-21T10:08:46",
+					createdAt: "",
+					updatedAt: "",
+					deletedAt: "",
 					likeCount: 0,
 					postId: 2
 				},
@@ -111,8 +111,8 @@
 					success: (res) => {
 						this.addComment.userId = res.data.data.userId
 						this.addComment.content = this.messageInput
-						var now = new Date().toISOString();
-						this.addComment.createdAt = now
+						// var now = new Date().toISOString();
+						// this.addComment.createdAt = now
 						this.addComment.postId = this.comment.postId
 						console.log(this.addComment);
 						uni.request({

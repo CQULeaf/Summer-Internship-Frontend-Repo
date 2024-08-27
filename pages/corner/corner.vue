@@ -2,21 +2,6 @@
   <view class="container">
 	  <u-navbar :is-back="false" title="聚" :background="background" :customBack="backtoinfo" height="50" title-size=40 title-color=#3e3e3e>
 	  </u-navbar>
-	  
-   <view class="search-container">
-       <u-search 
-         placeholder="搜索" 
-         v-model="searchText" 
-         border-color="#dddddd"  
-         @search="search" 
-         margin="15px"
-       ></u-search>
-       <view v-if="filteredTopics.length === 0">没有找到相关的超话</view>
-       <ul>
-         <li v-for="topic in filteredTopics" :key="topic.id">{{ topic.title }}</li>
-       </ul>
-     </view>
-
     <view class="container">
       <!-- 轮播图 -->
       <view class="swiper-container">
@@ -30,6 +15,7 @@
           </swiper>
         </uni-swiper-dot>
       </view>
+	  
     </view>
 	
   <!-- 2x2排列的四个小圆形图标 -->
@@ -58,10 +44,10 @@
       
     </view>
 
-<view>
+        <view>
 		<!-- 与包裹页面所有内容的元素u-page同级，且在它的下方 -->
 		<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
-	</view>
+	   </view>
   </view>
 </template>
 
@@ -69,9 +55,7 @@
 export default {
   data() {
     return {
-      searchText: '',  // 搜索输入框的内容
-      allTopics: [],   // 存储从API获取的所有超话
-      filteredTopics: [],  // 存储过滤后的超话
+      
       background: {
         backgroundColor: '#fed6dc'
       },
@@ -215,7 +199,7 @@ export default {
     toggleCategory(flag) {
       this.user.flag = flag
       uni.request({
-        url: "http://localhost:8080/corner/getTopicsByFlag", // API
+        url: "http://localhost:1234/corner/getTopicsByFlag", // API
         data: this.user, // 传递信息
         method: 'GET',
         success: (res) => {
@@ -244,31 +228,9 @@ export default {
       })
     },
 
-    async fetchTopics() {
-      try {
-        const response = await fetch('http://localhost:8080/corner/topics');
-        this.allTopics = await response.json();
-        this.filteredTopics = this.allTopics; // 初始化显示所有超话
-      } catch (error) {
-        console.error('获取超话失败:', error);
-      }
-    },
 
-    search() {
-      if (this.searchText) {
-        this.filteredTopics = this.allTopics.filter(topic => 
-          topic.title.includes(this.searchText) 
-        );
-      } else {
-        this.filteredTopics = this.allTopics; // 如果搜索框为空，显示所有超话
-      }
-    }
-  },
-
-  mounted() {
-    this.fetchTopics(); // 组件加载时获取超话
-  }
-};
+},
+}
 </script>
 
 //轮播图
@@ -294,7 +256,7 @@ export default {
 	.swiper-container {
 	  // 设置轮播图容器的高度和边距
 	  height: 100px; /* 设置轮播图容器的高度 */
-	  margin-top: 10px; /* 设置轮播图容器距顶部的高度 */
+	  margin-top: -10rpx; /* 设置轮播图容器距顶部的高度 */
 	}
 
 	.swiper-box {
@@ -378,7 +340,7 @@ export default {
 	
 </style>
 <style>
-//四个框框
+/* 四个框框 */
 .container {
   display: flex;
   flex-direction: column;
@@ -421,9 +383,4 @@ export default {
     padding: 40px; */
 }
 
-</style>
-<style scoped>
-.search-container {
-  padding: 16px;
-}
 </style>

@@ -32,7 +32,7 @@ export default {
 	},
 	onLoad: function (option) {
 			uni.request({
-				url:"http://127.0.0.1:4523/m1/5010181-4669608-default/bulletin/bulletinCheck?id",
+				url:"http://localhost:4523/m1/5010181-4669608-default/bulletin/bulletinCheck?id",
 				data:this.bulletinList,
 				method:"GET",
 				success:(rep)=>{

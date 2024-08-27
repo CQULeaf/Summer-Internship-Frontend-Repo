@@ -71,10 +71,10 @@
 					postContent: "",
 					commentCount: 0,
 					likeCount: 0,
-					createdAt: "1973-09-28T11:03:46",
-					updatedTime: "1972-06-18T15:34:22",
-					updatedAt: "1998-04-10T00:15:49",
-					deletedAt: "1977-04-30T01:20:14",
+					createdAt: "",
+					updatedTime: "",
+					updatedAt: "",
+					deletedAt: "",
 					cover: null,
 					topicId: 13
 				}
@@ -157,15 +157,15 @@
 									this.addPost.userId=res.data.data.userId
 									this.addPost.title=this.title
 									this.addPost.postContent=this.message
-									var now=new Date().toISOString();
-									this.addPost.createdAt=now
+									// var now=new Date().toISOString();
+									// this.addPost.createdAt=now
 									this.addPost.topicld=0
 								}
 							})
 			
 							// 发起请求
 							uni.request({
-								url: 'http://localhost:8080/ccPost/publish',
+								url: 'http://localhost:1234/ccPost/publish',
 								data:this.addPost,
 								method: 'POST',
 								header: { 'Content-Type': 'application/json' },

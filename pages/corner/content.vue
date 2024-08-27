@@ -1,7 +1,13 @@
 <!-- 点击里面的帖子跳转到post -->
 <!-- 超话里面具体内容要看数据库 -->
 <template>
+	<view>
+		<u-navbar :is-back="true" title="收到的点赞" :background="background" :customBack="backtoinfo" height="55">
+		</u-navbar>
+
+	
 				<view class="wrap">
+					
 						<!-- 新增的板块，用于展示头像、标题、描述、关注数和帖子数 -->
 						<view class="topic-section">
 							<u-navbar :is-back="true" title="聚" :background="background" :customBack="backtocorner" height="55" title-size=40>
@@ -115,7 +121,7 @@
 					
 				],
 				//--------------------------------------------返回的帖子数据
-				 isLiked: false, 
+				
 			}
 		},
 		
