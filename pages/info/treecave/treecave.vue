@@ -99,15 +99,11 @@
 								icon: 'none'
 							});
 						}
-
 					}
-
-
 				})
 			}
 		},
-		mounted() {
-		}
+		mounted() {}
 	}
 </script>
 

@@ -12,21 +12,21 @@
 			<view v-if="userlist.length === 0" class="loading">还没有朋友喔...</view>
 			<view v-for="(friend, index) in userlist" :key="index" class="list-item">
 				<image class="useravatar" :src="friend.avatar" />
-				<text class="nickname">{{ friend.username }}</text>
+				<text class="nickname">{{ friend.nickname }}</text>
 			</view>
 		</view>
 		<view v-else-if="current===1" class="list">
 			<view v-if="userlist.length === 0" class="loading">还没有关注的人喔...</view>
 			<view v-for="(follow, index) in userlist" :key="index" class="list-item">
 				<image class="useravatar" :src="follow.avatar" />
-				<text class="nickname">{{ follow.username }}</text>
+				<text class="nickname">{{ follow.nickname }}</text>
 			</view>
 		</view>
 		<view v-else-if="current===2" class="list">
 			<view v-if="userlist.length === 0" class="loading">还没有粉丝喔...</view>
 			<view v-for="(fan, index) in userlist" :key="index" class="list-item">
 				<image class="useravatar" :src="fan.avatar" />
-				<text class="nickname">{{ fan.username }}</text>
+				<text class="nickname">{{ fan.nickname }}</text>
 			</view>
 		</view>
 	</view>
@@ -91,7 +91,7 @@ import { type } from 'os';
 						this.user.userId = res.data.data.userId,
 							console.log('获取到的 userId:', this.user.userId); // 打印 userId
 						uni.request({
-							url: `http://localhost:8080/user/friends?userId=${this.user.userId}`,
+							url: `http://127.0.0.1:1234/user/friends?userId=${this.user.userId}`,
 							// data: this.user.userId, 请求体
 							method: 'GET',
 							success: (res) => {
@@ -119,7 +119,7 @@ import { type } from 'os';
 						this.user.userId = res.data.data.userId,
 							console.log('获取到的 userId:', this.user.userId); // 打印 userId
 						uni.request({
-							url: `http://localhost:8080/user/followers?userId=${this.user.userId}`,
+							url: `http://127.0.0.1:1234/user/followers?userId=${this.user.userId}`,
 							// data: this.user.userId, 请求体
 							method: 'GET',
 							success: (res) => {
@@ -146,7 +146,7 @@ import { type } from 'os';
 						this.user.userId = res.data.data.userId,
 							console.log('获取到的 userId:', this.user.userId); // 打印 userId
 						uni.request({
-							url: `http://localhost:8080/user/following?userId=${this.user.userId}`,
+							url: `http://127.0.0.1:1234/user/following?userId=${this.user.userId}`,
 							// data: this.user.userId, 请求体
 							method: 'GET',
 							success: (res) => {
@@ -179,7 +179,7 @@ import { type } from 'os';
 					if (userId) { // 确保 userId 不为空  
 						userRequests.push(new Promise((resolve, reject) => {
 							uni.request({
-								url: `http://localhost:8080/user/getUserInfo?userId=${userId}`,
+								url: `http://127.0.0.1:1234/user/getUserInfo?userId=${userId}`,
 								method: 'GET',
 								success: (res) => {
 									console.log('完整的响应:', res);

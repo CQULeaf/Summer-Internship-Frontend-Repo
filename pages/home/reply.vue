@@ -1,4 +1,5 @@
 <template>
+	
 	<view class="wrap">
 		<view class="comment">
 			<view class="top">
@@ -28,7 +29,7 @@
 
 		<view class="input-container">
 			<input v-model="messageInput" placeholder="编辑你的内容..." />
-			<button @click="sendMessage">发送</button>
+			<button @click="sendMessage"  >发送</button>
 		</view>
 
 		<!-- 回复 -->
@@ -89,9 +90,9 @@
 				addComment: {
 					userId: 1,
 					content: "This is a comment.",
-					createdAt: "1997-04-21T10:08:46",
-					updatedAt: "1997-04-21T10:08:46",
-					deletedAt: "1997-04-21T10:08:46",
+					createdAt: "",
+					updatedAt: "",
+					deletedAt: "",
 					likeCount: 0,
 					postId: 2
 				},
@@ -110,8 +111,8 @@
 					success: (res) => {
 						this.addComment.userId = res.data.data.userId
 						this.addComment.content = this.messageInput
-						var now = new Date().toISOString();
-						this.addComment.createdAt = now
+						// var now = new Date().toISOString();
+						// this.addComment.createdAt = now
 						this.addComment.postId = this.comment.postId
 						console.log(this.addComment);
 						uni.request({
@@ -278,7 +279,7 @@
 		border: none;
 		border-radius: 20px;
 		height: 40px;
-		background: linear-gradient(45deg, #7e5b54, #d9ab8c);
+		background: linear-gradient(45deg, #ffc7cd, #ffd8dc);
 		color: #fff;
 		cursor: pointer;
 		margin-left: 10px;

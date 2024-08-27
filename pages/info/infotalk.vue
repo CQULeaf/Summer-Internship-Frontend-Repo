@@ -1,167 +1,307 @@
-<template>  
-	<view class="container">  
-		<u-navbar   
-			class="wrap"   
-			height=60   
-			title="聊天"   
-			title-size=40   
-			:background="background"   
-			is-back=true  
-			:customBack="gotopofile">  
-		</u-navbar>  
-		<view class="chat-box" ref="chatBox">  
-			<view class="message" v-for="(msg, index) in messages" :key="index">  
-				<strong>{{ msg.senderId }}:</strong> {{ msg.content }}  
-			</view>  
-		</view>  
-		<view class="input-container">  
-			<input v-model="messageInput" placeholder="编辑你的内容..." />  
-			<button @click="sendMessage">发送</button>  
-		</view>  
-	</view>  
-</template>  
+<template>
+	<view class="container">
+		<u-navbar class="wrap" height=60 title="" title-size=40 :background="background" is-back=true
+			:customBack="gotopofile">
+		</u-navbar>
 
-<script>  
-	export default {  
-		data() {  
-			return {  
-				background: {  
-					backgroundColor: '#001f3f',  
-					backgroundSize: 'cover',  
-					backgroundImage: 'linear-gradient(45deg, rgb(159, 219, 196),rgb(139, 219, 186),rgb(35, 187, 154))'  
-				},  
-				ws: null, // WebSocket 实例  
-				messages: [], // 存储消息  
-				messageInput: '', // 输入框绑定值  
-				currentUserId: '',  
-				receiverId: ''  
-			}  
-		},  
-		onReady() {  
-			this.initWebSocket();  
-		},  
-		methods: {  
-			initWebSocket() {  
+		<view class="chat-box" ref="chatBox">
+			<view v-for="(msg, index) in messages" :key="index">
+				<view :class="{'message-me': msg.senderId === currentUserId, 'message-other': msg.senderId !== currentUserId}">
+					<strong>{{ msg.senderId === currentUserId ? currentnickname : receivernickname }}</strong>
+				</view>
+				<image :class="{'message-myavatar': msg.senderId === currentUserId, 'message-avatar': msg.senderId !== currentUserId}" :src="msg.senderId === currentUserId ? currentavatar : receiveravatar">
+				</image>
+				<view class="message"
+					:class="{'my-message': msg.senderId === currentUserId, 'other-message': msg.senderId !== currentUserId}">
+					{{ msg.content }}
+				</view>
+			</view>
+		</view>
+		<view class="input-container">
+			<input v-model="messageInput" placeholder="编辑你的内容..." />
+			<button @click="sendMessage">发送</button>
+		</view>
+	</view>
+</template>
+
+<script>
+	import {
+		Stomp
+	} from '../../js/stomp.js'; // 引入 STOMP 客户端库
+	export default {
+		data() {
+			return {
+				background: {
+					backgroundColor: '#001f3f',
+					backgroundSize: 'cover',
+					backgroundImage: 'linear-gradient(45deg, rgb(159, 219, 196),rgb(139, 219, 186),rgb(35, 187, 154))'
+				},
+				stompClient: null, // STOMP 客户端实例
+				messages: [], // 存储消息
+				messageInput: '', // 输入框绑定值
+				currentUserId: '', // 当前用户ID
+				receiverId: '', // 接收者ID
+				currentnickname: '',
+				receivernickname: '',
+				currentavatar: '',
+				receiveravatar:'',
+				otheruser: {}
+			}
+		},
+		onReady() {
+			this.initWebSocket();
+		},
+		methods: {
+			initWebSocket() {
 				// 创建 WebSocket 连接  
-				this.ws = new WebSocket('ws://127.0.0.1:8080/endpoint-websocket');  
+				const socket = new WebSocket('ws://127.0.0.1:1234/endpoint-websocket');
+				this.stompClient = Stomp.over(socket);
 
-				// 处理 WebSocket 消息  
-				this.ws.onmessage = (event) => {  
-					let message = JSON.parse(event.data);  
-					this.messages.push(message); // 推送解析后的消息对象  
-					this.$nextTick(() => {  
-						const chatBox = this.$refs.chatBox;  
-						chatBox.scrollTop = chatBox.scrollHeight; // 滚动到底部  
-					});  
-				};  
+				this.stompClient.connect({}, frame => {
+					console.log('STOMP连接成功:', frame);
 
-				// 处理 WebSocket 错误  
-				this.ws.onerror = (error) => {  
-					console.error('WebSocket Error: ', error);  
-				};  
+					// 订阅私人消息队列
+					this.stompClient.subscribe('/user/' + this.currentUserId + '/private', message => {
+						console.log(message.body);
+						this.messages.push(JSON.parse(message.body)); // 将消息添加到消息列表
+						// 自动滚动到底部
+						this.$nextTick(() => {
+							const chatBox = this.$refs.chatBox;
+							chatBox.scrollTop = chatBox.scrollHeight;
+						});
+					});
+				}, error => {
+					console.error('STOMP连接错误:', error);
+					this.reconnectWebSocket(); // 尝试重新连接
+				});
+			},
 
-				// 处理 WebSocket 关闭  
-				this.ws.onclose = () => {  
-					console.log('WebSocket closed');  
-				};  
-			},  
-			sendMessage() {  
-				if (this.messageInput.trim() !== '') {  
-					let message = {  
-						senderId: this.currentUserId, // 发件人 ID  
-						receiverId: this.receiverId,   // 收件人 ID  
-						content: this.messageInput,     // 消息内容  
-						createdAt: new Date()           // 创建时间  
-					};  
-					this.ws.send(JSON.stringify(message)); // 发送消息  
-					this.messageInput = ''; // 清空输入框  
-				}  
-			},  
-			gotopofile() {  
-				uni.switchTab({  
-					url: "/pages/info/infopage"  
-				})  
-			}  
-		},  
-		mounted() {  
-			this.receiverId = this.$route.query.userId; // 获取 UID  
-			console.log('获取到的 userId:', this.receiverId);  
-			uni.getStorage({  
-				key: 'nowAccount',  
-				success: (res) => {  
-					this.currentUserId = res.data.data.userId; // 获取当前用户 ID  
-					console.log('获取到的当前userId:', this.currentUserId);  
-				},  
-			});  
-		}  
-	}  
-</script>  
+			sendMessage() {
+				if (this.messageInput.trim() !== '') {
+					let message = {
+						senderId: this.currentUserId, // 发件人ID
+						receiverId: this.receiverId, // 收件人ID
+						content: this.messageInput, // 消息内容
+						createdAt: new Date() // 创建时间
+					};
+					console.log('发送的消息:', message); // 打印消息内容
+					this.messages.push(message);
+					this.stompClient.send('/app/private', {}, JSON.stringify(message)); // 确保消息被序列化为 JSON 字符串
+					this.messageInput = '';
+				}
+			},
 
-<style>  
-	.container {  
-		display: flex;  
-		flex-direction: column;  
-		height: 100vh;  
-		background: linear-gradient(45deg, #42c5a4, #8fdbbc, #8adbba);  
-	}  
+			reconnectWebSocket() {
+				if (!this.stompClient.connected) {
+					console.log('尝试重新连接WebSocket');
+					this.initWebSocket(); // 再次尝试连接WebSocket
+				}
+			},
 
-	.wrap {  
-		display: flex;  
-		align-items: center;  
-		padding: 0 150rpx;  
-		border: 2px solid #2fa787;  
-		border-radius: 5px;  
-		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  
-	}  
+			gotopofile() {
+				uni.switchTab({
+					url: "/pages/info/infopage"
+				})
+			},
+			getMessage() {
+				uni.request({
+					url: `http://localhost:1234/message/historyWithUser?userId=${this.currentUserId}&targetUserId=${this.receiverId}`,
+					method: 'GET',
+					success: (res) => {
+						if (res.statusCode === 200) {
+							this.messages = res.data.data
+							console.log("获取的消息", this.messages)
+						} else {
+							reject(
+								`获取消息记录失败: ${res.statusCode}`
+							);
+						}
+					},
+					fail: (err) => {
+						reject('请求失败');
+					}
+				});
+			},
 
-	.chat-box {  
-		flex: 1;  
-		overflow-y: auto;  
-		border: 1px solid #ddd;  
-		padding: 10px;  
-		background-color: #fff;  
-		margin-bottom: 10px;  
-	}  
+			getOthernUser() {
+				uni.request({
+					url: `http://localhost:1234/user/getUserInfo?userId=${ this.receiverId}`,
+					method: 'GET',
+					success: (res) => {
+						if (res.statusCode === 200) {
+							this.otheruser = res.data.data
+							console.log("获取其他用户", this.otheruser)
+							this.receivernickname=this.otheruser.nickname
+							this.receiveravatar=this.otheruser.avatar
+						} else {
+							reject(
+								`获取消息记录失败: ${res.statusCode}`
+							);
+						}
+					},
+					fail: (err) => {
+						reject('请求失败');
+					}
+				});
+			}
+		},
 
-	.message {  
-		padding: 5px;  
-		border-bottom: 1px solid #eee;  
-	}  
+		mounted() {
+			this.receiverId = this.$route.query.userId; // 获取目标用户ID（私聊对象）
+			console.log('获取到的 userId:', this.receiverId);
+			this.getOthernUser()
+			uni.getStorage({
+				key: 'nowAccount',
+				success: (res) => {
+					this.currentUserId = res.data.data.userId; // 获取当前用户ID
+					console.log('获取到的当前userId:', this.currentUserId);
+					this.currentnickname = res.data.data.nickname;
+					this.currentavatar = res.data.data.avatar;
+					console.log('获取到的当前头像:', this.currentavatar);
+				},
+			});
+			this.getMessage();
+		}
+	}
+</script>
 
-	.input-container {  
-		display: flex;  
-		margin-left: 10px;  
-		margin-bottom: 10px;  
-	}  
+<style>
+	.container {
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+		background: linear-gradient(45deg, #6ed2b1, #73d4b3, #42c5a4);
+	}
 
-	input {  
-		flex: 1;  
-		padding: 10px;  
-		border: 1px solid #ddd;  
-		border-radius: 10px;  
-		margin-left: 10px;  
-		background: linear-gradient(45deg, #ffffff, #ffffff);  
-	}  
+	.wrap {
+		display: flex;
+		align-items: center;
+		padding: 0 150rpx;
+		border: 2px solid #2fa787;
+		border-radius: 5px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	}
 
-	button {  
-		padding: 1px 20px;  
-		border: none;  
-		border-radius: 20px;  
-		background: linear-gradient(45deg, #7e5b54, #d9ab8c);  
-		color: #fff;  
-		cursor: pointer;  
-		margin-left: 10px;  
-		font-size: 16px;  
-		transition: background 0.3s, transform 0.3s;  
-	}  
+	.message-me {
+		display: flex;
+		margin-left: 610rpx;
+		/* 居中对齐 */
+		font-size: 16px;
+		/* 字体大小 */
+		color: #333;
+		/* 字体颜色 */
+		background-color: #ffffff;
+	}
+	.message-other {
+		display: flex;
+		margin-right: 590rpx;
+		/* 居中对齐 */
+		font-size: 16px;
+		/* 字体大小 */
+		color: #333;
+		/* 字体颜色 */
+		background-color: #ffffff;
+	}
 
-	button:hover {  
-		background: linear-gradient(45deg, #3bc2a1, #95dbbf);  
-		transform: scale(1.05);  
-	}  
+	.message-myavatar {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 50%;
+		margin-top: 3px;
+		margin-right: 20px;
+		margin-left: 610rpx;
+	}
+	.message-avatar {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 50%;
+		margin-top: 3px;
+	}
 
-	button:active {  
-		background: linear-gradient(45deg, #2ebe9d, #96dbc0);  
-		transform: scale(0.95);  
-	}  
+	.chat-box {
+		flex: 1;
+		overflow-y: auto;
+		border: 1px solid #ddd;
+		padding: 10px;
+		background-color: #fff;
+		margin-bottom: 10px;
+	}
+
+	.message {
+		display: inline-block;
+		/* 使消息框根据内容自动扩展 */
+		padding: 10px;
+		/* 内边距 */
+		border-radius: 10px;
+		/* 边角圆润 */
+		/* 最大宽度，防止过宽 */
+		word-wrap: break-word;
+		/* 允许单词换行 */
+		white-space: pre-wrap;
+		/* 保留空格和换行 */
+		margin-bottom: 20px;
+		/* 消息之间的间距 */
+
+	}
+
+	.my-message {
+		max-width: 60%;
+		margin-left: auto;
+		/* 右对齐 */
+		background: linear-gradient(45deg, #cdeedf, #8adbba, #8fdbbc);
+		/* 自己的消息背景色 */
+		display: block;
+		/* 改为 block 使其占满一行 */
+
+
+	}
+
+	.other-message {
+		max-width: 60%;
+		margin-right: auto;
+		/* 左对齐 */
+		background-color: ;
+		background: linear-gradient(45deg, #f8c2c7, #f8ced1, #f8d7da);
+		/* 对方的消息背景色 */
+		display: block;
+		/* 改为 block 使其占满一行 */
+	}
+
+	.input-container {
+		display: flex;
+		margin-left: 10px;
+		margin-bottom: 10px;
+	}
+
+	input {
+		flex: 1;
+		padding: 10px;
+		border: 1px solid #ddd;
+		border-radius: 10px;
+		margin-left: 10px;
+		background: linear-gradient(45deg, #ffffff, #ffffff);
+	}
+
+	button {
+		padding: 1px 20px;
+		border: none;
+		border-radius: 20px;
+		background: linear-gradient(45deg, #8f675f, #b8857b, #d9ab8c);
+		color: #fff;
+		cursor: pointer;
+		margin-left: 10px;
+		font-size: 16px;
+		margin-right: 10px;
+		transition: background 0.3s, transform 0.3s;
+	}
+
+	button:hover {
+		background: linear-gradient(45deg, #3bc2a1, #95dbbf);
+		transform: scale(1.05);
+	}
+
+	button:active {
+		background: linear-gradient(45deg, #2ebe9d, #96dbc0);
+		transform: scale(0.95);
+	}
 </style>
