@@ -1,9 +1,17 @@
 <!-- 点击里面的帖子跳转到post -->
 <!-- 超话里面具体内容要看数据库 -->
 <template>
+	<view>
+		<u-navbar :is-back="true" title="收到的点赞" :background="background" :customBack="backtoinfo" height="55">
+		</u-navbar>
+
+	
 				<view class="wrap">
+					
 						<!-- 新增的板块，用于展示头像、标题、描述、关注数和帖子数 -->
 						<view class="topic-section">
+							<u-navbar :is-back="true" title="聚" :background="background" :customBack="backtocorner" height="55" title-size=40>
+							</u-navbar>
 							<image class="cover" :src="topic.cover"></image>
 							<view class="topic-info">
 								<text class="name">{{ topic.name }}</text>
@@ -75,7 +83,13 @@
 	export default {
 		data() {
 			return {
+				// 背景颜色
+				 background: 
+				 {
 				
+					// 背景颜色
+				 	backgroundColor:'#abecff'
+				},
 				//---------------超话的变量
 				topic: {
 							cover: "/static/demodemo.jpg",
@@ -107,16 +121,17 @@
 					
 				],
 				//--------------------------------------------返回的帖子数据
-				 isLiked: false, 
+				
 			}
 		},
+		
 		onLoad() {
 			this.addRandomData();
 			uni.getStorage({
 				key:'matchuser2',
 				success(res) {
 					uni.request({
-						url:'http://localhost:1234/ccPost/getPostsByTopicId',
+						url:'http://localhost:8080/ccPost/getPostsByTopicId',
 						data:res,
 						success(suc) {
 							this.list=suc
@@ -134,6 +149,21 @@
 			}, 1000)
 		},
 		methods: {
+			backtocorner()
+			{
+				console.log("返回到 corner");
+				uni.switchTab//如果你的目标页面是 TabBar 页面，请使用 uni.switchTab 方法来进行跳转。
+				             //TabBar 页面是指在移动应用中，通常位于底部的导航栏，用于快速切换不同的页面或功能模块。它允许用户在应用程序的多个主要视图之间进行切换，通常显示为一组图标和文本。
+				({
+					url:"/pages/corner/corner",
+					   success: () => {
+					        console.log("成功跳转到 corner");
+					    },
+					    fail: (err) => {
+					        console.error("跳转失败:", err);
+					    }
+				})
+				},
 handleClick()
 	{
 		uni.navigateTo({
@@ -158,7 +188,7 @@ handleClick()
 			        goToPost(post_id) {
 			         
 						uni.request({
-							url: "http://localhost:1234/ccPost/getPost",//api
+							url: "http://localhost:8080/ccPost/getPost",//api
 							data: post_id,//自己定义的 变量，包含api中需要传递的信息
 							method: 'GET',//方法类型
 							success: (res) => {
@@ -272,7 +302,7 @@ handleClick()
 //-------------------上方框框的位置
 .wrap {
 		padding-top: 0rpx; // 减少顶部内边距，使内容更靠近顶部
-	
+	background-color: #c7f2ff;
 	}
 	.topic-section {
 			display: flex;
@@ -280,7 +310,7 @@ handleClick()
 			background-color: #ffffff;
 			padding:50rpx;//超话框的宽度
 			margin-bottom: 10rpx; //超话和帖子之间的距离
-			
+			margin-top: 100rpx;
 		
 		}
 		
@@ -289,6 +319,7 @@ handleClick()
 			height: 100rpx;
 			border-radius: 50%;
 			margin-right: 20rpx;
+			
 		}
 		
 		.topic-info {

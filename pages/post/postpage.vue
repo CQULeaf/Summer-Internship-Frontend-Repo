@@ -32,7 +32,7 @@
 						</view>
 					</u-upload>
 					<u-button :custom-style="{marginTop: '20rpx'}" @click="upload">上传</u-button>
-					<u-button :custom-style="{marginTop: '40rpx'}" @click="clear">清空列表</u-button>
+					<!-- <u-button :custom-style="{marginTop: '40rpx'}" @click="clear">清空列表</u-button> -->
 				</view>
 			</view>
 		</view>
@@ -75,12 +75,25 @@
 					updatedTime: "",
 					updatedAt: "",
 					deletedAt: "",
-					cover: '',
+					cover: null,
 					topicId: 13
 				}
 			}
 		},
 		
+		 onLoad: function (options) {
+		  setTimeout(function () {
+		   console.log('start pulldown');
+		  }, 1000);
+		  uni.startPullDownRefresh();
+		 },
+		  onPullDownRefresh() {
+		  console.log('refresh');
+		  setTimeout(function () {
+		   uni.stopPullDownRefresh();
+		  }, 1000);
+		 },
+		 
 		onReady() {
 			// 得到整个组件对象，内部图片列表变量为"lists"
 			this.lists = this.$refs.uUpload.lists;
@@ -218,7 +231,7 @@
 .btn 
 {
     text-align: right;
-    padding: 8px;
+    padding: 20rpx;
     margin: 0 auto;
 	margin-right: 10%;
     width: 9%;
@@ -229,18 +242,19 @@
 
 .form-item
 {
-	margin-bottom: 15px;
+	margin-bottom: 25px;
 	/* 添加一个左右边距，使输入框居中 */
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 10px;
 	width: 90%; /* 设置一个固定宽度，使左右边距生效 */
+	background-color: #ffffff;
 }
 .input1
 {
   width: 100%;
-  height: 25px;
-  padding: 10px;
+  height: 40rpx;
+  padding: 20rpx;
   border: 1px solid #ccc;
   border-radius: 4px;
   /* 通过设置 margin-left 负值来向左移动输入框 */
@@ -249,8 +263,8 @@
 .input2 
 {
   width: 100%;
-  height: 150px;
-  padding: 10px;
+  height: 350rpx;
+  padding: 20rpx;
   border: 1px solid #ccc;
   border-radius: 4px;
   /* 通过设置 margin-left 负值来向左移动输入框 */

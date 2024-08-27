@@ -244,11 +244,14 @@
 </script>
 
 <style lang="scss" scoped>
-	page {
-		background-color: #f2f2f2;
-	}
-	.wrap {
-		background-color: #fedfe4;
+page {
+	background-color: #f2f2f2;
+}
+.input-container {
+	background-color: #e2ece9;
+	  display: flex;
+	  margin-left: 10px;
+	  margin-bottom: 100px;
 	}
 
 	.input-container {

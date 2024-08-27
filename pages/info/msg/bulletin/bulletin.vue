@@ -1,5 +1,7 @@
 <template>
 	<view>
+		<u-navbar :is-back="true" title="公告" :background="background" :customBack="backtoinfo" height="55" title-size=40>
+		</u-navbar>
 		<view class="bulletin" v-for="(res, index) in bulletinList" :key="res.id">
 			<view class="right">
 				<view class="content">{{ res.bulletinTitle }}</view>
@@ -20,14 +22,17 @@ export default {
 	data() {
 		return {
 			bulletinList: '',
-			background: {
-				'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
-			},
+			background:
+			 {
+			
+				// 背景颜色
+			 	backgroundColor:'#fed6dc'
+			}
 		};
 	},
 	onLoad: function (option) {
 			uni.request({
-				url:"http://127.0.0.1:4523/m1/5010181-4669608-default/bulletin/bulletinCheck?id",
+				url:"http://localhost:4523/m1/5010181-4669608-default/bulletin/bulletinCheck?id",
 				data:this.bulletinList,
 				method:"GET",
 				success:(rep)=>{

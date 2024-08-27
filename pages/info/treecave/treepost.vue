@@ -132,8 +132,8 @@
 	}
 .floating-button {  
   position: fixed;  
-  bottom: 50px; /* 距离页面底部20px */  
-  right: 25px; /* 距离页面右侧20px */  
+  bottom: 90rpx; /* 距离页面底部20px */  
+  right: 40rpx; /* 距离页面右侧20px */  
   z-index: 1000; /* 确保按钮在其他内容之上 */  
 }  
 .button-image {  

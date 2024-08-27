@@ -189,6 +189,9 @@
 				uni.request({
 					url: `http://localhost:1234/message/history?userId=${this.user.userId}`,
 					method: 'GET',
+					header:{
+						'Content-Type': 'application/json'
+					},
 					success: (res) => {
 						console.log('请求成功:', res);
 						if (res.statusCode === 200) {
@@ -280,7 +283,7 @@
 								        
 								        uni.setStorage({  
 								            key: 'usermessage',  
-								            data: this.currentItems  
+								            data: this.currentItems  //存储信息
 								        });  
 								    })  
 								    .catch(error => {  
@@ -459,7 +462,7 @@
 	}
 
 	.time {
-		font-size: 4px;
+		font-size: 10px;
 		color: #333;
 
 	}

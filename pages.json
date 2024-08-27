@@ -35,13 +35,13 @@
 		{
 			"path": "pages/info/msg/bulletin/bulletin",
 			"style": {
-				"navigationBarTitleText": "公告"
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/info/msg/bulletin/bulletinCheck",
 			"style": {
-				"navigationBarTitleText": "公告"
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -149,17 +149,17 @@
 	},
 	
 	{
-				"path" : "pages/corner/Superwordname",
+				"path" : "pages/corner/superWordName",
 				"style" : 
 				{
-					"navigationBarTitleText": ""
+					"navigationStyle" : "custom"
 				}
 	},
 	{
 					"path" : "pages/corner/content",
 					"style" : 
 					{
-						"navigationBarTitleText": "聚"
+						"navigationStyle" : "custom"
 					}
 	},
 		{

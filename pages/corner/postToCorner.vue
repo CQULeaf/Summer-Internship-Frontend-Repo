@@ -1,6 +1,6 @@
 <template>
 	<view class="help-container">
-		<u-navbar :is-back="true" title="发帖子" :background="background" :customBack="backtocorner" height="55">
+		<u-navbar :is-back="true" title="发帖子" :background="background" :customBack="backtocontent" height="55">
 			<div class="btn" @click="sendPost()">发送</div>
 		</u-navbar>
 		<view class="form-item">
@@ -42,11 +42,11 @@
 	export default {
 		data() {
 			return {
-				action: 'http://localhost:1234/user/updateAvatar',
+				action: 'http://localhost:8080/user/updateAvatar',
 				// 背景颜色
 				 background: 
 				 {
-				 	backgroundColor:'#fed6dc'
+				 	backgroundColor:'#abecff'
 				},
 				// 预置上传列表
 				fileList: [],
@@ -82,10 +82,10 @@
 		},
 		
 		methods: {
-			backtocorner()
+			backtocontent()
 			{
-				uni.switchTab({
-					url:"/pages/corner/corner"
+				uni.navigateTo({
+					url:"/pages/corner/content"
 				})
 				
 			},
@@ -212,7 +212,7 @@
     margin: 0 auto;
 	margin-right: 10%;
     width: 9%;
-    background-color: #66b1ff;
+    background-color: #509cff;
 	border-radius: 40%;
     color: #ffffff;
 	},
@@ -225,6 +225,7 @@
 	margin-right: auto;
 	margin-top: 10px;
 	width: 90%; /* 设置一个固定宽度，使左右边距生效 */
+	background-color: #fff;
 }
 .input1
 {
@@ -250,12 +251,14 @@
 	padding: 20px;
 	background-color: #fdfdfd;
    min-height: 100vh; /* 确保至少与视口高度相同 */
+   background-color: #f4fdff;
 }
 	.u-demo-wrap {
 		background-color: #fdfdfd;
 		padding: 40rpx 8rpx;
 		margin-left: -14rpx;
 		margin-right: -14rpx;
+		background-color: #f4fdff;
 	}
 	
 	.u-add-wrap {
