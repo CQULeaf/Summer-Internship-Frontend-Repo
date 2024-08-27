@@ -28,7 +28,6 @@
 		{
 			"path": "pages/me/mypage",
 			"style": {
-				"navigationBarTitleText": "我的",
 				"navigationStyle": "custom"
 			}
 		},
@@ -144,15 +143,15 @@
 				"path" : "pages/corner/corner",
 				"style" : 
 				{
-					"navigationBarTitleText": "聚"
+					"navigationStyle": "custom"
 				}
 	},
 	
 	{
-				"path" : "pages/corner/superWordName",
+				"path" : "pages/corner/Superwordname",
 				"style" : 
 				{
-					"navigationBarTitleText": "聚"
+					"navigationBarTitleText": ""
 				}
 	},
 	{
@@ -183,20 +182,6 @@
 			{
 				"navigationStyle" : "custom"
 			}},
-			{
-			"path" : "pages/me/mypost",
-			"style" : 
-			{
-				"navigationStyle" : "custom"
-			}
-		},
-		{
-			"path" : "pages/me/myliked",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
-			}
-		},
 		{
 			"path" : "pages/userPage",
 			"style" : 

@@ -1,6 +1,6 @@
 <template>
-	<view>
-		<view v-if="logined" v-model="this.user">
+	<view >
+		<view v-if="logined" v-model="this.user" >
 			<view class="u-demo-wrap">
 				<view class="u-demo-area">
 					<u-toast ref="uToast"></u-toast>
@@ -13,13 +13,13 @@
 			</view>
 
 			<u-grid :col="8" :border="false">
-				<u-grid-item  @click="gotoconcern('friends')">
+				<u-grid-item @click="gotoconcern('friends')">
 					<view class="grid-text">朋友</view>
 				</u-grid-item>
-				<u-grid-item  @click="gotoconcern('follows')">
+				<u-grid-item @click="gotoconcern('follows')">
 					<view class="grid-text">关注</view>
 				</u-grid-item>
-				<u-grid-item  @click="gotoconcern('fans')">
+				<u-grid-item @click="gotoconcern('fans')">
 					<view class="grid-text">粉丝</view>
 				</u-grid-item>
 				<u-grid-item></u-grid-item>
@@ -30,7 +30,7 @@
 					<u-icon name="setting" :size="50" @click="gotoSetting"></u-icon>
 				</u-grid-item>
 			</u-grid>
-			
+
 			<view class="u-p-t-20">
 				<view class="all-reply-top">全部帖子</view>
 				<view class="list-item" v-for="(item, index) in postList" :key="index" @click="goToPost(item)">
@@ -162,11 +162,11 @@
 		},
 		onShow() {
 			uni.getStorage({
-				key:'nowAccount',
+				key: 'nowAccount',
 				success: (ret) => {
 					//console.log(ret.data.data.userId);
 					this.user = ret.data.data
-					
+
 					//判断用户是否登录
 					this.logined = (ret.data.code == 200)
 					console.log(this.user);
@@ -174,11 +174,11 @@
 					uni.request({
 						url:"http://localhost:1234/ccPost/mypost",
 						data: {
-						    user_id: ret.data.data.userId
+							user_id: ret.data.data.userId
 						},
-						success:(res)=>{
+						success: (res) => {
 							console.log(res.data.data);
-							this.postList=res.data.data
+							this.postList = res.data.data
 							console.log(this.postList);
 						},
 						fail(res2) {
@@ -188,7 +188,7 @@
 					})
 				}
 			})
-			
+
 			const value = uni.getStorageSync('nowAccount');
 			this.user = value.data
 			this.logined = (value.code == 200)
@@ -228,11 +228,11 @@
 		methods: {
 			goToPost(item) {
 				uni.setStorage({
-					key:"postData",
-					data:item,
+					key: "postData",
+					data: item,
 					success() {
 						uni.navigateTo({
-							url:"/pages/home/reply"
+							url: "/pages/home/reply"
 						})
 					}
 				})
@@ -255,11 +255,11 @@
 					url: "/pages/me/setting/setting"
 				})
 			},
-		 gotoconcern(type) {  
-		        uni.navigateTo({  
-		            url: `/pages/me/concern?type=${type}` // 传递用户类别  
-		        });  
-		    }, 
+			gotoconcern(type) {
+				uni.navigateTo({
+					url: `/pages/me/concern?type=${type}` // 传递用户类别  
+				});
+			},
 			quit() {
 				console.log("退出"),
 					this.logined = false
@@ -290,9 +290,8 @@
 </script>
 
 <style lang="scss">
-
-	.grid {
-		background-color: #ffcbcc;
+	.container {
+		background-color: #ffc9d3;
 	}
 
 	.myavatar {
@@ -305,7 +304,7 @@
 	.grid-text {
 		font-size: 32rpx;
 		margin-top: 4rpx;
-		color: $u-type-info;
+		color: u-type-info;
 	}
 
 	page {
@@ -316,13 +315,19 @@
 		width: 54px;
 		height: 44px;
 
-		&:active {
+    :active {
 			background-color: #ededed;
 		}
 	}
 
 	.user-box {
 		background-color: #fff;
+	}
+
+	.u-demo-wrap {
+		background-color: #ffd2d9;
+		padding: 5px;
+		
 	}
 
 	.u-avatar-demo {
@@ -332,10 +337,11 @@
 	}
 
 	.u-avatar-wrap {
-		margin-top: 80rpx;
+		padding: 5px;
 		overflow: hidden;
 		margin-bottom: 80rpx;
 		text-align: center;
+		margin-top: 40px;
 	}
 
 	.list-item {
@@ -343,13 +349,14 @@
 		align-items: center;
 		padding: 25px;
 		border-bottom: 1px solid #f0dddf;
+		background-color: #ffeff2;
 	}
 
 	.item-title {
 		font-size: 13px;
 		color: #333;
 	}
-	
+
 	.all-reply-top {
 		margin-left: 20rpx;
 		padding-left: 20rpx;

@@ -4,7 +4,7 @@
 			
 		</u-navbar>
 		<view class="u-tabs-box">
-			<u-tabs-swiper activeColor="#f2b2c3" ref="tabs" :list="homelist" :current="current" @change="change" :is-scroll="true" swiperWidth="900" height=90></u-tabs-swiper>
+			<u-tabs-swiper activeColor="#f2b2c3" ref="tabs" :list="homelist" :current="current" @change="change" :is-scroll="false" swiperWidth="900" height=90></u-tabs-swiper>
 		</view>
 		<view class="=search">
 			<u-search placeholder="请输入标题关键字" v-model="keyword" @search="search" @custom="search" height=80 shape=round bg-color=#ededed input-align=center margin=10px></u-search>
@@ -203,8 +203,9 @@ export default {
 		
 		// tab栏切换
 		change(index) {
-			this.swiperCurrent = index;
-		},
+		        this.current = index;  // 更新当前索引
+		        this.swiperCurrent = index;  // 更新swiper的索引
+		    },
 		transition({ detail: { dx } }) {
 			this.$refs.tabs.setDx(dx);
 		},

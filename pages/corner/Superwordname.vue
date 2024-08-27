@@ -3,19 +3,21 @@
 		<view>
 			<view class="slot-wrap">
 				<u-tabs-swiper ref="uTabs" :list="pagelist" :current="pagecurrent" @change="tabsChange"
-					:is-scroll="false" :bold="false" bg-color="#ffc7cb" active-color="#000000"></u-tabs-swiper>
+					:is-scroll="false" :bold="false" bg-color="#ffc7cb" height=120 active-color="#000000"></u-tabs-swiper>
 			</view>
 			<swiper class="swiper" :current="swiperCurrent">
 				<swiper-item v-for="(tab, tabindex) in pagelist" :key="tabindex">
 					<scroll-view class="scroll-view" scroll-y>
 						<view class="list">
+							
 							<view v-if="pagelist[pagecurrent].type === 'recommend'">
-								<view class="list-item" v-for="(item, index) in currentItems" :key="index" @click="goToContent(item.topic_id)">
+								<view class="list-item" v-for="(item, index) in list" :key="index" @click="goToContent(item.topic_id)">
 									<!-- 这里可以显示item的相关属性 -->
-									<view>{{ item.cover }}</view>
-									<view>{{ item.description }}</view>
+									<text class="item-title">{{item.name}}</text>
+									
 								</view>
 							</view>
+							
 							<view v-if="pagelist[pagecurrent].type === 'like'">
 								<view class="list-item" v-for="(item, index) in currentItems" :key="index" @click="goToContent(item.topic_id)">
 									<!-- 这里可以显示item的相关属性 -->
@@ -35,26 +37,34 @@
 	export default {
 		data() {
 			return {
-				list: '',
+				list:[{	topicId:'',
+						name: '',
+						cover:'',
+						description:'',
+						postCount:'',
+						followerCount:'',
+						flag: '',
+					  },],
 				current: 4,
 				pagelist: [
-					{
+					{name: '关注',
 						type: 'like',
 						name: '关注',
 						url: "http://localhost:1234/corner/getTopicsByFlagAndUser",
+						api: 'http://localhost:8080/corner/superWordNameRecommend'
 					},
 					{
 						name: '推荐',
 						type: 'recommend',
-						url: "http://localhost:1234/corner/getTopicsByFlagAndUser",
+						api: 'http://localhost:8080/corner/superWordNameRecommend',
+						url: "http://localhost:8080/corner/getTopicsByFlagAndUser",
 					}
 				],
 				pagecurrent: 0,
 				swiperCurrent: 0,
-				matchuser2: {
-					name: '', cover: '', description: '', post_count: '', follower_count: ''
-				},
-				currentItems: [],
+				
+				currentItems: [{name: '', cover: '', description: '', post_count: '', follower_count: ''},
+				{name: '', cover: '', description: '', post_count: '', follower_count: ''}],
 				dataCache: {},
 				loading: false,
 				page: 1,
@@ -65,39 +75,46 @@
 				postList: [{
 					title: ''
 				}],
-				currentUserId:''
+				currentUserId:'',
+				
+				dataofgetTopicsByFlagAndUser:{
+					flag:'',
+					userId:''
+				}
 			};
 		},
 		onLoad() {
-			this.getTopic();
+			
 		},
-		onShow() { },
+		onShow() {
+			this.getTopic();
+			 this.getLike();
+			 this.getRecommendations();
+			 console.log(this.list)
+		},
 
 		methods: {
 			getTopic() {
 				uni.getStorage({
 					key: 'matchuser1',
 					success: (res) => {
-						if (typeof res.data === 'string') {
-							this.list = JSON.parse(res.data);
-						} else {
-							this.list = res.data;
-						}
+						console.log(res)
+						this.list = res.data;
 					},
-					fail: () => {
-						// 如果没有缓存数据，您可以在这里处理，比如设置默认值或提示用户
-					}
 				});
 			},
 			
-			 getLike(user_id,flag) {
+			 getLike() {
 			            uni.request({
-			                url: "http://localhost:1234/corner/getTopicsByFlagAndUser",
-			                data: { user_id: this.user_id, flag: 'l' }, // 发送user_id和flag
+			                url: "http://localhost:8080/corner/getTopicsByFlagAndUser",
+			                data: { user_id: this.currentUserId, flag: '专业' }, // 发送user_id和flag
 			                method: 'GET',
 			                success: (res) => {
 			                    if (res.statusCode == 200) {
-			                        this.currentItems = res.data.data; // 用实际数据格式替换
+			                        this.currentItems = res.data.data;
+									console.log('噫，好了，我中了');
+									console.log( this.currentItems);
+									// 用实际数据格式替换
 			                    } else {
 			                        uni.showToast({
 			                            title: '获取数据失败',
@@ -111,13 +128,14 @@
 			            });
 			        },
 			
-			        getRecommendations(flag) {
+			        getRecommendations() {
 			            uni.request({
-			                url: "http://localhost:1234/corner/getTopicsByFlag",
-			                data: { user_id: this.user_id }, // 获取推荐的内容
+			                url: "http://localhost:8080/corner/getTopicsByFlag",
+			                data: { flag: '专业'  }, // 获取推荐的内容
 			                method: 'GET',
 			                success: (res) => {
 			                    if (res.statusCode == 200) {
+									console.log('噫，好了，我中了');
 			                        this.currentItems = res.data.data; // 用实际数据格式替换
 			                    } else {
 			                        uni.showToast({
@@ -181,7 +199,7 @@
 						key: 'nowAccount',  
 						success: (res) => {  
 							this.currentUserId = res.data.data.userId; // 获取当前用户 ID  
-							console.log('获取到的当前userId:', this.currentUserId);  
+							//console.log('获取到的当前userId:', this.currentUserId);  
 						},  
 					});  
 				}  

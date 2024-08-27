@@ -12,21 +12,21 @@
 			<view v-if="userlist.length === 0" class="loading">还没有朋友喔...</view>
 			<view v-for="(friend, index) in userlist" :key="index" class="list-item">
 				<image class="useravatar" :src="friend.avatar" />
-				<text class="nickname">{{ friend.username }}</text>
+				<text class="nickname">{{ friend.nickname }}</text>
 			</view>
 		</view>
 		<view v-else-if="current===1" class="list">
 			<view v-if="userlist.length === 0" class="loading">还没有关注的人喔...</view>
 			<view v-for="(follow, index) in userlist" :key="index" class="list-item">
 				<image class="useravatar" :src="follow.avatar" />
-				<text class="nickname">{{ follow.username }}</text>
+				<text class="nickname">{{ follow.nickname }}</text>
 			</view>
 		</view>
 		<view v-else-if="current===2" class="list">
 			<view v-if="userlist.length === 0" class="loading">还没有粉丝喔...</view>
 			<view v-for="(fan, index) in userlist" :key="index" class="list-item">
 				<image class="useravatar" :src="fan.avatar" />
-				<text class="nickname">{{ fan.username }}</text>
+				<text class="nickname">{{ fan.nickname }}</text>
 			</view>
 		</view>
 	</view>
