@@ -39,7 +39,7 @@
 						</view>
 					</template>
 					
-					<!-- 右边 --><!-- 先不改形成对照，不太确定怎么改呢 -->
+					<!-- 右边 -->
 					<template v-slot:right="{rightList}">
 						<view class="demo-warter" v-for="(item, index) in rightList" :key="index" @click="goToPost(item.post_id)">
 							<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index"></u-lazy-load>
@@ -60,8 +60,13 @@
 					</template>
 				</u-waterfall>
 				<u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="addRandomData"></u-loadmore>
+				<button @click="handleClick" class="floating-button">
+				    <view  class="hoverbutton" ><image class="button-image" src="/static/post.png" ></image></view>
+				</button>
 			</view>
+			
 	</view>
+	
 </template>
 
 
@@ -129,7 +134,12 @@
 			}, 1000)
 		},
 		methods: {
-
+handleClick()
+	{
+		uni.navigateTo({
+			url:"/pages/corner/postToCorner"
+		})
+	},
 			addRandomData() {
 				for(let i = 0; i < 10; i++) {
 					let index = this.$u.random(0, this.list.length - 1);
@@ -196,6 +206,34 @@
 //------------------------------------
 
 <style lang="scss" scoped>
+	
+	
+	.floating-button {
+	  position: fixed;
+	  bottom: 10px; /* 距离页面底部10px */
+	  right: 5px; /* 距离页面右侧5px */
+	  z-index: 1000; /* 确保按钮在其他内容之上 */
+	  border-radius: 50%;
+	  display: flex; /* 使用flex布局 */
+	  justify-content: center; /* 水平居中 */
+	  align-items: center; /* 垂直居中 */
+	  width: 80px; /* 按钮的宽度 */
+	  height: 80px; /* 按钮的高度 */
+	  background-color: #ffffff;
+	  border-bottom: 1px solid #000;
+	  border-top: 1px solid  #7dc5eb;
+	 
+	}
+
+	.button-image {  
+	  width: 60px;  
+	  height: 60px;  
+	  margin-left: 6%;
+	  margin-bottom: 2%;
+	  margin-top: 20%;
+	  /* 如果你不想图片被拉伸，可以使用aspectFit等mode值 */ 
+	  padding: 10px;
+	}  
 	//--------------------瀑布流
 	.demo-warter {
 		border-radius: 8px;
