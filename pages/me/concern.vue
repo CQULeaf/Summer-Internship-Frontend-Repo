@@ -91,7 +91,7 @@ import { type } from 'os';
 						this.user.userId = res.data.data.userId,
 							console.log('获取到的 userId:', this.user.userId); // 打印 userId
 						uni.request({
-							url: `http://localhost:1234/user/friends?userId=${this.user.userId}`,
+							url: `http://localhost:8080/user/friends?userId=${this.user.userId}`,
 							// data: this.user.userId, 请求体
 							method: 'GET',
 							success: (res) => {
@@ -119,7 +119,7 @@ import { type } from 'os';
 						this.user.userId = res.data.data.userId,
 							console.log('获取到的 userId:', this.user.userId); // 打印 userId
 						uni.request({
-							url: `http://localhost:1234/user/followers?userId=${this.user.userId}`,
+							url: `http://localhost:8080/user/followers?userId=${this.user.userId}`,
 							// data: this.user.userId, 请求体
 							method: 'GET',
 							success: (res) => {
@@ -146,7 +146,7 @@ import { type } from 'os';
 						this.user.userId = res.data.data.userId,
 							console.log('获取到的 userId:', this.user.userId); // 打印 userId
 						uni.request({
-							url: `http://localhost:1234/user/following?userId=${this.user.userId}`,
+							url: `http://localhost:8080/user/following?userId=${this.user.userId}`,
 							// data: this.user.userId, 请求体
 							method: 'GET',
 							success: (res) => {
@@ -179,7 +179,7 @@ import { type } from 'os';
 					if (userId) { // 确保 userId 不为空  
 						userRequests.push(new Promise((resolve, reject) => {
 							uni.request({
-								url: `http://localhost:1234/user/getUserInfo?userId=${userId}`,
+								url: `http://localhost:8080/user/getUserInfo?userId=${userId}`,
 								method: 'GET',
 								success: (res) => {
 									console.log('完整的响应:', res);

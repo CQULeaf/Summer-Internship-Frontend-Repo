@@ -4,7 +4,8 @@
 			<div class="btn" @click="sent">投递</div>
 		</u-navbar>
 		<view class="form-item">
-		  <textarea class="input" v-model="message" placeholder="在这里,没有人了解你的过去,没有你抒发不了的烦恼,所以请尽情释放自己吧 (/≧▽≦)/"></textarea>
+			<textarea class="input1" v-model="message" placeholder="标题"></textarea>
+		  <textarea class="input2" v-model="message" placeholder="在这里,没有人了解你的过去,没有你抒发不了的烦恼,所以请尽情释放自己吧 (/≧▽≦)/"></textarea>
 		</view>
 		<view class="u-demo">
 			<view class="u-demo-wrap">
@@ -26,8 +27,6 @@
 							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
 						</view>
 					</u-upload>
-					<u-button :custom-style="{marginTop: '20rpx'}" @click="upload" class="btnstyle">上传</u-button>
-					<u-button :custom-style="{marginTop: '40rpx'}" @click="clear" class="btnstyle">清空列表</u-button>
 					<!-- <u-button :custom-style="{marginTop: '40rpx'}" @click="reUpload">重新上传</u-button> -->
 				</view>
 			</view>
@@ -163,7 +162,7 @@
 .btn 
 {
     text-align: right;
-    padding: 8px;
+    padding: 20rpx;
     margin: 0 auto;
 	margin-right: 10%;
     width: 9%;
@@ -177,13 +176,25 @@
 	/* 添加一个左右边距，使输入框居中 */
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 10px;
+	margin-top: 30rpx;
 	width: 90%; /* 设置一个固定宽度，使左右边距生效 */
 }
-.input 
+.input1
 {
   width: 100%;
-  height: 150px;
+  height: 50rpx;
+  padding: 20rpx;
+  border: 1px solid #ccc;//框框
+  border-radius: 4px;
+  /* 通过设置 margin-left 负值来向左移动输入框 */
+  margin-left: -10px;
+  margin-bottom: 50rpx;
+  background-color: #f8fdf8;
+}
+.input2
+{
+  width: 100%;
+  height: 360rpx;
   padding: 10px;
   border: 1px solid #ccc;//框框
   border-radius: 4px;

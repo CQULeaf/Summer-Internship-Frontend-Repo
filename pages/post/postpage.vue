@@ -31,8 +31,8 @@
 							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
 						</view>
 					</u-upload>
-					<!-- <u-button :custom-style="{marginTop: '20rpx'}" @click="upload">上传</u-button>
-					<u-button :custom-style="{marginTop: '40rpx'}" @click="clear">清空列表</u-button> -->
+					<u-button :custom-style="{marginTop: '20rpx'}" @click="upload">上传</u-button>
+					<!-- <u-button :custom-style="{marginTop: '40rpx'}" @click="clear">清空列表</u-button> -->
 				</view>
 			</view>
 		</view>
@@ -44,7 +44,7 @@
 	export default {
 		data() {
 			return {
-				action: 'http://localhost:1234/user/updateAvatar?username=1',
+				action: 'http://localhost:8080/user/updateAvatar?username=1',
 				// 背景颜色
 				 background: 
 				 {
@@ -266,7 +266,7 @@
 .btn 
 {
     text-align: right;
-    padding: 8px;
+    padding: 20rpx;
     margin: 0 auto;
 	margin-right: 10%;
     width: 9%;
@@ -283,12 +283,13 @@
 	margin-right: auto;
 	margin-top: 10px;
 	width: 90%; /* 设置一个固定宽度，使左右边距生效 */
+	background-color: #ffffff;
 }
 .input1
 {
   width: 100%;
-  height: 27px;
-  padding: 10px;
+  height: 40rpx;
+  padding: 20rpx;
   border: 1px solid #ccc;
   border-radius: 4px;
   /* 通过设置 margin-left 负值来向左移动输入框 */
@@ -297,8 +298,8 @@
 .input2 
 {
   width: 100%;
-  height: 200px;
-  padding: 10px;
+  height: 350rpx;
+  padding: 20rpx;
   border: 1px solid #ccc;
   border-radius: 4px;
   /* 通过设置 margin-left 负值来向左移动输入框 */

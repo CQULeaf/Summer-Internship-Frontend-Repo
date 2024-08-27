@@ -95,7 +95,12 @@ export default {
 				likeCount:'',
 				isLike:'0',
 			}],
-			originalPostList:''
+			originalPostList:'',
+			
+			
+			 keyword: '',
+			        user: [],
+			        originalUserList: [], // 添加这行来保存原始用户列表
 		};
 	},
 	
@@ -114,14 +119,24 @@ export default {
 	
 	onShow() {
 		
-		// 请求帖子数据
 		this.keyword='',
+		// 请求帖子数据
 		uni.request({
-			url:'http://localhost:1234/ccPost/getAllPosts',
+			url:'http://localhost:8080/ccPost/getAllPosts',
 			success: (res) => {
 				console.log(res)
 				this.postList=res.data.data
 				this.originalPostList = this.postList
+			}
+		})
+		//请求用户数据
+		uni.request({
+			url:'http://localhost:8080/user/getUserByNickname',
+			data:this.user,
+			success:(res)=>{
+				console.log(res)
+				this.user=res.data.data
+				this.originalPostList=this.user
 			}
 		})
 				
@@ -169,10 +184,14 @@ export default {
 	
 	methods: {
 		 handleSearch() {  
+			 
 		             // 如果搜索关键字不为空，过滤帖子  
 		             if (this.keyword) {
 		                 const filteredPosts = this.postList.filter(post => post.title.includes(this.keyword) || post.postContent.includes(this.keyword));
 		                 this.postList = filteredPosts;  
+						 const filteredUsers = this.user.filter(user => user.username.includes(this.keyword));  
+						// 您可以选择将结果存储在一个新的变量中，或者更新当前的用户视图  
+						console.log(filteredUsers); // 显示搜索结果  
 		             } else {
 		                 // 如果搜索关键字为空，重置帖子列表为原始数据
 		                 this.postList = this.originalPostList;

@@ -51,7 +51,7 @@ export default {
 			success(res) {
 				console.log(res);
 				uni.request({
-					url:"http://localhost:1234/ccPost/mypost",
+					url:"http://localhost:8080/ccPost/mypost",
 					data:res.data.data,
 					success: (res2) => {
 						console.log(res2);
@@ -132,13 +132,49 @@ export default {
 					date: '06-25 20:40',
 					contentText: '评论了你：棒棒！',
 					url: 'https://cdn.uviewui.com/uview/template/niannian.jpg',
+				},
+				{
+				    id: 7,
+				    name: '李雷',
+				    date: '07-15 10:30',
+				    contentText: '评论了你：太厉害了！',
+				    url: 'https://cdn.uviewui.com/uview/template/HappyCat.jpg',
+				},
+				{
+				    id: 8,
+				    name: '王芳',
+				    date: '08-01 15:45',
+				    contentText: '回复：我也想变得这么厉害',
+				    url: '../../../static/avatar2.png',
+				    replyList: [
+				        {
+				            name: '陈小明',
+				            contentStr: '加油，你也可以的！'
+				        }
+				    ]
+				},
+				{
+				    id: 9,
+				    name: '赵倩',
+				    date: '08-15 09:20',
+				    contentText: '评论了你：真的佩服！',
+				    url: 'https://cdn.uviewui.com/uview/template/CuteBird.jpg',
+				},
+				{
+				    id: 10,
+				    name: '孙浩',
+				    date: '09-10 14:00',
+				    contentText: '评论了你：非常棒！',
+				    url: 'https://cdn.uviewui.com/uview/template/ExcitedDog.jpg',
 				}
-			];
+
+			]
+			;
 		},
 		gotouserpage(index)
 		{
 			uni.request({
-				url:"http://localhost:1234/user/getUserInfo",
+				url:"http://localhost:8080/user/getUserInfo",
 				data:index,
 				success: (res) => {
 					uni.setStorage({
