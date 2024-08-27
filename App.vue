@@ -13,12 +13,12 @@ export default {
   methods: {
     connectWebSocket() {
       uni.connectSocket({
-        url: 'ws://127.0.0.1:8080/endpoint-websocket',
+        url: 'ws://127.0.0.1:1234/endpoint-websocket',
         header: {
           'content-type': 'application/json',
         },
         success: () => {
-          console.log('WebSocket连接成功');
+//          console.log('WebSocket连接成功');
         },
         fail: (err) => {
           console.error('WebSocket连接失败', err);
@@ -33,7 +33,7 @@ export default {
 
       // 监听 WebSocket 错误事件
       uni.onSocketError((err) => {
-        console.error('WebSocket 错误', err);
+        //console.error('WebSocket 错误', err);
         this.socketOpen = false;
         this.reconnectWebSocket();  // 尝试重新连接
       });
@@ -54,7 +54,7 @@ export default {
     // 重新连接WebSocket
     reconnectWebSocket() {
       if (!this.socketOpen) {
-        console.log('尝试重新连接WebSocket');
+        //console.log('尝试重新连接WebSocket');
         this.connectWebSocket();  // 再次尝试连接WebSocket
       }
     },

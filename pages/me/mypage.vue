@@ -34,7 +34,9 @@
 			<view class="u-p-t-20">
 				<view class="all-reply-top">全部帖子</view>
 				<view class="list-item" v-for="(item, index) in postList" :key="index" @click="goToPost(item)">
-					<text class="item-title">{{item.title}}</text>
+					<view>
+						<text class="item-title">{{item.title}}</text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -84,20 +86,7 @@
 				logined: true,
 				list: '',
 				current: 4,
-				pagelist: [
-					// 标签数据
-					{
-						name: '帖子',
-						type: 'post',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/ccPost/mypost'
-					},
-					{
-						name: '点赞',
-						type: 'liked',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/follow/getFollowedPosts'
-					},
-				],
-				pagecurrent: 0, //变量名：变量值
+			
 				swiperCurrent: 0,
 				currentItems: [], // 当前用户列表数据
 				dataCache: {},
@@ -277,19 +266,16 @@
 					}
 				})
 			},
-			tabsChange(index) {
-				this.swiperCurrent = index;
-				this.pagecurrent = index;
-				this.page = 1; // 重置页码
-				this.hasMore = true; // 重新设置有更多数据标志
-				this.currentItems = []; // 清空当前用户列表
-				this.loading = true; // 开始加载
-			},
 		},
 	};
 </script>
 
 <style lang="scss">
+	.comment {
+		padding: 30rpx;
+		font-size: 32rpx;
+		background-color: #ffffff;
+	}
 	.container {
 		background-color: #ffc9d3;
 	}

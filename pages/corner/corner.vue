@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-	  <u-navbar :is-back="false" title="聚" :background="background" :customBack="backtoinfo" height="50" title-size=40 title-color=#3e3e3e>
+	  <u-navbar :is-back="false" title="聚" :background="background" height="50" title-size=40 title-color=#3e3e3e>
 	  </u-navbar>
 	  
    <view class="search-container">
@@ -110,43 +110,7 @@ export default {
   },
 
 	//------------------------------------------根据flag跳转以及获取想要信息
-	       toggleCategory(flag) {
-				uni.request({
-					url: "http://localhost:1234/corner/getTopicsByFlag",//api
-					data: this.user,//自己定义的 变量，包含api中需要传递的信息
-					method: 'GET',//方法类型
-					success: (res) => {
-						console.log(res);
-						if (res.statusCode == 200) {
-							this.matchuser1 = res.data.data; // 假设 API 返回的数据格式包含用户信息
-							//获取想要的信息
-							console.log(res.data);//打印
-							uni.setStorage({//缓存
-								key: 'matchuser1',//就是之前定义的变量
-								data: this.matchuser1,
-								success: function() {
-									console.log('噫，好了，我中了');//成功后打印这句话
-									uni.navigateTo({
-									    url: '/pages/corner/superWordName',
-									})
-								}
-							});
-						} else {
-							uni.showToast({
-								title: '获取数据失败',
-								icon: 'none'
-							});
-						}
-					},
-					fail:()=>{
-						console.log(1111)
-					}
-				})
-				
-	        },
-			//------------------------------------------跳转
-	//---------------------------------------------
-	//重点！！！之后要和后端连接
+	      
   onLoad() {
     this.list = [
       {
@@ -192,61 +156,52 @@ export default {
   },
 
   methods: {
+	toggleCategory(flag) {
+	  	uni.request({
+	  		url: "http://localhost:1234/corner/getTopicsByFlag",//api
+	  		data: {
+				flag:flag
+			},//自己定义的 变量，包含api中需要传递的信息
+	  		method: 'GET',//方法类型
+	  		success: (res) => {
+	  			console.log(res);
+	  			if (res.data.code == 200) {
+	  				this.matchuser1 = res.data.data; // 假设 API 返回的数据格式包含用户信息
+	  				//获取想要的信息
+	  				console.log(this.matchuser1);//打印
+	  				uni.setStorage({//缓存
+	  					key: 'matchuser1',//就是之前定义的变量
+	  					data: this.matchuser1,
+	  					success:(mat) => {
+	  						console.log(mat);//成功后打印这句话
+	  						uni.navigateTo({
+	  						    url: '/pages/corner/Superwordname',
+	  						})
+	  					}
+	  				});
+	  			} else {
+	  				uni.showToast({
+	  					title: '获取数据失败',
+	  					icon: 'none'
+	  				});
+	  			}
+	  		},
+	  		fail:()=>{
+	  			console.log(1111)
+	  		}
+	  	})
+	},
+	  
     change(e) {
       this.current = e.detail.current
-    },
-    selectStyle(index) {
-      this.dotsStyles = this.dotStyle[index]
-      this.styleIndex = index
-    },
-    selectMode(mode, index) {
-      this.mode = mode
-      this.modeIndex = index
-      this.styleIndex = -1
-      this.dotsStyles = this.dotStyle[0]
     },
     clickItem(e) {
       this.swiperDotIndex = e
     },
-    onBanner(index) {
-      console.log(22222, index);
-    },
-
-    toggleCategory(flag) {
-      this.user.flag = flag
-      uni.request({
-        url: "http://localhost:8080/corner/getTopicsByFlag", // API
-        data: this.user, // 传递信息
-        method: 'GET',
-        success: (res) => {
-          console.log(res);
-          if (res.statusCode == 200) {
-            this.matchuser1 = res.data.data; 
-            uni.setStorage({
-              key: 'matchuser1',
-              data: this.matchuser1,
-              success: function() {
-                uni.navigateTo({
-                  url: '/pages/corner/superWordName',
-                })
-              }
-            });
-          } else {
-            uni.showToast({
-              title: '获取数据失败',
-              icon: 'none'
-            });
-          }
-        },
-        fail: () => {
-          console.log(1111)
-        }
-      })
-    },
 
     async fetchTopics() {
       try {
-        const response = await fetch('http://localhost:8080/corner/topics');
+        const response = await fetch('http://localhost:1234/corner/topics');
         this.allTopics = await response.json();
         this.filteredTopics = this.allTopics; // 初始化显示所有超话
       } catch (error) {
@@ -303,9 +258,7 @@ export default {
 	
 
 	.swiper-item {
-		/* #ifndef APP-NVUE */
 		display: flex;
-		/* #endif */
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;

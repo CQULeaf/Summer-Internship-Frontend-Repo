@@ -22,7 +22,8 @@
 			"path" : "pages/home/reply",
 			"style" : 
 			{
-				"navigationBarTitleText" : "评论"
+				"navigationBarTitleText" : "评论",
+				"enablePullDownRefresh" : true
 			}
 		},
 		{

@@ -8,22 +8,21 @@
 			<swiper class="swiper" :current="swiperCurrent">
 				<swiper-item v-for="(tab, tabindex) in pagelist" :key="tabindex">
 					<scroll-view class="scroll-view" scroll-y>
-						<view class="list">
-							
-							<view v-if="pagelist[pagecurrent].type === 'recommend'">
+						<!-- 推荐 -->
+						<view v-if="pagelist[pagecurrent].type === 'recommend'">111
+							<!-- <view class="list">
 								<view class="list-item" v-for="(item, index) in list" :key="index" @click="goToContent(item.topic_id)">
-									<!-- 这里可以显示item的相关属性 -->
 									<text class="item-title">{{item.name}}</text>
-									
 								</view>
-							</view>
-							
-							<view v-if="pagelist[pagecurrent].type === 'like'">
-								<view class="list-item" v-for="(item, index) in currentItems" :key="index" @click="goToContent(item.topic_id)">
-									<!-- 这里可以显示item的相关属性 -->
-									<view>{{ item.cover }}</view>
-									<view>{{ item.description }}</view>
+								<u-divider>还没有关注任何话题</u-divider>
+							</view> -->
+							 
+							 <!-- 关注 -->
+							<view v-if="pagelist[pagecurrent].type === 'like'">1111
+								<!-- <view class="list-item" v-for="(item, index) in currentItems" :key="index" @click="goToContent(item.topic_id)">
+									<text class="item-title">{{item.name}}</text>
 								</view>
+								<u-divider>还没有关注任何话题</u-divider> -->
 							</view>
 						</view>
 					</scroll-view>
@@ -49,22 +48,24 @@
 				pagelist: [
 					{name: '关注',
 						type: 'like',
-						name: '关注',
-						url: "http://localhost:1234/corner/getTopicsByFlagAndUser",
-						api: 'http://localhost:8080/corner/superWordNameRecommend'
 					},
 					{
 						name: '推荐',
 						type: 'recommend',
-						api: 'http://localhost:8080/corner/superWordNameRecommend',
-						url: "http://localhost:8080/corner/getTopicsByFlagAndUser",
 					}
 				],
 				pagecurrent: 0,
 				swiperCurrent: 0,
 				
-				currentItems: [{name: '', cover: '', description: '', post_count: '', follower_count: ''},
-				{name: '', cover: '', description: '', post_count: '', follower_count: ''}],
+				currentItems:[{	topicId:'',
+						name: '',
+						cover:'',
+						description:'',
+						postCount:'',
+						followerCount:'',
+						flag: '',
+					  },],
+				
 				dataCache: {},
 				loading: false,
 				page: 1,
@@ -80,6 +81,11 @@
 				dataofgetTopicsByFlagAndUser:{
 					flag:'',
 					userId:''
+				},
+				
+				Update:{
+					userId:'',
+					flag:''
 				}
 			};
 		},
@@ -87,10 +93,16 @@
 			
 		},
 		onShow() {
+			uni.getStorage({
+				key: 'nowAccount',  
+				success: (res) => {  
+					this.currentUserId = res.data.data.userId; // 获取当前用户 ID  
+					console.log('获取到的当前userId:', this.currentUserId);  
+				},
+			});
 			this.getTopic();
-			 this.getLike();
-			 this.getRecommendations();
-			 console.log(this.list)
+			this.getLike();
+			console.log(this.list)
 		},
 
 		methods: {
@@ -98,57 +110,34 @@
 				uni.getStorage({
 					key: 'matchuser1',
 					success: (res) => {
-						console.log(res)
 						this.list = res.data;
 					},
 				});
 			},
 			
-			 getLike() {
-			            uni.request({
-			                url: "http://localhost:8080/corner/getTopicsByFlagAndUser",
-			                data: { user_id: this.currentUserId, flag: '专业' }, // 发送user_id和flag
-			                method: 'GET',
-			                success: (res) => {
-			                    if (res.statusCode == 200) {
-			                        this.currentItems = res.data.data;
-									console.log('噫，好了，我中了');
-									console.log( this.currentItems);
-									// 用实际数据格式替换
-			                    } else {
-			                        uni.showToast({
-			                            title: '获取数据失败',
-			                            icon: 'none'
-			                        });
-			                    }
-			                },
-			                fail: () => {
-			                    console.log('请求失败');
-			                }
-			            });
+			getLike() {
+			    uni.request({
+			        url: "http://localhost:1234/corner/getTopicsByFlagAndUser",
+			        data: { userId: this.currentUserId, flag: '专业' }, // 发送user_id和flag
+			        method: 'GET',
+			        success: (res) => {
+			            if (res.statusCode == 200) {
+			                this.currentItems = res.data.data;
+							console.log(res);
+							console.log(this.currentItems);
+							// 用实际数据格式替换
+			            } else {
+			                uni.showToast({
+			                    title: '获取数据失败',
+			                    icon: 'none'
+			                });
+			            }
 			        },
-			
-			        getRecommendations() {
-			            uni.request({
-			                url: "http://localhost:8080/corner/getTopicsByFlag",
-			                data: { flag: '专业'  }, // 获取推荐的内容
-			                method: 'GET',
-			                success: (res) => {
-			                    if (res.statusCode == 200) {
-									console.log('噫，好了，我中了');
-			                        this.currentItems = res.data.data; // 用实际数据格式替换
-			                    } else {
-			                        uni.showToast({
-			                            title: '获取推荐内容失败',
-			                            icon: 'none'
-			                        });
-			                    }
-			                },
-			                fail: () => {
-			                    console.log('请求失败');
-			                }
-			            });
-			        },
+			        fail: () => {
+			            console.log('请求失败');
+			        }
+			    });
+			},
 			goToContent(topicId) {
 				uni.request({
 					url: "http://localhost:1234/corner/superWordNameConcern",
@@ -161,6 +150,7 @@
 								key: 'matchuser2',
 								data: this.matchuser2,
 								success: () => {
+									console.log(this.list);
 									uni.navigateTo({
 										url: '/pages/corner/content',
 									});
@@ -194,15 +184,6 @@
 			            }
 			        },
 		},
-		mounted() {  
-					uni.getStorage({  
-						key: 'nowAccount',  
-						success: (res) => {  
-							this.currentUserId = res.data.data.userId; // 获取当前用户 ID  
-							//console.log('获取到的当前userId:', this.currentUserId);  
-						},  
-					});  
-				}  
 	};
 </script>
 

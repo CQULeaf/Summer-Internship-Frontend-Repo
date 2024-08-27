@@ -11,22 +11,22 @@
 		<view v-if="current === 0" class="list">
 			<view v-if="userlist.length === 0" class="loading">还没有朋友喔...</view>
 			<view v-for="(friend, index) in userlist" :key="index" class="list-item">
-				<image class="useravatar" :src="friend.avatar" />
-				<text class="nickname">{{ friend.nickname }}</text>
+					<image class="useravatar" :src="friend.avatar" @click="gotouserPage(friend)"/>
+					<text class="nickname" @click="gotouserPage(friend)">{{ friend.nickname }}</text>
 			</view>
 		</view>
 		<view v-else-if="current===1" class="list">
 			<view v-if="userlist.length === 0" class="loading">还没有关注的人喔...</view>
 			<view v-for="(follow, index) in userlist" :key="index" class="list-item">
-				<image class="useravatar" :src="follow.avatar" />
-				<text class="nickname">{{ follow.nickname }}</text>
+					<image class="useravatar" :src="follow.avatar" @click="gotouserPage(follow)"/>
+					<text class="nickname" @click="gotouserPage(follow)">{{ follow.nickname }}</text>
 			</view>
 		</view>
 		<view v-else-if="current===2" class="list">
 			<view v-if="userlist.length === 0" class="loading">还没有粉丝喔...</view>
 			<view v-for="(fan, index) in userlist" :key="index" class="list-item">
-				<image class="useravatar" :src="fan.avatar" />
-				<text class="nickname">{{ fan.nickname }}</text>
+				<image class="useravatar" :src="fan.avatar" @click="gotouserPage(fan)"/>
+				<text class="nickname" @click="gotouserPage(fan)">{{ fan.nickname }}</text>
 			</view>
 		</view>
 	</view>
@@ -69,6 +69,19 @@ import { type } from 'os';
 			};
 		},
 		methods: { //写自定义方法
+			gotouserPage(index){
+				console.log(index.userId);
+				uni.setStorage({
+					key:"userPost",
+					data:index,
+					success() {
+						uni.navigateTo({
+							url:"/pages/userPage"
+						})
+					}
+				})
+			},
+		
 			gotopofile() {
 				uni.switchTab({
 					url: '/pages/me/mypage' // 返回上一页面
@@ -89,7 +102,7 @@ import { type } from 'os';
 					key: 'nowAccount',
 					success: (res) => {
 						this.user.userId = res.data.data.userId,
-							console.log('获取到的 userId:', this.user.userId); // 打印 userId
+						console.log('获取到的 userId:', this.user.userId); // 打印 userId
 						uni.request({
 							url: `http://localhost:1234/user/friends?userId=${this.user.userId}`,
 							// data: this.user.userId, 请求体
@@ -99,7 +112,7 @@ import { type } from 'os';
 								if (res.statusCode === 200) {
 									this.friends = res.data.data
 									console.log('用户列表:', this.friends)
-									this.fetchUserInfos(this.friends);
+									this.fetchUserInfos(this.friends,0);
 								} else {
 									console.error('获取朋友列表失败:', res);
 								}
@@ -112,12 +125,14 @@ import { type } from 'os';
 				})
 
 			},
-			getfollows() {
+			
+			//获取关注我的人
+			getfans() {
 				uni.getStorage({
 					key: 'nowAccount',
 					success: (res) => {
 						this.user.userId = res.data.data.userId,
-							console.log('获取到的 userId:', this.user.userId); // 打印 userId
+						//console.log('获取到的 userId:', this.user.userId); // 打印 userId
 						uni.request({
 							url: `http://localhost:1234/user/followers?userId=${this.user.userId}`,
 							// data: this.user.userId, 请求体
@@ -127,7 +142,7 @@ import { type } from 'os';
 								if (res.statusCode === 200) {
 									this.follows = res.data.data
 									console.log('用户列表:', this.follows)
-									this.fetchUserInfos(this.follows);
+									this.fetchUserInfos(this.follows,1);
 								} else {
 									console.error('获取朋友列表失败:', res);
 								}
@@ -139,14 +154,16 @@ import { type } from 'os';
 					}
 				})
 			},
-			getfans() {
+			
+			//获取我关注的人
+			getfollows() {
 				uni.getStorage({
 					key: 'nowAccount',
 					success: (res) => {
 						this.user.userId = res.data.data.userId,
-							console.log('获取到的 userId:', this.user.userId); // 打印 userId
+						console.log('获取到的 userId:', this.user.userId,2); // 打印 userId
 						uni.request({
-							url: `http://localhost:1234/user/following?userId=${this.user.userId}`,
+							url: `http://localhost:1234/user/following?userId=${this.user.userId}&followableType=user`,
 							// data: this.user.userId, 请求体
 							method: 'GET',
 							success: (res) => {
@@ -154,7 +171,7 @@ import { type } from 'os';
 								if (res.statusCode === 200) {
 									this.fans = res.data.data
 									console.log('用户列表:', this.fans)
-									this.fetchUserInfos(this.fans);
+									this.fetchUserInfos(this.fans,2);
 								} else {
 									console.error('获取朋友列表失败:', res);
 								}
@@ -166,23 +183,31 @@ import { type } from 'os';
 					}
 				})
 			},
-			fetchUserInfos(users) { // users 朋友的信息-id  
-				console.log('获取到的 users:', users);
-				console.log('获取到的长度:', users.length);
-				const userIds = users.map(user => user.user_id); // 使用 user_id 属性  
+			fetchUserInfos(users,index) { // users 朋友的信息-id  
+				//console.log('获取到的 users:', users);
+				//console.log('获取到的长度:', users.length);
+				console.log(index);
+				var userIds=[];
+				if(index===2){
+					userIds = users.map(user => user.followableId); 
+				}else if(index===1){
+					userIds = users.map(user => user.userId); 
+				}else{
+					userIds = users.map(user => user.user_id); 
+				}
 				console.log('提取的用户ID:', userIds); // 输出提取的 userId 列表 
 
 				const userRequests = [];
 
 				userIds.forEach(userId => {
-					console.log('请求的用户ID:', userId); // 打印用户 ID  
+					//console.log('请求的用户ID:', userId); // 打印用户 ID
 					if (userId) { // 确保 userId 不为空  
 						userRequests.push(new Promise((resolve, reject) => {
 							uni.request({
 								url: `http://localhost:1234/user/getUserInfo?userId=${userId}`,
 								method: 'GET',
 								success: (res) => {
-									console.log('完整的响应:', res);
+									//console.log('完整的响应:', res);
 									if (res.statusCode === 200) {
 										if (res.data && res.data.data) {
 											console.log('返回的数据:', res.data.data);
@@ -207,6 +232,7 @@ import { type } from 'os';
 				Promise.all(userRequests)
 					.then(userInfos => {
 						this.userlist = userInfos;
+						console.log(1111);
 						console.log('当前用户列表:', this.userlist);
 					})
 					.catch(error => {

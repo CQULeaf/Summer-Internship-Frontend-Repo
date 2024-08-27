@@ -13,16 +13,13 @@
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;">
-						<view class="post" v-for="(res, index) in postList" :key="res.userId">
+						<view class="post" v-for="(res, index) in postList" :key="res.postId">
 							<view class="right">
 								<view class="content" @click="toReply(res)">{{ res.title }}</view>
 								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
 								<view v-if="res.cover">
 									<u-image width="100%" height="300rpx" :src="res.cover" @tap="preAvatar(res.cover)"></u-image>
 								</view>
-								<view class="like" :class="{ highlight: res.likeCount }">
-									<view class="num">点赞数：{{ res.likeCount }}</view>
-									</view>
 								<view class="top">
 									<view class="createdAt">{{ res.createdAt }}</view>
 								</view>
@@ -32,7 +29,7 @@
 				</swiper-item>
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;">
-						<view class="post" v-for="(res, index) in postList" :key="res.userId" @search="search" @custom="custom">
+						<view class="post" v-for="(res, index) in postList" :key="res.postId" @search="search" @custom="custom">
 							<view class="right">
 								<view class="content" @click="toReply(res)">{{ res.title }}</view>
 								<view class="u-line-2" @click="toReply(res)">{{ res.postContent }}</view>
@@ -118,7 +115,6 @@ export default {
 		uni.request({
 			url:'http://localhost:1234/ccPost/getAllPosts',
 			success: (res) => {
-				console.log(res)
 				this.postList=res.data.data
 			}
 		})
