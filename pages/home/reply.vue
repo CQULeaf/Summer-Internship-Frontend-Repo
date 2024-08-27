@@ -1,4 +1,5 @@
 <template>
+	
 	<view class="wrap">
 		<view class="comment">
 			<view class="top">
@@ -28,7 +29,7 @@
 
 		<view class="input-container">
 			<input v-model="messageInput" placeholder="编辑你的内容..." />
-			<button @click="sendMessage">发送</button>
+			<button @click="sendMessage"  >发送</button>
 		</view>
 
 		<!-- 回复 -->
@@ -278,7 +279,7 @@
 		border: none;
 		border-radius: 20px;
 		height: 40px;
-		background: linear-gradient(45deg, #7e5b54, #d9ab8c);
+		background: linear-gradient(45deg, #ffc7cd, #ffd8dc);
 		color: #fff;
 		cursor: pointer;
 		margin-left: 10px;

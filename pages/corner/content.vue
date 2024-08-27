@@ -60,8 +60,13 @@
 					</template>
 				</u-waterfall>
 				<u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="addRandomData"></u-loadmore>
+				<button @click="handleClick" class="floating-button">
+				    <view  class="hoverbutton" ><image class="button-image" src="/static/post.png" ></image></view>
+				</button>
 			</view>
+			
 	</view>
+	
 </template>
 
 
@@ -111,7 +116,7 @@
 				key:'matchuser2',
 				success(res) {
 					uni.request({
-						url:'http://localhost:8080/ccPost/getPostsByTopicId',
+						url:'http://localhost:1234/ccPost/getPostsByTopicId',
 						data:res,
 						success(suc) {
 							this.list=suc
@@ -129,7 +134,12 @@
 			}, 1000)
 		},
 		methods: {
-
+handleClick()
+	{
+		uni.navigateTo({
+			url:"/pages/corner/postToCorner"
+		})
+	},
 			addRandomData() {
 				for(let i = 0; i < 10; i++) {
 					let index = this.$u.random(0, this.list.length - 1);
@@ -148,7 +158,7 @@
 			        goToPost(post_id) {
 			         
 						uni.request({
-							url: "http://localhost:8080/ccPost/getPost",//api
+							url: "http://localhost:1234/ccPost/getPost",//api
 							data: post_id,//自己定义的 变量，包含api中需要传递的信息
 							method: 'GET',//方法类型
 							success: (res) => {
@@ -196,6 +206,34 @@
 //------------------------------------
 
 <style lang="scss" scoped>
+	
+	
+	.floating-button {
+	  position: fixed;
+	  bottom: 10px; /* 距离页面底部10px */
+	  right: 5px; /* 距离页面右侧5px */
+	  z-index: 1000; /* 确保按钮在其他内容之上 */
+	  border-radius: 50%;
+	  display: flex; /* 使用flex布局 */
+	  justify-content: center; /* 水平居中 */
+	  align-items: center; /* 垂直居中 */
+	  width: 80px; /* 按钮的宽度 */
+	  height: 80px; /* 按钮的高度 */
+	  background-color: #ffffff;
+	  border-bottom: 1px solid #000;
+	  border-top: 1px solid  #7dc5eb;
+	 
+	}
+
+	.button-image {  
+	  width: 60px;  
+	  height: 60px;  
+	  margin-left: 6%;
+	  margin-bottom: 2%;
+	  margin-top: 20%;
+	  /* 如果你不想图片被拉伸，可以使用aspectFit等mode值 */ 
+	  padding: 10px;
+	}  
 	//--------------------瀑布流
 	.demo-warter {
 		border-radius: 8px;

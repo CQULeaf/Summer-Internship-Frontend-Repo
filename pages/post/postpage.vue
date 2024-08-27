@@ -23,7 +23,9 @@
 							 :percent="item.progress"></u-line-progress>
 						</view>
 					</view>
-					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action" :auto-upload="false" :file-list="fileList"
+					
+					<!-- 图片选择 -->
+					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action" :auto-upload="false"
 					 :show-progress="showProgress" :deletable="deletable" :max-count="maxCount" @on-list-change="onListChange">
 						<view v-if="customBtn" slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
@@ -42,14 +44,12 @@
 	export default {
 		data() {
 			return {
-				action: 'http://localhost:1234/user/updateAvatar',
+				action: 'http://localhost:1234/user/updateAvatar?username=1',
 				// 背景颜色
 				 background: 
 				 {
 				 	backgroundColor:'#fed6dc'
 				},
-				// 预置上传列表
-				fileList: [],
 				message:'',
 				title:"",
 				showUploadList: true,
@@ -80,6 +80,12 @@
 				}
 			}
 		},
+		
+		onReady() {
+			// 得到整个组件对象，内部图片列表变量为"lists"
+			this.lists = this.$refs.uUpload.lists;
+		},
+		
 		onLoad() {
 			this.list = [{
 					iconPath: "/static/newhomeg.png",
@@ -199,10 +205,8 @@
 				}
 			},
 			upload() {
-				let files = [];
-				files = this.$refs.uUpload.lists;
-				console.log(files.url)
 				this.$refs.uUpload.upload();
+				console.log(this.lists)
 			},
 			deleteItem(index) {
 				this.$refs.uUpload.remove(index);
@@ -256,7 +260,7 @@
     background-color: #66b1ff;
 	border-radius: 40%;
     color: #ffffff;
-	},
+	}
 
 .form-item
 {
@@ -272,7 +276,7 @@
   width: 100%;
   height: 25px;
   padding: 10px;
-  border: 1px solid #ccc;//框框
+  border: 1px solid #ccc;
   border-radius: 4px;
   /* 通过设置 margin-left 负值来向左移动输入框 */
   margin-left: -10px;
@@ -282,11 +286,12 @@
   width: 100%;
   height: 150px;
   padding: 10px;
-  border: 1px solid #ccc;//框框
+  border: 1px solid #ccc;
   border-radius: 4px;
   /* 通过设置 margin-left 负值来向左移动输入框 */
   margin-left: -10px;
 }
+
 .help-container {
 	padding: 20px;
 	background-color: #fdfdfd;
@@ -301,11 +306,11 @@
 	
 	.u-add-wrap {
 		flex-direction: column;
-		color: $u-content-color;
+		color: u-content-color;
 		font-size: 28rpx;
 	}
 	
-	/deep/ .slot-btn {
+  .slot-btn {
 		width: 329rpx;
 		height: 140rpx;
 		display: flex;
@@ -354,7 +359,7 @@
 		top: 10rpx;
 		right: 10rpx;
 		z-index: 10;
-		background-color: $u-type-error;
+		background-color: u-type-error;
 		border-radius: 100rpx;
 		width: 44rpx;
 		height: 44rpx;

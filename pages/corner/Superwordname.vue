@@ -3,7 +3,7 @@
 		<view>
 			<view class="slot-wrap">
 				<u-tabs-swiper ref="uTabs" :list="pagelist" :current="pagecurrent" @change="tabsChange"
-					:is-scroll="false" :bold="false" bg-color="#ffc7cb" active-color="#000000"></u-tabs-swiper>
+					:is-scroll="false" :bold="false" bg-color="#ffc7cb" height=120 active-color="#000000"></u-tabs-swiper>
 			</view>
 			<swiper class="swiper" :current="swiperCurrent">
 				<swiper-item v-for="(tab, tabindex) in pagelist" :key="tabindex">
@@ -47,8 +47,10 @@
 					  },],
 				current: 4,
 				pagelist: [
-					{
+					{name: '关注',
 						type: 'like',
+						name: '关注',
+						url: "http://localhost:1234/corner/getTopicsByFlagAndUser",
 						api: 'http://localhost:8080/corner/superWordNameRecommend'
 					},
 					{
@@ -149,7 +151,7 @@
 			        },
 			goToContent(topicId) {
 				uni.request({
-					url: "http://localhost:8080/corner/superWordNameConcern",
+					url: "http://localhost:1234/corner/superWordNameConcern",
 					data: { topic_id: topicId },
 					method: 'GET',
 					success: (res) => {
