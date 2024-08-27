@@ -6,8 +6,8 @@
 		<view class="u-tabs-box">
 			<u-tabs-swiper activeColor="#f2b2c3" ref="tabs" :list="homelist" :current="current" @change="change" :is-scroll="false" swiperWidth="900" height=90></u-tabs-swiper>
 		</view>
-		<view class="=search">
-			<u-search placeholder="请输入标题关键字" v-model="keyword" @search="search" @custom="search" height=80 shape=round bg-color=#ededed input-align=center margin=10px></u-search>
+		<view class="search">
+			<u-search placeholder="请输入标题关键字" v-model="keyword" @search="handleSearch" height="80" shape="round" bg-color="#ededed" input-align="center" margin="10px" @blur="handleSearch"></u-search>
 		</view>
 		<view class="wrap">
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
@@ -64,15 +64,15 @@
 export default {
 	data() {
 		return {
+			
 			// 背景颜色
 			 background: 
 			 {
 			 	backgroundColor:'#fed6dc'
 			},
 			list:'',
-			current: 1,
-			keyword:'',
 			current: 0,
+			keyword:'',
 			swiperCurrent: 0,
 			dx: 0,
 			homelist: [
@@ -94,19 +94,21 @@ export default {
 				cover:'',
 				likeCount:'',
 				isLike:'0',
-			}]
+			}],
+			originalPostList:''
 		};
 	},
 	
 	onShow() {
 		
 		// 请求帖子数据
-		
+		this.keyword='',
 		uni.request({
 			url:'http://localhost:8080/ccPost/getAllPosts',
 			success: (res) => {
 				console.log(res)
 				this.postList=res.data.data
+				this.originalPostList = this.postList
 			}
 		})
 				
@@ -153,6 +155,16 @@ export default {
 	},
 	
 	methods: {
+		 handleSearch() {  
+		             // 如果搜索关键字不为空，过滤帖子  
+		             if (this.keyword) {
+		                 const filteredPosts = this.postList.filter(post => post.title.includes(this.keyword) || post.postContent.includes(this.keyword));
+		                 this.postList = filteredPosts;  
+		             } else {
+		                 // 如果搜索关键字为空，重置帖子列表为原始数据
+		                 this.postList = this.originalPostList;
+		             }
+		         },
 		// 评论
 		gotoCommentpage(){
 			

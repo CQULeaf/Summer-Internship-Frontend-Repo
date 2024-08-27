@@ -29,8 +29,8 @@
 							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
 						</view>
 					</u-upload>
-					<u-button :custom-style="{marginTop: '20rpx'}" @click="upload">上传</u-button>
-					<u-button :custom-style="{marginTop: '40rpx'}" @click="clear">清空列表</u-button>
+					<!-- <u-button :custom-style="{marginTop: '20rpx'}" @click="upload">上传</u-button>
+					<u-button :custom-style="{marginTop: '40rpx'}" @click="clear">清空列表</u-button> -->
 				</view>
 			</view>
 		</view>
@@ -80,6 +80,20 @@
 				}
 			}
 		},
+		
+		 onLoad: function (options) {
+		  setTimeout(function () {
+		   console.log('start pulldown');
+		  }, 1000);
+		  uni.startPullDownRefresh();
+		 },
+		  onPullDownRefresh() {
+		  console.log('refresh');
+		  setTimeout(function () {
+		   uni.stopPullDownRefresh();
+		  }, 1000);
+		 },
+		 
 		onLoad() {
 			this.list = [{
 					iconPath: "/static/newhomeg.png",
@@ -260,7 +274,7 @@
 
 .form-item
 {
-	margin-bottom: 15px;
+	margin-bottom: 25px;
 	/* 添加一个左右边距，使输入框居中 */
 	margin-left: auto;
 	margin-right: auto;
@@ -270,7 +284,7 @@
 .input1
 {
   width: 100%;
-  height: 25px;
+  height: 27px;
   padding: 10px;
   border: 1px solid #ccc;//框框
   border-radius: 4px;
@@ -280,7 +294,7 @@
 .input2 
 {
   width: 100%;
-  height: 150px;
+  height: 200px;
   padding: 10px;
   border: 1px solid #ccc;//框框
   border-radius: 4px;

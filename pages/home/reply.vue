@@ -242,7 +242,7 @@ page {
 	background-color: #e2ece9;
 	  display: flex;
 	  margin-left: 10px;
-	  margin-bottom: 10px;
+	  margin-bottom: 100px;
 	}
 
 .comment {
