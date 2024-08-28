@@ -9,7 +9,7 @@
 			<image class="image" :src="imageSrc"></image>
 			<button v-if="isButtonVisible" class="center-button" @click="showTree()">开始相遇</button>
 			<view v-if="isImageVisible" class="useravatarborder">
-				<image class="useravatar" :src="fixedAvatarSrc" @click="goToTalk()"></image>
+				<image class="useravatar" :src="fixedAvatarSrc"></image>
 			</view>
 		</view>
 		<bottom-nav-bar class="bottom-nav-bar" :navItems="navItems" />
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+	import { Stomp } from '../../../js/stomp.js';
 	import BottomNavBar from '@/components/BottomNavBar.vue'; // 引入组件
 	export default {
 		components: {
@@ -53,11 +54,36 @@
 					userId: '' // 当前用户的 ID
 				},
 				fixedAvatarSrc: '/static/momo.jpg', // 固定头像图片路径
-				matchusAAer: {} // 用于存储匹配用户信息
+				matchuser: {
+					userId: '' // 匹配用户的 ID
+				}
 			}
 		},
 
+		onReady() {
+        this.initWebSocket(); // 在页面加载完成时，初始化WebSocket连接
+    },
+
 		methods: {
+			initWebSocket() {
+    const socket = new WebSocket('ws://127.0.0.1:8080/endpoint-websocket');
+    this.stompClient = Stomp.over(socket);
+
+    this.stompClient.connect({}, frame => {
+        console.log('STOMP连接成功:', frame);
+        // 确保连接成功后再订阅私人聊天频道
+        if (this.currentUserId) {
+            this.subscribePrivateChat();
+        } else {
+            console.error('currentUserId尚未设置');
+        }
+    }, error => {
+        console.error('STOMP连接错误:', error);
+        this.reconnectWebSocket();
+    });
+},
+
+
 			gotopofile() {
 				uni.switchTab({
 					url: "/pages/info/infopage"
@@ -70,40 +96,63 @@
 				this.isButtonVisible = false; // 隐藏按钮
 				this.fetchRandomMatch(); // 显示树时获取匹配用户
 			},
-			goToTalk() {
-				// 跳转到聊天界面，假设聊天界面的路径为 '/pages/info/treecave/treetalk'
-				uni.navigateTo({
-					url: '/pages/info/treecave/treetalk?userId=' + this.matchuser.user_id // 假设用户有一个 id 属性
-				});
-			},
 			fetchRandomMatch() {
-				uni.request({
-					url: "http://127.0.0.1:4523/m1/5010181-4669608-default/info/treetalk",
-					data: this.user,
-					method: 'GET',
-					success: (res) => {
-						console.log(res);
-						if (res.statusCode == 200) {
-							this.matchuser = res.data.data; // 假设 API 返回的数据格式包含用户信息
-							console.log(res.data);
-							uni.setStorage({
-								key: 'matchuser',
-								data: this.matchuser,
-								success: function() {
-									console.log('Match user data stored successfully.');
-								}
-							});
-						} else {
-							uni.showToast({
-								title: '获取数据失败',
-								icon: 'none'
-							});
-						}
-					}
-				})
+    if (this.stompClient && this.stompClient.connected) {
+        // 使用STOMP发送匹配请求
+        this.stompClient.send('/app/match', {}, JSON.stringify({ userId: this.currentUserId }));
+
+        // 取消已有的订阅，以防止重复订阅
+        if (this.matchSubscription) {
+            this.matchSubscription.unsubscribe();
+        }
+
+        // 订阅匹配消息
+        this.matchSubscription = this.stompClient.subscribe('/user/' + this.currentUserId + '/queue/match', message => {
+            let response = JSON.parse(message.body);
+            if (response.status === 'matched') {
+                this.matchuser = { userId: response.matchUserId };
+                console.log('匹配成功, 对方用户ID:', this.matchuser.userId);
+                this.goToTalk(); // 匹配成功后跳转到聊天界面
+            } else if (response.status === 'waiting') {
+                console.log('等待匹配...');
+                uni.showToast({
+                    title: '等待匹配...',
+                    icon: 'none'
+                });
+            } else {
+                uni.showToast({
+                    title: '匹配失败，请重试',
+                    icon: 'none'
+                });
+            }
+        });
+    } else {
+        console.error('STOMP客户端未连接');
+    }
+},
+
+
+			// 确保在跳转到聊天页面时传递正确的userId
+			goToTalk() {
+				console.log('跳转到聊天界面，传递的 userId:', this.matchuser.userId);
+				uni.navigateTo({
+					url: '/pages/info/treecave/treetalk?userId=' + this.matchuser.userId
+				});
 			}
+
+
 		},
-		mounted() {}
+		mounted() {
+			// 从本地存储中获取当前用户的ID
+			uni.getStorage({
+				key: 'nowAccount',
+				success: (res) => {
+					console.log(res);
+					this.currentUserId = res.data.data.userId;
+					console.log('当前用户ID:', this.currentUserId);
+				}
+			});
+		}
 	}
 </script>
 

@@ -15,69 +15,107 @@
 	</view>
 </template>
 
+
 <script>
-	export default {
-		data() {
-			return {
+import { Stomp } from '../../../js/stomp.js';
+export default {
+    data() {
+        return {
+            background: {
+                backgroundColor: '#001f3f',
+                backgroundSize: 'cover',
+                backgroundImage: 'linear-gradient(45deg, rgb(159, 219, 196),rgb(139, 219, 186),rgb(35, 187, 154))'
+            },
+            stompClient: null,
+            messages: [],
+            messageInput: '',
+            currentUserId: '',
+            receiverId: '', // 用于存储聊天对象的ID
+            currentnickname: '',
+            receivernickname: '',
+            currentavatar: ''
+        };
+    },
 
-				background: {
-					backgroundColor: '#001f3f',
-					backgroundSize: 'cover',
-					backgroundImage: 'linear-gradient(45deg, rgb(159, 219, 196),rgb(139, 219, 186),rgb(35, 187, 154))'
-				},
-				ws: null, // WebSocket 实例
-				messages: [], // 存储消息
-				messageInput: '', // 输入框绑定值
-			}
-		},
-		onReady() {
-			this.initWebSocket();
-		},
-		methods: {
-			initWebSocket() {
-				// 创建 WebSocket 连接
-				this.ws = new WebSocket('ws://127.0.0.1:8080/endpoint-websocket');
+    onReady() {
+        this.initWebSocket(); // 在页面加载完成时，初始化WebSocket连接
+    },
 
-				// 处理 WebSocket 消息
-				this.ws.onmessage = (event) => {
-					let message = JSON.parse(event.data);
-					this.messages.push(event.data);
-					this.$nextTick(() => {
-						// 滚动到聊天框底部
-						const chatBox = this.$refs.chatBox;
-						chatBox.scrollTop = chatBox.scrollHeight;
-					});
-				};
+    methods: {
+        initWebSocket() {
+            const socket = new WebSocket('ws://127.0.0.1:8080/endpoint-websocket');
+            this.stompClient = Stomp.over(socket);
 
-				// 处理 WebSocket 错误
-				this.ws.onerror = (error) => {
-					console.error('WebSocket Error: ', error);
-				};
+            this.stompClient.connect({}, frame => {
+                console.log('STOMP连接成功:', frame);
+                this.subscribePrivateChat(); // 连接成功后，立即订阅私人聊天频道
+            }, error => {
+                console.error('STOMP连接错误:', error);
+                this.reconnectWebSocket(); // 处理连接错误
+            });
+        },
 
-				// 处理 WebSocket 关闭
-				this.ws.onclose = () => {
-					console.log('WebSocket closed');
-				};
-			},
-			sendMessage() {
-				if (this.messageInput.trim() !== '') {
-					let message = {
-						senderId: this.currentUserId,
-						receiverId: this.receiverId,
-						content: this.messageInput,
-						createdAt: new Date()
-					};
-					this.ws.send(JSON.stringify(message));
-					this.messageInput = ''; // 清空输入框
-				}
-			},
-			gotopofile() {
-				uni.navigateTo({
-					url: "/pages/info/treecave/treecave"
-				})
-			}
-		}
-	}
+        subscribePrivateChat() {
+            // 订阅私人聊天消息
+            this.stompClient.subscribe('/user/' + this.currentUserId + '/private', message => {
+                console.log('收到消息:', message.body);
+                this.messages.push(JSON.parse(message.body));
+                this.$nextTick(() => {
+                    const chatBox = this.$refs.chatBox;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                });
+            });
+        },
+
+        sendMessage() {
+            if (this.messageInput.trim() !== '') {
+                let message = {
+                    senderId: this.currentUserId,
+                    receiverId: this.receiverId,
+                    content: this.messageInput,
+                    createdAt: new Date()
+                };
+                console.log('发送的消息:', message);
+                this.messages.push(message);
+                this.stompClient.send('/app/private', {}, JSON.stringify(message));
+                this.messageInput = ''; // 清空输入框
+            }
+        },
+
+        reconnectWebSocket() {
+            if (!this.stompClient.connected) {
+                console.log('尝试重新连接WebSocket');
+                this.initWebSocket();
+            }
+        },
+
+        gotopofile() {
+            uni.switchTab({
+                url: "/pages/info/infopage"
+            });
+        },
+    },
+
+    mounted() {
+        // 从路由参数获取聊天对象的ID
+        this.receiverId = this.$route.query.userId;
+        console.log('获取到的 userId:', this.receiverId);
+
+        // 获取当前用户信息
+        uni.getStorage({
+            key: 'nowAccount',
+            success: (res) => {
+                this.currentUserId = res.data.data.userId;
+                console.log('获取到的当前userId:', this.currentUserId);
+                this.currentnickname = res.data.data.nickname;
+                this.currentavatar = res.data.data.avatar;
+
+                // 在获取到用户信息后，初始化WebSocket连接
+                this.initWebSocket();
+            },
+        });
+    }
+}
 </script>
 
 <style>
