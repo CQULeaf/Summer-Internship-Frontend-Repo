@@ -15,9 +15,6 @@
 							<view class="topic-info">
 								<text class="name">{{ topic.name }}</text>
 								<text class="description">{{ topic.description }}</text>
-								<view class="stats">
-									<text class="stat">帖子数：{{ topic.postCount }}</text>
-								</view>
 							</view>
 						</view>
 			<!-- 新增的板块，用于展示头像、标题、描述、关注数和帖子数 -->
