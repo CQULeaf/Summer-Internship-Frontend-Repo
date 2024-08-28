@@ -3,10 +3,7 @@
 		<u-navbar :is-back="false" title="主页" :background="background" height="55" title-size=40 title-color=#262626>
 
 		</u-navbar>
-		<view class="u-tabs-box">
-			<u-tabs-swiper activeColor="#f2b2c3" ref="tabs" :list="homelist" :current="current" @change="change"
-				:is-scroll="false" swiperWidth="900" height=90></u-tabs-swiper>
-		</view>
+	
 		<view class="search">
 			<u-search placeholder="请输入标题关键字" v-model="keyword" @search="handleSearch" height="80" shape="round"
 				bg-color="#ededed" input-align="center" margin="10px" @blur="handleSearch"></u-search>
