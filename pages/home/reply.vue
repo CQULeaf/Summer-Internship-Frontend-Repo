@@ -93,31 +93,28 @@
 				messageInput: '',
 			};
 		},
-		onLoad() {
-			this.getComment();
-			setTimeout(function() {
-				console.log('start pulldown');
-			}, 1000);
-			uni.startPullDownRefresh();
-		},
-
-		onShow() {
-			this.getComment();
-			setTimeout(function() {
-				console.log('start pulldown');
-			}, 1000);
-			uni.startPullDownRefresh();
-		},
-		
-
-		onPullDownRefresh() {
-				this.getComment()
-				log('refresh');
-				setTimeout(function () {
-					uni.stopPullDownRefresh();
-				}, 1000);
-			},
-	
+			onLoad() {
+					this.getComment();
+					setTimeout(function () {
+						console.log('start pulldown');
+					}, 1000);
+					uni.startPullDownRefresh();
+				},
+				
+				onShow() {
+					this.getComment();
+					setTimeout(function () {
+						console.log('start pulldown');
+					}, 1000);
+					uni.startPullDownRefresh();
+				},
+				
+				onPullDownRefresh() {
+					this.getComment()
+					setTimeout(function () {
+						uni.stopPullDownRefresh();
+					}, 1000);
+				},
 
 		methods: {
 			// 发送信息(评论)
@@ -138,16 +135,16 @@
 							data: this.addComment,
 							method: "POST",
 							success(res) {
-
+								this.messageInput=''
 							}
 						})
 					}
 				})
-
+				this.messageInput=''
 			},
 			backtohome() {
-				uni.switchTab({
-					url: "/pages/home/homepage"
+				uni.navigateBack({
+					delta: 1
 				})
 
 			},
