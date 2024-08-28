@@ -163,7 +163,7 @@
 					iconPath: "/static/newhomeg.png",
 					selectedIconPath: "/static/newhomep.png",
 					text: '家',
-					isDot: true,
+					
 					customIcon: false,
 					pagePath: '/pages/home/homepage'
 				},
@@ -171,7 +171,7 @@
 					iconPath: "/static/happygrey.png",
 					selectedIconPath: "/static/happierp.png",
 					text: '聚',
-					isDot: true,
+					
 					customIcon: false,
 					pagePath: '/pages/corner/corner'
 				},
