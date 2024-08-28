@@ -1,33 +1,10 @@
 <template>
 	<view>
 		<view>
-			<view class="slot-wrap">
-				<u-tabs-swiper ref="uTabs" :list="pagelist" :current="pagecurrent" @change="tabsChange"
-					:is-scroll="false" :bold="false" bg-color="#ffc7cb" height=120 active-color="#000000"></u-tabs-swiper>
+			<view class="list-item" v-for="(item, index) in list" :key="index" >
+				<text class="item-title" @click="goToContent(item.topicId)">{{item.name}}</text>
 			</view>
-			<swiper class="swiper" :current="swiperCurrent">
-				<swiper-item v-for="(tab, tabindex) in pagelist" :key="tabindex">
-					<scroll-view class="scroll-view" scroll-y>
-						<!-- 推荐 -->
-						<view v-if="pagelist[pagecurrent].type === 'recommend'">111
-							<!-- <view class="list">
-								<view class="list-item" v-for="(item, index) in list" :key="index" @click="goToContent(item.topic_id)">
-									<text class="item-title">{{item.name}}</text>
-								</view>
-								<u-divider>还没有关注任何话题</u-divider>
-							</view> -->
-							 
-							 <!-- 关注 -->
-							<view v-if="pagelist[pagecurrent].type === 'like'">1111
-								<!-- <view class="list-item" v-for="(item, index) in currentItems" :key="index" @click="goToContent(item.topic_id)">
-									<text class="item-title">{{item.name}}</text>
-								</view>
-								<u-divider>还没有关注任何话题</u-divider> -->
-							</view>
-						</view>
-					</scroll-view>
-				</swiper-item>
-			</swiper>
+			<u-divider>还没有关注任何话题</u-divider>
 		</view>
 	</view>
 </template>
@@ -43,17 +20,8 @@
 						postCount:'',
 						followerCount:'',
 						flag: '',
-					  },],
+					  }],
 				current: 4,
-				pagelist: [
-					{name: '关注',
-						type: 'like',
-					},
-					{
-						name: '推荐',
-						type: 'recommend',
-					}
-				],
 				pagecurrent: 0,
 				swiperCurrent: 0,
 				
@@ -97,12 +65,11 @@
 				key: 'nowAccount',  
 				success: (res) => {  
 					this.currentUserId = res.data.data.userId; // 获取当前用户 ID  
-					console.log('获取到的当前userId:', this.currentUserId);  
+					//console.log('获取到的当前userId:', this.currentUserId);  
 				},
 			});
 			this.getTopic();
-			this.getLike();
-			console.log(this.list)
+			//console.log(this.list)
 		},
 
 		methods: {
@@ -114,43 +81,21 @@
 					},
 				});
 			},
-			
-			getLike() {
-			    uni.request({
-			        url: "http://localhost:1234/corner/getTopicsByFlagAndUser",
-			        data: { userId: this.currentUserId, flag: '专业' }, // 发送user_id和flag
-			        method: 'GET',
-			        success: (res) => {
-			            if (res.statusCode == 200) {
-			                this.currentItems = res.data.data;
-							console.log(res);
-							console.log(this.currentItems);
-							// 用实际数据格式替换
-			            } else {
-			                uni.showToast({
-			                    title: '获取数据失败',
-			                    icon: 'none'
-			                });
-			            }
-			        },
-			        fail: () => {
-			            console.log('请求失败');
-			        }
-			    });
-			},
 			goToContent(topicId) {
+				console.log(topicId)
 				uni.request({
-					url: "http://localhost:1234/corner/superWordNameConcern",
-					data: { topic_id: topicId },
+					url: "http://localhost:8080/corner/superWordNameConcern",
+					data: { topicId: topicId },
 					method: 'GET',
 					success: (res) => {
+						//console.log(res)
 						if (res.statusCode == 200) {
 							this.matchuser2 = res.data.data;
 							uni.setStorage({
 								key: 'matchuser2',
 								data: this.matchuser2,
 								success: () => {
-									console.log(this.list);
+									console.log(this.matchuser2);
 									uni.navigateTo({
 										url: '/pages/corner/content',
 									});
@@ -168,21 +113,6 @@
 					}
 				});
 			},
-
-			tabsChange(index) {
-			            this.swiperCurrent = index;
-			            this.pagecurrent = index;
-			            this.page = 1; 
-			            this.hasMore = true;
-			            this.currentItems = []; 
-			            this.loading = true; 
-			
-			            if (this.pagelist[index].type === 'like') {
-			                this.getLike(); 
-			            } else if (this.pagelist[index].type === 'recommend') {
-			                this.getRecommendations(); // 如果是推荐标签，调用推荐数据的方法
-			            }
-			        },
 		},
 	};
 </script>

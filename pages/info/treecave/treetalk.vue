@@ -36,7 +36,7 @@
 		methods: {
 			initWebSocket() {
 				// 创建 WebSocket 连接
-				this.ws = new WebSocket('ws://127.0.0.1:8080/endpoint-websocket');
+				this.ws = new WebSocket('ws://localhost:8080/endpoint-websocket');
 
 				// 处理 WebSocket 消息
 				this.ws.onmessage = (event) => {

@@ -44,7 +44,7 @@ onShow() {
         key: "nowAccount",
         success: (res) => {
             uni.request({
-                url: "http://localhost:1234/ccPost/mypost",
+                url: "http://localhost:8080/ccPost/mypost",
                 data: { user_id: res.data.data.userId },
                 success: (res2) => {
                     const requests = [];
@@ -53,14 +53,14 @@ onShow() {
                     for (const key of res2.data.data) {
                         const requestPromise = new Promise((resolve) => {
                             uni.request({
-                                url: "http://localhost:1234/comment/getReply",
+                                url: "http://localhost:8080/comment/getReply",
                                 data: { postId: key.postId },
                                 success: (fin) => {
                                     for (const key2 of fin.data.data) {
 										
 										//请求评论用户信息
 										uni.request({
-											url:"http://localhost:1234/user/getUserInfo",
+											url:"http://localhost:8080/user/getUserInfo",
 											data:{userId:key2.userId},
 											success(key3) {
 												List.push({
@@ -122,7 +122,7 @@ onShow() {
 				key:"nowAccount",
 				success(account) {
 					uni.request({
-						url:"http://localhost:1234/user/getUserInfo",
+						url:"http://localhost:8080/user/getUserInfo",
 						data:{userId:index},
 						success: (res) => {
 							console.log(account);

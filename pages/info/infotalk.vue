@@ -54,7 +54,7 @@
 		methods: {
 			initWebSocket() {
 				// 创建 WebSocket 连接  
-				const socket = new WebSocket('ws://127.0.0.1:1234/endpoint-websocket');
+				const socket = new WebSocket('ws://localhost:8080/endpoint-websocket');
 				this.stompClient = Stomp.over(socket);
 
 				this.stompClient.connect({}, frame => {
@@ -105,7 +105,7 @@
 			},
 			getMessage() {
 				uni.request({
-					url: `http://localhost:1234/message/historyWithUser?userId=${this.currentUserId}&targetUserId=${this.receiverId}`,
+					url: `http://localhost:8080/message/historyWithUser?userId=${this.currentUserId}&targetUserId=${this.receiverId}`,
 					method: 'GET',
 					success: (res) => {
 						if (res.statusCode === 200) {
@@ -125,7 +125,7 @@
 
 			getOthernUser() {
 				uni.request({
-					url: `http://localhost:1234/user/getUserInfo?userId=${ this.receiverId}`,
+					url: `http://localhost:8080/user/getUserInfo?userId=${ this.receiverId}`,
 					method: 'GET',
 					success: (res) => {
 						if (res.statusCode === 200) {

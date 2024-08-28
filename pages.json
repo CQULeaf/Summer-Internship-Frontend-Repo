@@ -2,28 +2,25 @@
 	"easycom": {
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
-	"pages": [
-		{
-			
+	"pages": [{
+
 			"path": "pages/login",
 			"style": {
 				"navigationStyle": "custom"
 			}
 		},
 		{
-			"path" : "pages/home/homepage",
-			"style" : 
-			{
+			"path": "pages/home/homepage",
+			"style": {
 				"navigationStyle": "custom"
-				
+
 			}
 		},
 		{
-			"path" : "pages/home/reply",
-			"style" : 
-			{
-				"navigationBarTitleText" : "评论",
-				"enablePullDownRefresh" : true
+			"path": "pages/home/reply",
+			"style": {
+				"navigationBarTitleText": "评论",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -93,117 +90,110 @@
 				"navigationStyle": "custom"
 			}
 		},
-	{
-		"path": "pages/info/treecave/treecave",
-		"style": {
-			"navigationStyle": "custom",
-			"navigationBarTextStyle": "white" 
-		}
-	},
-	{
-		"path": "pages/info/treecave/ai",
-		"style": {
-			"navigationStyle": "custom",
-			"navigationBarTextStyle": "white" 
-		}
-	},
-	{
-		"path": "pages/info/treecave/treepost",
-		"style": {
-			"navigationStyle": "custom",
-			"navigationBarTextStyle": "white" 
-		}
-	},
-	{
-		"path": "pages/info/treecave/treetalk",
-		"style": {
-			"navigationStyle": "custom",
-			"navigationBarTextStyle": "white" 
-		}
-	},
-	{
-		"path": "pages/info/msg/like",
-		"style": {
-			"navigationStyle": "custom"
-		}
-	},
-	{
-		"path": "pages/info/msg/comment",
-		"style": {
-			"navigationStyle": "custom"
-		}
-	},
-	{
-		"path": "pages/register",
-		"style": {
-			"navigationStyle": "custom"
-		}
-	},
-		
-	{
-				"path" : "pages/corner/corner",
-				"style" : 
-				{
-					"navigationStyle": "custom"
-				}
-	},
-	
-	{
-				"path" : "pages/corner/superWordName",
-				"style" : 
-				{
-					"navigationBarTitleText" : "",
-					"navigationBarBackgroundColor": "#ffc7cb"
-				}
-	},
-	{
-					"path" : "pages/corner/content",
-					"style" : 
-					{
-						"navigationStyle" : "custom"
-					}
-	},
 		{
-			"path" : "pages/post/postpage",
-			"style" : 
-			{
-				"navigationStyle" : "custom"
-			}
-		},
-		
-		{
-			"path" : "pages/info/treecave/treepostpage",
-			"style" : 
-			{
-				"navigationStyle" : "custom"
+			"path": "pages/info/treecave/treecave",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
 			}
 		},
 		{
-			"path" : "pages/corner/postToCorner",
-			"style" : 
-			{
-				"navigationStyle" : "custom"
-			}},
-		{
-			"path" : "pages/userPage",
-			"style" : 
-			{
-				"navigationBarTitleText" : "用户主页"
+			"path": "pages/info/treecave/ai",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
 			}
 		},
 		{
-			"path" : "pages/info/infotalk",
-			"style" : 
-			{
+			"path": "pages/info/treecave/treepost",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/info/treecave/treetalk",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/info/msg/like",
+			"style": {
 				"navigationStyle": "custom"
-			}},{
-			"path" : "pages/home/commentpage",
-			"style" : 
-			{
+			}
+		},
+		{
+			"path": "pages/info/msg/comment",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/register",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+
+		{
+			"path": "pages/corner/corner",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+
+		{
+			"path": "pages/corner/Superwordname",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationBarBackgroundColor": "#ffc7cb"
+			}
+		},
+		{
+			"path": "pages/corner/content",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/post/postpage",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+
+		{
+			"path": "pages/info/treecave/treepostpage",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/corner/postToCorner",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/userPage",
+			"style": {
+				"navigationBarTitleText": "用户主页"
+			}
+		},
+		{
+			"path": "pages/info/infotalk",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/home/commentpage",
+			"style": {
 				"navigationStyle": "custom"
 			}
 		}
-		
+
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -219,8 +209,7 @@
 		"selectedColor": "#303133",
 		"backgroundColor": "#FFFFFF",
 		"borderStyle": "black",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/home/homepage",
 				"iconPath": "/static/newhomeg.png",
 				"selectedIconPath": "/static/newhomep.png",

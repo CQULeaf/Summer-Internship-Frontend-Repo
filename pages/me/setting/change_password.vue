@@ -67,7 +67,7 @@ export default {
 
       // 发送请求到后端 API
       uni.request({
-        url:'http://localhost:1234/user/updatePassword',
+        url:'http://localhost:8080/user/updatePassword',
         data:this.user,
         method:"POST",
         header:{

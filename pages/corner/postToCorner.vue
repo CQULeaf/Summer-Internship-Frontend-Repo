@@ -23,8 +23,8 @@
 							 :percent="item.progress"></u-line-progress>
 						</view>
 					</view>
-					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action" :auto-upload="false" :file-list="fileList"
-					 :show-progress="showProgress" :deletable="deletable" :max-count="maxCount" @on-list-change="onListChange">
+					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action" 
+					 :show-progress="showProgress" :deletable="deletable" :max-count="maxCount" @on-list-change="onListChange" max-count=1>
 						<view v-if="customBtn" slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
 						</view>
@@ -42,14 +42,12 @@
 	export default {
 		data() {
 			return {
-				action: 'http://localhost:1234/user/updateAvatar',
+				action: 'http://localhost:8080/upload',
 				// 背景颜色
 				 background: 
 				 {
 				 	backgroundColor:'#abecff'
 				},
-				// 预置上传列表
-				fileList: [],
 				message:'',
 				title:"",
 				showUploadList: true,
@@ -71,12 +69,12 @@
 					postContent: "",
 					commentCount: 0,
 					likeCount: 0,
-					createdAt: "1973-09-28T11:03:46",
-					updatedTime: "1972-06-18T15:34:22",
-					updatedAt: "1998-04-10T00:15:49",
-					deletedAt: "1977-04-30T01:20:14",
+					createdAt: "",
+					updatedTime: "",
+					updatedAt: "",
+					deletedAt: "",
 					cover: null,
-					topicId: 13
+					topicId: 0
 				}
 			}
 		},
@@ -91,49 +89,56 @@
 			},
 			
 			sendPost() {
-							uni.getStorage({
-								key:"nowAccount",
-								success:(res)=>{
-									this.addPost.userId=res.data.data.userId
-									this.addPost.title=this.title
-									this.addPost.postContent=this.message
-									var now=new Date().toISOString();
-									this.addPost.createdAt=now
-									this.addPost.topicld=0
-								}
-							})
-			
-							// 发起请求
-							uni.request({
-								url: 'http://localhost:1234/ccPost/publish',
-								data:this.addPost,
-								method: 'POST',
-								header: { 'Content-Type': 'application/json' },
-								success: (res) => {
-									console.log('发布成功', res.data);
-									uni.showToast({ title: '发布成功', icon: 'success' });
-									// 清空输入框内容
-									this.title = "";
-									this.message = "";
-									this.backtohome(); // 返回首页
-								},
-								fail: (err) => {
-									console.error('发布失败', err);
-									uni.showToast({ title: '发布失败', icon: 'none' });
-								}
-							});
-							uni.switchTab({
-								url:"/pages/home/homepage"
-							})
-						},
-			reUpload() {
-				this.$refs.uUpload.reUpload();
+				if(this.title==''){
+					this.$u.toast("发送失败，请输入标题")
+					return
+				}
+				if(this.message==''){
+					this.$u.toast("发送失败，请输入内容")
+					return
+				}
+				uni.getStorage({
+					key:"nowAccount",
+					success:(res)=>{
+						uni.getStorage({
+							key:"matchuser2",
+							success:(res2)=>{
+								console.log(res2.data.topicId)
+								this.addPost.userId=res.data.data.userId
+								this.addPost.title=this.title
+								this.addPost.postContent=this.message
+								this.addPost.topicId=res2.data.topicId
+							}
+						})
+					}
+				})
+		
+				// 发起请求
+				uni.request({
+					url: 'http://localhost:8080/ccPost/publish',
+					data:this.addPost,
+					method: 'POST',
+					header: { 'Content-Type': 'application/json' },
+					success: (res) => {
+						console.log('发布成功', res.data);
+						uni.showToast({ title: '发布成功', icon: 'success' });
+						// 清空输入框内容
+						this.title = "";
+						this.message = "";
+						this.backtohome(); // 返回首页
+					},
+					fail: (err) => {
+						console.error('发布失败', err);
+						uni.showToast({ title: '发布失败', icon: 'none' });
+					}
+				});
+				uni.navigateTo({
+					url:"/pages/corner/content"
+				})
 			},
+			
 			clear() {
 				this.$refs.uUpload.clear();
-			},
-			autoUploadChange(index) {
-				this.autoUpload = index == 0 ? true : false;
 			},
 			controlChange(index) {
 				if(index == 0) {
@@ -160,35 +165,21 @@
 			upload() {
 				let files = [];
 				files = this.$refs.uUpload.lists;
-				console.log(files.url)
-				this.$refs.uUpload.upload();
+				console.log(files[0])
+				if(files[0].response.code===400){
+					this.$u.toast("文件太大，无法上传")
+					return
+				}
+				if(files[0].response==null){
+					this.$u.toast("上传失败，请重试")
+					return
+				}else{
+					this.$u.toast("上传成功")
+				}
+				this.addPost.cover=files[0].response
 			},
 			deleteItem(index) {
 				this.$refs.uUpload.remove(index);
-			},
-			onOversize(file, lists) {
-				// console.log('onOversize', file, lists);
-			},
-			onPreview(url, lists) {
-				// console.log('onPreview', url, lists);
-			},
-			onRemove(index, lists) {
-				// console.log('onRemove', index, lists);
-			},
-			onSuccess(data, index, lists) {
-				// console.log('onSuccess', data, index, lists);
-			},
-			onChange(res, index, lists) {
-				// console.log('onChange', res, index, lists);
-			},
-			error(res, index, lists) {
-				// console.log('onError', res, index, lists);
-			},
-			onProgress(res, index, lists) {
-				// console.log('onProgress', res, index, lists);
-			},
-			onUploaded(lists) {
-				// console.log('onUploaded', lists);
 			},
 			onListChange(lists) {
 				// console.log('onListChange', lists);
@@ -198,7 +189,7 @@
 				return true;
 			},
 			onChooseFail(e) {
-				// console.log(e);
+				onsole.log(e);
 			}
 		}
 	}

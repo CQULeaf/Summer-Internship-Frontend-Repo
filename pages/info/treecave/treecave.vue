@@ -5,7 +5,7 @@
 				:customBack="gotopofile">
 			</u-navbar>
 		</view>
-		<view class="image-container">
+	<view class="image-container">
 			<image class="image" :src="imageSrc"></image>
 			<button v-if="isButtonVisible" class="center-button" @click="showTree()">开始相遇</button>
 			<view v-if="isImageVisible" class="useravatarborder">
@@ -78,7 +78,7 @@
 			},
 			fetchRandomMatch() {
 				uni.request({
-					url: "http://127.0.0.1:4523/m1/5010181-4669608-default/info/treetalk",
+					url: "http://localhost:4523/m1/5010181-4669608-default/info/treetalk",
 					data: this.user,
 					method: 'GET',
 					success: (res) => {

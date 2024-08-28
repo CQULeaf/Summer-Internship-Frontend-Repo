@@ -142,11 +142,14 @@ export default {
   methods: {
 	toggleCategory(flag) {
 	  	uni.request({
-	  		url: "http://localhost:1234/corner/getTopicsByFlag",//api
+	  		url: "http://localhost:8080/corner/getTopicsByFlag",//api
 	  		data: {
 				flag:flag
 			},//自己定义的 变量，包含api中需要传递的信息
 	  		method: 'GET',//方法类型
+			header:{
+				'Content-Type': 'application/json'
+			},
 	  		success: (res) => {
 	  			console.log(res);
 	  			if (res.data.code == 200) {
@@ -189,9 +192,12 @@ export default {
     toggleCategory(flag) {
       this.user.flag = flag
       uni.request({
-        url: "http://localhost:1234/corner/getTopicsByFlag", // API
+        url: "http://localhost:8080/corner/getTopicsByFlag", // API
         data: this.user, // 传递信息
         method: 'GET',
+		header:{
+			'Content-Type': 'application/json'
+		},
         success: (res) => {
           console.log(res);
           if (res.statusCode == 200) {
@@ -201,7 +207,7 @@ export default {
               data: this.matchuser1,
               success: function() {
                 uni.navigateTo({
-                  url: '/pages/corner/superWordName',
+                  url: '/pages/corner/Superwordname',
                 })
               }
             });

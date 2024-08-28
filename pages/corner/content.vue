@@ -2,8 +2,7 @@
 <!-- 超话里面具体内容要看数据库 -->
 <template>
 	<view>
-		<u-navbar :is-back="true" title="收到的点赞" :background="background" :customBack="backtoinfo" height="55">
-		</u-navbar>
+		
 
 	
 				<view class="wrap">
@@ -17,8 +16,7 @@
 								<text class="name">{{ topic.name }}</text>
 								<text class="description">{{ topic.description }}</text>
 								<view class="stats">
-									<text class="stat">关注数：{{ topic.follower_count  }}</text>
-									<text class="stat">帖子数：{{ topic.post_count }}</text>
+									<text class="stat">帖子数：{{ topic.postCount }}</text>
 								</view>
 							</view>
 						</view>
@@ -27,8 +25,8 @@
 		<u-waterfall v-model="flowList" ref="uWaterfall">
 			<!-- 左边里面是帖子而不是topic -->
 					<template v-slot:left="{leftList}">
-						<view class="demo-warter" v-for="(item, index) in leftList" :key="index" @click="goToPost(item.post_id)">
-							<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index"></u-lazy-load>
+						<view class="demo-warter" v-for="(item, index) in leftList" :key="index" @click="goToPost(item)">
+							<u-lazy-load threshold="-450" border-radius="10" :image="item.cover" :index="index"></u-lazy-load>
 							<view class="demo-title">
 								{{item.title}}
 							</view>
@@ -49,8 +47,8 @@
 					
 					<!-- 右边 -->
 					<template v-slot:right="{rightList}">
-						<view class="demo-warter" v-for="(item, index) in rightList" :key="index" @click="goToPost(item.post_id)">
-							<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index"></u-lazy-load>
+						<view class="demo-warter" v-for="(item, index) in rightList" :key="index" @click="goToPost(item)">
+							<u-lazy-load threshold="-450" border-radius="10" :image="item.cover" :index="index"></u-lazy-load>
 							<view class="demo-title">
 								{{item.title}}
 							</view>
@@ -90,55 +88,35 @@
 					// 背景颜色
 				 	backgroundColor:'#abecff'
 				},
-				//---------------超话的变量
-				topic: {
-							cover: "/static/demodemo.jpg",
-							name: '元白超话   ',
-							description: '君埋泉下泥销骨,我寄人间雪满头',
-							follower_count : 8080,
-							post_count: 5678,
-							post_id:'',
-						},
-				//---------------超话的变量
+				topic: {},
 				loadStatus: 'loadmore',//加载状态
 				flowList: [],//瀑布流数据
 				
 				//--------------------------------------------返回的帖子数据
-				list: [//需要api进行连接，生成不同的图片和标题，昵称，头像
-					{
-						post_id:'',
-						title: '我今因病魂颠倒,唯梦闲人不梦君',
-						user_id: '元稹',
-						image: "/static/demodemo.jpg",
-					},
-					{
-						post_id:'',
-						title: '不知忆我因何事,昨夜三回梦见君',
-						user_id: '白居易',
-						image: 'http://pic.sc.chinaz.com/Files/pic/pic9/202002/zzpic23325_s.jpg',
-					},
-					
-					
-				],
+				list: [],
 				//--------------------------------------------返回的帖子数据
 				
 			}
 		},
 		
 		onLoad() {
-			this.addRandomData();
 			uni.getStorage({
 				key:'matchuser2',
-				success(res) {
+				success:(res) => {
+					this.topic=res.data
+					
 					uni.request({
-						url:'http://localhost:1234/ccPost/getPostsByTopicId',
-						data:res,
-						success(suc) {
-							this.list=suc
+						url:'http://localhost:8080/ccPost/getPostsByTopicId',
+						data:res.data,
+						success:(suc) => {
+							//console.log(suc)
+							this.list=suc.data.data
+							this.addRandomData();
 						}
 					})
 				}
 			})
+			
 		},
 		onReachBottom() {
 			this.loadStatus = 'loading';
@@ -152,9 +130,7 @@
 			backtocorner()
 			{
 				console.log("返回到 corner");
-				uni.switchTab//如果你的目标页面是 TabBar 页面，请使用 uni.switchTab 方法来进行跳转。
-				             //TabBar 页面是指在移动应用中，通常位于底部的导航栏，用于快速切换不同的页面或功能模块。它允许用户在应用程序的多个主要视图之间进行切换，通常显示为一组图标和文本。
-				({
+				uni.switchTab({
 					url:"/pages/corner/corner",
 					   success: () => {
 					        console.log("成功跳转到 corner");
@@ -164,12 +140,13 @@
 					    }
 				})
 				},
-handleClick()
-	{
-		uni.navigateTo({
-			url:"/pages/corner/postToCorner"
-		})
-	},
+		handleClick()
+		{
+			
+			uni.navigateTo({
+				url:"/pages/corner/postToCorner"
+			})
+		},
 			addRandomData() {
 				for(let i = 0; i < 10; i++) {
 					let index = this.$u.random(0, this.list.length - 1);
@@ -185,40 +162,20 @@ handleClick()
 			},//删除
 
 			//-----------------------------点击帖子，跳转到帖子详情页面+获取想要的信息
-			        goToPost(post_id) {
-			         
-						uni.request({
-							url: "http://localhost:1234/ccPost/getPost",//api
-							data: post_id,//自己定义的 变量，包含api中需要传递的信息
-							method: 'GET',//方法类型
-							success: (res) => {
-								console.log(res);
-								if (res.statusCode == 200) {
-									const value = res.data.data; // 假设 API 返回的数据格式包含用户信息
-									//获取想要的信息
-									
-									console.log(res.data);//打印
-									uni.setStorage({//缓存
-										key: 'postData',//就是之前定义的变量
-										data: this.value,
-										success: function() {
-											console.log('噫，好了，我中了');
-											uni.navigateTo({
-												url:'/pages/home/reply',
-											})
-											
-										}
-									});
-								} else {
-									uni.showToast({
-										title: '获取数据失败',
-										icon: 'none'
-									});
-								}
+			        goToPost(post) {
+						console.log(post)
+						uni.setStorage({//缓存
+							key: 'postData',//就是之前定义的变量
+							data: post,
+							success: function() {
+								console.log('噫，好了，我中了');
+								uni.navigateTo({
+									url:'/pages/home/reply',
+								})
+								
 							}
-						})
+						});
 			        },
-			
 		}
 	}
 </script>

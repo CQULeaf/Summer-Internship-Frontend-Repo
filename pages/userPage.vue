@@ -61,7 +61,7 @@
 								followableType:"user"
 							}
 							uni.request({
-								url:"http://localhost:1234/user/isFollowing",
+								url:"http://localhost:8080/user/isFollowing",
 								data:judge,
 								success: (Sta) => {
 									this.followSta=Sta.data.data
@@ -92,14 +92,14 @@
 						this.followList.followableId=this.user.userId
 						this.followList.isFollow=this.followSta
 			            uni.request({
-			                url: "http://localhost:1234/user/followOrUnfollow",
+			                url: "http://localhost:8080/user/followOrUnfollow",
 			                data: this.followList,
 			                method: "POST",
 							header: {
 							    "content-type": "application/x-www-form-urlencoded"
 							},
 			                success:(res2)=>{
-			                    console.log(res2.data.data);
+			                    console.log("关注成功",res2.data.data);
 			                },
 			            });
 			        },

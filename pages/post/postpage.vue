@@ -44,7 +44,7 @@
 	export default {
 		data() {
 			return {
-				action: 'http://localhost:1234/upload',
+				action: 'http://localhost:8080/upload',
 				// 背景颜色
 				 background: 
 				 {
@@ -178,7 +178,7 @@
 		
 				// 发起请求
 				uni.request({
-					url: 'http://localhost:1234/ccPost/publish',
+					url: 'http://localhost:8080/ccPost/publish',
 					data:this.addPost,
 					method: 'POST',
 					header: { 'Content-Type': 'application/json' },
