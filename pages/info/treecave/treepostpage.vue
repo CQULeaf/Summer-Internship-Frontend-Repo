@@ -4,33 +4,8 @@
 			<div class="btn" @click="sent">投递</div>
 		</u-navbar>
 		<view class="form-item">
-		  <textarea class="input" v-model="message" placeholder="在这里,没有人了解你的过去,没有你抒发不了的烦恼,所以请尽情释放自己吧 (/≧▽≦)/"></textarea>
-		</view>
-		<view class="u-demo">
-			<view class="u-demo-wrap">
-				<view class="u-demo-area">
-					<u-toast ref="uToast"></u-toast>
-					<view class="pre-box" v-if="!showUploadList">
-						<view class="pre-item" v-for="(item, index) in lists" :key="index">
-							<image class="pre-item-image" :src="item.url" mode="aspectFill"></image>
-							<view class="u-delete-icon" @tap.stop="deleteItem(index)">
-								<u-icon name="close" size="20" color="#ffffff"></u-icon>
-							</view>
-							<u-line-progress v-if="item.progress > 0 && !item.error" :show-percent="false" height="16" class="u-progress"
-							 :percent="item.progress"></u-line-progress>
-						</view>
-					</view>
-					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action" :auto-upload="autoUpload" :file-list="fileList"
-					 :show-progress="showProgress" :deletable="deletable" :max-count="maxCount" @on-list-change="onListChange">
-						<view v-if="customBtn" slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
-							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
-						</view>
-					</u-upload>
-					<u-button :custom-style="{marginTop: '20rpx'}" @click="upload" class="btnstyle">上传</u-button>
-					<u-button :custom-style="{marginTop: '40rpx'}" @click="clear" class="btnstyle">清空列表</u-button>
-					<!-- <u-button :custom-style="{marginTop: '40rpx'}" @click="reUpload">重新上传</u-button> -->
-				</view>
-			</view>
+			<textarea class="input1" v-model="title" placeholder="标题"></textarea>
+		  <textarea class="input2" v-model="message" placeholder="在这里,没有人了解你的过去,没有你抒发不了的烦恼,所以请尽情释放自己吧 (/≧▽≦)/"></textarea>
 		</view>
 	</view>
 </template>
@@ -47,22 +22,8 @@
 				 		backgroundImage: 'linear-gradient(45deg, rgb(159, 219, 196),rgb(139, 219, 186),rgb(35, 187, 154))'
 				 	
 				},
-				action: 'http://127.0.0.1:7001/upload',
-				// 预置上传列表
-				fileList: [],
-				// fileList: [{
-				// 	url: 'http://pics.sc.chinaz.com/files/pic/pic9/201912/hpic1886.jpg',
-				// 	error: false,
-				// 	progress: 100
-				// }],
-				showUploadList: true,
-				customBtn: false,
-				autoUpload: false,
-				showProgress: true,
-				deletable: true,
-				customStyle: false,
-				maxCount: 2,
-				lists: [], // 组件内部的文件列表
+				title:'',
+				message:''
 			}
 		},
 		methods: {
@@ -75,81 +36,32 @@
 			},
 			sent()
 			{
-				uni.navigateTo({
-					url:"/pages/info/treecave/treepost"
+				if(this.title==''){
+					this.$u.toast("发送失败，请输入标题")
+					return
+				}
+				if(this.message==''){
+					this.$u.toast("发送失败，请输入内容")
+					return
+				}
+				uni.request({
+					url:"http://localhost:8080/ccPost/publish",
+					data:
+					{
+						userId:0,
+						title:this.title,
+						postContent:this.message,
+						topicId:3
+					},
+					method:"POST",
+					success:(res)=>{
+						uni.showToast({ title: '发布成功', icon: 'success' });
+						this.title = "";
+						this.message = "";
+						this.backtotreepost();
+					}
 				})
 			},
-			reUpload() {
-				this.$refs.uUpload.reUpload();
-			},
-			clear() {
-				this.$refs.uUpload.clear();
-			},
-			autoUploadChange(index) {
-				this.autoUpload = index == 0 ? true : false;
-			},
-			controlChange(index) {
-				if(index == 0) {
-					this.showProgress = true;
-					this.deletable = true;
-				} else {
-					this.showProgress = false;
-					this.deletable = false;
-				}
-			},
-			maxCountChange(index) {
-				this.maxCount = index == 0 ? 1 : index == 1 ? 2 : 4;
-			},
-			customStyleChange(index) {
-				if (index == 0) {
-					this.showUploadList = false;
-					this.customBtn = true;
-					
-				} else {
-					this.showUploadList = true;
-					this.customBtn = false;
-				}
-			},
-			upload() {
-				this.$refs.uUpload.upload();
-			},
-			deleteItem(index) {
-				this.$refs.uUpload.remove(index);
-			},
-			onOversize(file, lists) {
-				// console.log('onOversize', file, lists);
-			},
-			onPreview(url, lists) {
-				// console.log('onPreview', url, lists);
-			},
-			onRemove(index, lists) {
-				// console.log('onRemove', index, lists);
-			},
-			onSuccess(data, index, lists) {
-				// console.log('onSuccess', data, index, lists);
-			},
-			onChange(res, index, lists) {
-				// console.log('onChange', res, index, lists);
-			},
-			error(res, index, lists) {
-				// console.log('onError', res, index, lists);
-			},
-			onProgress(res, index, lists) {
-				// console.log('onProgress', res, index, lists);
-			},
-			onUploaded(lists) {
-				// console.log('onUploaded', lists);
-			},
-			onListChange(lists) {
-				// console.log('onListChange', lists);
-				this.lists = lists;
-			},
-			beforeRemove(index, lists) {
-				return true;
-			},
-			onChooseFail(e) {
-				// console.log(e);
-			}
 		}
 	}
 </script>
@@ -163,7 +75,7 @@
 .btn 
 {
     text-align: right;
-    padding: 8px;
+    padding: 20rpx;
     margin: 0 auto;
 	margin-right: 10%;
     width: 9%;
@@ -177,13 +89,25 @@
 	/* 添加一个左右边距，使输入框居中 */
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 10px;
+	margin-top: 30rpx;
 	width: 90%; /* 设置一个固定宽度，使左右边距生效 */
 }
-.input 
+.input1
 {
   width: 100%;
-  height: 150px;
+  height: 50rpx;
+  padding: 20rpx;
+  border: 1px solid #ccc;//框框
+  border-radius: 4px;
+  /* 通过设置 margin-left 负值来向左移动输入框 */
+  margin-left: -10px;
+  margin-bottom: 50rpx;
+  background-color: #f8fdf8;
+}
+.input2
+{
+  width: 100%;
+  height: 360rpx;
   padding: 10px;
   border: 1px solid #ccc;//框框
   border-radius: 4px;

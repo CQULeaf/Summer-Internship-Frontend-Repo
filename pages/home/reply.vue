@@ -12,13 +12,6 @@
 						<view class="date">{{comment.createdAt}}</view>
 					</view>
 				</view>
-				<view class="right" :class="{ highlight: comment.isLike }">
-					{{ comment.likeCount }}
-					<u-icon v-if="!comment.isLike" name="thumb-up" class="like" color="#9a9a9a" :size="30"
-						@click="getLike"></u-icon>
-					<u-icon v-if="comment.isLike" name="thumb-up-fill" class="like" :size="30"
-						@click="getLike"></u-icon>
-				</view>
 			</view>
 			<view class="post">
 				<view class="content u-font-40">{{ comment.title}}</view>
@@ -29,7 +22,7 @@
 
 		<view class="input-container">
 			<input v-model="messageInput" placeholder="编辑你的内容..." />
-			<button @click="sendMessage"  >发送</button>
+			<button @click="sendMessage">发送</button>
 		</view>
 
 		<!-- 回复 -->
@@ -47,13 +40,7 @@
 								<view class="date">{{ item.createdAt }}</view>
 							</view>
 						</view>
-						<view class="right" :class="{ highlight: item.isLike }">
-							<view class="num">{{ item.likeCount }}</view>
-							<u-icon v-if="!item.isLike" name="thumb-up" class="like" :size="30" color="#9a9a9a"
-								@click="getLike(index)"></u-icon>
-							<u-icon v-if="item.isLike" name="thumb-up-fill" class="like" :size="30"
-								@click="getLike(index)"></u-icon>
-						</view>
+						
 					</view>
 					<view class="content">{{ item.content }}</view>
 				</view>
@@ -63,7 +50,6 @@
 </template>
 
 <script>
-	import colorGradient from '../../uview-ui/libs/function/colorGradient';
 	export default {
 		data() {
 			return {
@@ -101,76 +87,105 @@
 		},
 		onLoad() {
 			this.getComment();
+			setTimeout(function () {
+				console.log('start pulldown');
+			}, 1000);
+			uni.startPullDownRefresh();
+		},
+		
+		onShow() {
+			this.getComment();
+			setTimeout(function () {
+				console.log('start pulldown');
+			}, 1000);
+			uni.startPullDownRefresh();
+		},
+		
+		onPullDownRefresh() {
+			this.getComment()
+			setTimeout(function () {
+				uni.stopPullDownRefresh();
+			}, 1000);
 		},
 
 		methods: {
 			// 发送信息(评论)
 			sendMessage() {
+				if(this.messageInput==''){
+					this.$u.toast("请输入评论内容")
+					return
+				}
 				uni.getStorage({
 					key: "nowAccount",
 					success: (res) => {
 						this.addComment.userId = res.data.data.userId
 						this.addComment.content = this.messageInput
-						// var now = new Date().toISOString();
-						// this.addComment.createdAt = now
 						this.addComment.postId = this.comment.postId
 						console.log(this.addComment);
 						uni.request({
-							url: "http://127.0.0.1:8080/comment/add",
+							url: "http://localhost:8080/comment/add",
 							data: this.addComment,
 							method: "POST",
 							success(res) {
-								console.log(res)
+
 							}
 						})
 					}
 				})
-
+				
 			},
 
 			// 获取所有的评论信息
 			getComment() {
-				uni.getStorage({
-					key: 'postData',
-					success: (res) => {
-						this.comment = res.data
-
-						// 请求获得所有的回复数据
-						uni.request({
-							url: "http://127.0.0.1:8080/comment/getReply",
-							data: res.data,
-							success: (respones) => {
-								this.commentList = respones.data.data
-								for (let key in this.commentList) {
-									uni.request({
-										url: "http://127.0.0.1:8080/user/getUserInfo",
-										data: this.commentList[key],
-										success: (res2) => {
-											this.commentList[key].avatar = res2.data
-												.data.avatar
-											this.commentList[key].nickname = res2.data
-												.data.nickname
-											this.commentList[key].userId = res2.data
-												.data.userId
-										},
-									})
-								}
-							}
-						})
-					}
-				});
-
-				uni.request({
-					url: "http://127.0.0.1:8080/user/getUserInfo",
-					data: this.comment,
-					success: (res) => {
-						this.user = res.data.data
-						uni.setStorage({
-							key: "userPost",
-							data: res.data.data
-						})
-					},
-				})
+			    uni.getStorage({
+			        key: 'postData',
+			        success: (res) => {
+			            this.comment = res.data;
+			
+			            // 请求获得所有的回复数据
+			            uni.request({
+			                url: "http://localhost:8080/comment/getReply",
+			                data: res.data,
+			                success: (response) => {
+			                    this.commentList = response.data.data;
+			
+			                    // 收集所有用户信息请求的 promises
+			                    const userRequests = this.commentList.map((comment) => {
+			                        return new Promise((resolve) => {
+			                            uni.request({
+			                                url: "http://localhost:8080/user/getUserInfo",
+			                                data: comment,
+			                                success: (res2) => {
+			                                    comment.avatar = res2.data.data.avatar;
+			                                    comment.nickname = res2.data.data.nickname;
+			                                    comment.userId = res2.data.data.userId;
+			                                    resolve();
+			                                }
+			                            });
+			                        });
+			                    });
+			
+			                    // 等待所有用户信息请求完成
+			                    Promise.all(userRequests).then(() => {
+			                        console.log("All user info loaded");
+			                        // 此处可以更新视图或进行其他处理
+			                    });
+			                }
+			            });
+			        }
+			    });
+			
+			    uni.request({
+			        url: "http://localhost:8080/user/getUserInfo",
+			        data: this.comment,
+			        success: (res) => {
+			            this.user = res.data.data;
+			            uni.setStorage({
+			                key: "userPost",
+			                data: res.data.data
+			            });
+			        }
+			    });
 			},
 
 			//跳转到发帖人用户界面
@@ -196,7 +211,7 @@
 			gotoUserPage2(userId) {
 				console.log(userId)
 				uni.request({
-					url: "http://127.0.0.1:8080/user/getUserInfo",
+					url: "http://localhost:8080/user/getUserInfo",
 					data: userId,
 					success: (res) => {
 						console.log(userId);
@@ -224,37 +239,15 @@
 					},
 				})
 			},
-
-			// 点赞
-			getLike(index) {
-				if (index === 0 || index > 0) {
-					this.commentList[index].isLike = !this.commentList[index].isLike;
-					if (this.commentList[index].isLike == true) {
-						this.commentList[index].likeCount++;
-					} else {
-						this.commentList[index].likeCount--;
-					}
-				} else {
-					if (this.comment.isLike == true) {
-						this.comment.isLike = !this.comment.isLike;
-						this.comment.likeCount--;
-					} else {
-						this.comment.isLike = !this.comment.isLike;
-						this.comment.likeCount++;
-					}
-				}
-			},
 		}
 	};
 </script>
 
 <style lang="scss" scoped>
-	page {
-		background-color: #f2f2f2;
-	}
-	.wrap {
-		background-color: #fedfe4;
-	}
+page {
+	background-color: #f2f2f2;
+}
+
 
 	.input-container {
 		background-color: #ffffff;

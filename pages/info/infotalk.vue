@@ -1,13 +1,18 @@
 <template>
 	<view class="container">
-		<u-navbar class="wrap" height=60 title="聊天" title-size=40 :background="background" is-back=true
+		<u-navbar class="wrap" height=60 title="" title-size=40 :background="background" is-back=true
 			:customBack="gotopofile">
 		</u-navbar>
+
 		<view class="chat-box" ref="chatBox">
 			<view v-for="(msg, index) in messages" :key="index">
+				<view :class="{'message-me': msg.senderId === currentUserId, 'message-other': msg.senderId !== currentUserId}">
+					<strong>{{ msg.senderId === currentUserId ? currentnickname : receivernickname }}</strong>
+				</view>
+				<image :class="{'message-myavatar': msg.senderId === currentUserId, 'message-avatar': msg.senderId !== currentUserId}" :src="msg.senderId === currentUserId ? currentavatar : receiveravatar">
+				</image>
 				<view class="message"
 					:class="{'my-message': msg.senderId === currentUserId, 'other-message': msg.senderId !== currentUserId}">
-					<!-- <strong>{{ msg.senderId === currentUserId ? currentnickname: receivernickname }}:</strong> -->
 					{{ msg.content }}
 				</view>
 			</view>
@@ -38,7 +43,9 @@
 				receiverId: '', // 接收者ID
 				currentnickname: '',
 				receivernickname: '',
-				currentavatar: ''
+				currentavatar: '',
+				receiveravatar:'',
+				otheruser: {}
 			}
 		},
 		onReady() {
@@ -47,7 +54,7 @@
 		methods: {
 			initWebSocket() {
 				// 创建 WebSocket 连接  
-				const socket = new WebSocket('ws://127.0.0.1:8080/endpoint-websocket');
+				const socket = new WebSocket('ws://localhost:8080/endpoint-websocket');
 				this.stompClient = Stomp.over(socket);
 
 				this.stompClient.connect({}, frame => {
@@ -98,12 +105,34 @@
 			},
 			getMessage() {
 				uni.request({
-					url: `http://127.0.0.1:8080/message/historyWithUser?userId=${this.currentUserId}&targetUserId=${this.receiverId}`,
+					url: `http://localhost:8080/message/historyWithUser?userId=${this.currentUserId}&targetUserId=${this.receiverId}`,
 					method: 'GET',
 					success: (res) => {
 						if (res.statusCode === 200) {
 							this.messages = res.data.data
-							console.log("获取的消息", messages)
+							console.log("获取的消息", this.messages)
+						} else {
+							reject(
+								`获取消息记录失败: ${res.statusCode}`
+							);
+						}
+					},
+					fail: (err) => {
+						reject('请求失败');
+					}
+				});
+			},
+
+			getOthernUser() {
+				uni.request({
+					url: `http://localhost:8080/user/getUserInfo?userId=${ this.receiverId}`,
+					method: 'GET',
+					success: (res) => {
+						if (res.statusCode === 200) {
+							this.otheruser = res.data.data
+							console.log("获取其他用户", this.otheruser)
+							this.receivernickname=this.otheruser.nickname
+							this.receiveravatar=this.otheruser.avatar
 						} else {
 							reject(
 								`获取消息记录失败: ${res.statusCode}`
@@ -120,7 +149,7 @@
 		mounted() {
 			this.receiverId = this.$route.query.userId; // 获取目标用户ID（私聊对象）
 			console.log('获取到的 userId:', this.receiverId);
-
+			this.getOthernUser()
 			uni.getStorage({
 				key: 'nowAccount',
 				success: (res) => {
@@ -128,6 +157,7 @@
 					console.log('获取到的当前userId:', this.currentUserId);
 					this.currentnickname = res.data.data.nickname;
 					this.currentavatar = res.data.data.avatar;
+					console.log('获取到的当前头像:', this.currentavatar);
 				},
 			});
 			this.getMessage();
@@ -140,7 +170,7 @@
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
-		background: linear-gradient(45deg, #42c5a4, #8fdbbc, #8adbba);
+		background: linear-gradient(45deg, #6ed2b1, #73d4b3, #42c5a4);
 	}
 
 	.wrap {
@@ -150,6 +180,42 @@
 		border: 2px solid #2fa787;
 		border-radius: 5px;
 		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	}
+
+	.message-me {
+		display: flex;
+		margin-left: 610rpx;
+		/* 居中对齐 */
+		font-size: 16px;
+		/* 字体大小 */
+		color: #333;
+		/* 字体颜色 */
+		background-color: #ffffff;
+	}
+	.message-other {
+		display: flex;
+		margin-right: 590rpx;
+		/* 居中对齐 */
+		font-size: 16px;
+		/* 字体大小 */
+		color: #333;
+		/* 字体颜色 */
+		background-color: #ffffff;
+	}
+
+	.message-myavatar {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 50%;
+		margin-top: 3px;
+		margin-right: 20px;
+		margin-left: 610rpx;
+	}
+	.message-avatar {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 50%;
+		margin-top: 3px;
 	}
 
 	.chat-box {
@@ -173,16 +239,16 @@
 		/* 允许单词换行 */
 		white-space: pre-wrap;
 		/* 保留空格和换行 */
-		margin-bottom: 10px;
+		margin-bottom: 20px;
 		/* 消息之间的间距 */
 
 	}
 
 	.my-message {
-		max-width: 40%;
+		max-width: 60%;
 		margin-left: auto;
 		/* 右对齐 */
-		background-color: #d1e7dd;
+		background: linear-gradient(45deg, #cdeedf, #8adbba, #8fdbbc);
 		/* 自己的消息背景色 */
 		display: block;
 		/* 改为 block 使其占满一行 */
@@ -191,10 +257,11 @@
 	}
 
 	.other-message {
-		max-width: 40%;
+		max-width: 60%;
 		margin-right: auto;
 		/* 左对齐 */
-		background-color: #f8d7da;
+		background-color: ;
+		background: linear-gradient(45deg, #f8c2c7, #f8ced1, #f8d7da);
 		/* 对方的消息背景色 */
 		display: block;
 		/* 改为 block 使其占满一行 */
@@ -219,11 +286,12 @@
 		padding: 1px 20px;
 		border: none;
 		border-radius: 20px;
-		background: linear-gradient(45deg, #7e5b54, #d9ab8c);
+		background: linear-gradient(45deg, #8f675f, #b8857b, #d9ab8c);
 		color: #fff;
 		cursor: pointer;
 		margin-left: 10px;
 		font-size: 16px;
+		margin-right: 10px;
 		transition: background 0.3s, transform 0.3s;
 	}
 

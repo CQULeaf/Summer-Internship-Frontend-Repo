@@ -5,7 +5,7 @@
 				:customBack="gotopofile">
 			</u-navbar>
 		</view>
-		<view class="image-container">
+	<view class="image-container">
 			<image class="image" :src="imageSrc"></image>
 			<button v-if="isButtonVisible" class="center-button" @click="showTree()">开始相遇</button>
 			<view v-if="isImageVisible" class="useravatarborder">

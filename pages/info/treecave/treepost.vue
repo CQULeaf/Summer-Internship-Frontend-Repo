@@ -6,10 +6,10 @@
 			</u-navbar>
 		</view>
 			<scroll-view class="scroll-view" scroll-y @scrolltolower="onreachBottom">
-				<view class="subinfolist" @click="gotoreply(index)" v-for="(subinfo, index) in subinfolist"
+				<view class="subinfolist" @click="gotoreply(subinfo)" v-for="(subinfo, index) in postList"
 					:key="index">
-					<image class="image" :src="subinfo.image"></image>
-					<text class="text">{{ subinfo.text }}</text>
+					<image class="image" :src="image"></image>
+					<text class="text">{{ subinfo.title }}</text>
 				</view>
 			</scroll-view>
 		<view class="floating-button">  
@@ -22,48 +22,34 @@
 	export default {
 		data() {
 			return {
+				
+				postList:[],
 
 				background: {
 					backgroundColor: '#001f3f',
 					backgroundSize: 'cover',
 					backgroundImage: 'linear-gradient(45deg, rgb(159, 219, 196),rgb(139, 219, 186),rgb(35, 187, 154))'
 				},
-				subinfolist: [
-					// 标签数据
-					{
-						image: '/static/mail.svg',
-						text: '不会有人再像她一样爱我了...',
-					},
-					{
-						image: '/static/mail.svg',
-						text: '我是全世界最聪明的小女孩！',
-					},
-					{
-						image: '/static/mail.svg',
-						text: '我今天被老师表扬了好开心>_<'
-					},
-					{
-						image: '/static/mail.svg',
-						text: '哈哈光顾着抽风，忘记抽你啦'
-					},
-					{
-						image: '/static/mail.svg',
-						text: '她今天跟我说话了嘿嘿...'
-					},
-					{
-						image: '/static/mail.svg',
-						text: '救命！！遇到下头男了...'
-					},
-					{
-						image: '/static/mail.svg',
-						text: '我真的要失去她了...'
-					},
-					{
-						image: '/static/mail.svg',
-						text: '原来一切都有迹可循...'
-					}
-				]
+				image: '/static/mail.svg',
 			}
+		},
+		
+		onShow() {
+			//加载所有帖子信息
+			uni.request({
+				url:"http://localhost:8080/ccPost/getAllPosts",
+				success: (res) => {
+					console.log(res)
+					for(let key in res.data.data){
+						if(res.data.data[key].userId==0){
+							this.postList.push(res.data.data[key])
+						}
+					}
+					console.log(this.postList);
+				},fail() {
+					console.log(2222);
+				}
+			})
 		},
 
 		methods: {
@@ -72,9 +58,15 @@
 					url: "/pages/info/treecave/treecave"
 				})
 			},
-			gotoreply(){
-				uni.navigateTo({
-					url:"/pages/home/reply"
+			gotoreply(post){
+				uni.setStorage({
+					key:"postData",
+					data:post,
+					success() {
+						uni.navigateTo({
+							url:"/pages/home/reply"
+						})
+					}
 				})
 			},
 			handleClick()
@@ -132,8 +124,8 @@
 	}
 .floating-button {  
   position: fixed;  
-  bottom: 50px; /* 距离页面底部20px */  
-  right: 25px; /* 距离页面右侧20px */  
+  bottom: 90rpx; /* 距离页面底部20px */  
+  right: 40rpx; /* 距离页面右侧20px */  
   z-index: 1000; /* 确保按钮在其他内容之上 */  
 }  
 .button-image {  

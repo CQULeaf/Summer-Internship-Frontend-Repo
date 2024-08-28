@@ -25,14 +25,14 @@
 					</view>
 					
 					<!-- 图片选择 -->
-					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action" :auto-upload="false"
-					 :show-progress="showProgress" :deletable="deletable" :max-count="maxCount" @on-list-change="onListChange">
+					<u-upload @on-choose-fail="onChooseFail" :before-remove="beforeRemove" ref="uUpload" :custom-btn="customBtn" :show-upload-list="showUploadList" :action="action"
+					 :show-progress="showProgress" :deletable="deletable" :max-count="maxCount" @on-list-change="onListChange" max-count=1>
 						<view v-if="customBtn" slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
 						</view>
 					</u-upload>
 					<u-button :custom-style="{marginTop: '20rpx'}" @click="upload">上传</u-button>
-					<u-button :custom-style="{marginTop: '40rpx'}" @click="clear">清空列表</u-button>
+					<!-- <u-button :custom-style="{marginTop: '40rpx'}" @click="clear">清空列表</u-button> -->
 				</view>
 			</view>
 		</view>
@@ -44,7 +44,7 @@
 	export default {
 		data() {
 			return {
-				action: 'http://127.0.0.1:1234/user/updateAvatar?username=1',
+				action: 'http://localhost:8080/upload',
 				// 背景颜色
 				 background: 
 				 {
@@ -81,6 +81,19 @@
 			}
 		},
 		
+		 onLoad: function (options) {
+		  setTimeout(function () {
+		   console.log('start pulldown');
+		  }, 1000);
+		  uni.startPullDownRefresh();
+		 },
+		  onPullDownRefresh() {
+		  console.log('refresh');
+		  setTimeout(function () {
+		   uni.stopPullDownRefresh();
+		  }, 1000);
+		 },
+		 
 		onReady() {
 			// 得到整个组件对象，内部图片列表变量为"lists"
 			this.lists = this.$refs.uUpload.lists;
@@ -129,6 +142,13 @@
 			]
 		},
 		methods: {
+			submit() {
+				let files = [];
+				// 如果您不需要进行太多的处理，直接如下即可
+				files = this.$refs.uUpload.lists;
+				console.log(files)
+			},
+			
 			backtohome()
 			{
 				uni.switchTab({
@@ -138,112 +158,70 @@
 			},
 			
 			sendPost() {
-							uni.getStorage({
-								key:"nowAccount",
-								success:(res)=>{
-									this.addPost.userId=res.data.data.userId
-									this.addPost.title=this.title
-									this.addPost.postContent=this.message
-									// var now=new Date().toISOString();
-									// this.addPost.createdAt=now
-									this.addPost.topicld=0
-								}
-							})
-			
-							// 发起请求
-							uni.request({
-								url: 'http://127.0.0.1:8080/ccPost/publish',
-								data:this.addPost,
-								method: 'POST',
-								header: { 'Content-Type': 'application/json' },
-								success: (res) => {
-									console.log('发布成功', res.data);
-									uni.showToast({ title: '发布成功', icon: 'success' });
-									// 清空输入框内容
-									this.title = "";
-									this.message = "";
-									this.backtohome(); // 返回首页
-								},
-								fail: (err) => {
-									console.error('发布失败', err);
-									uni.showToast({ title: '发布失败', icon: 'none' });
-								}
-							});
-							uni.switchTab({
-								url:"/pages/home/homepage"
-							})
-						},
-			reUpload() {
-				this.$refs.uUpload.reUpload();
+				if(this.title==''){
+					this.$u.toast("发送失败，请输入标题")
+					return
+				}
+				if(this.message==''){
+					this.$u.toast("发送失败，请输入内容")
+					return
+				}
+				uni.getStorage({
+					key:"nowAccount",
+					success:(res)=>{
+						this.addPost.userId=res.data.data.userId
+						this.addPost.title=this.title
+						this.addPost.postContent=this.message
+						this.addPost.topicld=0
+					}
+				})
+		
+				// 发起请求
+				uni.request({
+					url: 'http://localhost:8080/ccPost/publish',
+					data:this.addPost,
+					method: 'POST',
+					header: { 'Content-Type': 'application/json' },
+					success: (res) => {
+						console.log('发布成功', res.data);
+						uni.showToast({ title: '发布成功', icon: 'success' });
+						// 清空输入框内容
+						this.title = "";
+						this.message = "";
+						this.backtohome(); // 返回首页
+					},
+					fail: (err) => {
+						console.error('发布失败', err);
+						uni.showToast({ title: '发布失败', icon: 'none' });
+					}
+				});
+				uni.switchTab({
+					url:"/pages/home/homepage"
+				})
 			},
+						
+			//发送图片
 			clear() {
 				this.$refs.uUpload.clear();
 			},
-			autoUploadChange(index) {
-				this.autoUpload = index == 0 ? true : false;
-			},
-			controlChange(index) {
-				if(index == 0) {
-					this.showProgress = true;
-					this.deletable = true;
-				} else {
-					this.showProgress = false;
-					this.deletable = false;
-				}
-			},
-			maxCountChange(index) {
-				this.maxCount = index == 0 ? 1 : index == 1 ? 2 : 4;
-			},
-			customStyleChange(index) {
-				if (index == 0) {
-					this.showUploadList = false;
-					this.customBtn = true;
-					
-				} else {
-					this.showUploadList = true;
-					this.customBtn = false;
-				}
-			},
 			upload() {
-				this.$refs.uUpload.upload();
-				console.log(this.lists)
+				let files = [];
+				// 如果您不需要进行太多的处理，直接如下即可
+				files = this.$refs.uUpload.lists;
+				console.log(files[0].response)
+				this.addPost.cover=files[0].response
 			},
 			deleteItem(index) {
 				this.$refs.uUpload.remove(index);
 			},
-			onOversize(file, lists) {
-				// console.log('onOversize', file, lists);
-			},
-			onPreview(url, lists) {
-				// console.log('onPreview', url, lists);
-			},
-			onRemove(index, lists) {
-				// console.log('onRemove', index, lists);
-			},
-			onSuccess(data, index, lists) {
-				// console.log('onSuccess', data, index, lists);
-			},
-			onChange(res, index, lists) {
-				// console.log('onChange', res, index, lists);
-			},
-			error(res, index, lists) {
-				// console.log('onError', res, index, lists);
-			},
-			onProgress(res, index, lists) {
-				// console.log('onProgress', res, index, lists);
-			},
-			onUploaded(lists) {
-				// console.log('onUploaded', lists);
-			},
 			onListChange(lists) {
-				// console.log('onListChange', lists);
 				this.lists = lists;
 			},
 			beforeRemove(index, lists) {
 				return true;
 			},
 			onChooseFail(e) {
-				// console.log(e);
+				console.log(e);
 			}
 		}
 	}
@@ -253,7 +231,7 @@
 .btn 
 {
     text-align: right;
-    padding: 8px;
+    padding: 20rpx;
     margin: 0 auto;
 	margin-right: 10%;
     width: 9%;
@@ -264,18 +242,19 @@
 
 .form-item
 {
-	margin-bottom: 15px;
+	margin-bottom: 25px;
 	/* 添加一个左右边距，使输入框居中 */
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 10px;
 	width: 90%; /* 设置一个固定宽度，使左右边距生效 */
+	background-color: #ffffff;
 }
 .input1
 {
   width: 100%;
-  height: 25px;
-  padding: 10px;
+  height: 40rpx;
+  padding: 20rpx;
   border: 1px solid #ccc;
   border-radius: 4px;
   /* 通过设置 margin-left 负值来向左移动输入框 */
@@ -284,8 +263,8 @@
 .input2 
 {
   width: 100%;
-  height: 150px;
-  padding: 10px;
+  height: 350rpx;
+  padding: 20rpx;
   border: 1px solid #ccc;
   border-radius: 4px;
   /* 通过设置 margin-left 负值来向左移动输入框 */

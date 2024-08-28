@@ -4,22 +4,15 @@
 		</u-navbar>
 
 		<view class="comment" v-for="(res, index) in commentList" :key="res.id">
-			<view class="left"><image :src="res.url" mode="aspectFill" @click="gotouserpage(res.id)"></image></view>
+			<view class="left"><image :src="res.avatar" mode="aspectFill" @click="gotouserpage(res.userId)"></image></view>
 			<view class="right">
 				<view class="top">
-					<view class="name">{{ res.name }}</view>
+					<view class="name">{{ res.nickname }}</view>
 				</view>
-				<view class="content">{{ res.contentText }}</view>
-				<view class="reply-box">
-					<view class="item" v-for="(item, index) in res.replyList" :key="item.index">
-						<view class="username">{{ item.name }}</view>
-						<view class="text">{{ item.contentStr }}</view>
-					</view>
-					
+				<view class="content">{{ res.comment }}</view>
 				</view>
 				<view class="bottom">
 					{{ res.date }}
-					
 				</view>
 			</view>
 		</view>
@@ -30,41 +23,88 @@
 export default {
 	data() {
 		return {
-			commentList: [],
+			
+			commentList: [{
+				postId:'',
+				content:''
+			}],
 			// 背景颜色
 			 background: 
 			 {
-
-				// 背景颜色
 			 	backgroundColor:'#fed6dc'
 			}
 
 		};
 	},
 	onLoad() {
-		this.getComment();
 	},
 	
-	onShow() {
-		uni.getStorage({
-			key:"nowAccount",
-			success(res) {
-				console.log(res);
-				uni.request({
-					url:"http://127.0.0.1:1234/ccPost/mypost",
-					data:res.data.data,
-					success: (res2) => {
-						console.log(res2);
-					},fail(resf) {
-						console.log(resf);
-					}
-				})
-			},fail(res) {
-				console.log(res);
-			}
-		})
-		
-	},
+onShow() {
+    uni.getStorage({
+        key: "nowAccount",
+        success: (res) => {
+            uni.request({
+                url: "http://localhost:8080/ccPost/mypost",
+                data: { user_id: res.data.data.userId },
+                success: (res2) => {
+                    const requests = [];
+                    const List = [];
+
+                    for (const key of res2.data.data) {
+                        const requestPromise = new Promise((resolve) => {
+                            uni.request({
+                                url: "http://localhost:8080/comment/getReply",
+                                data: { postId: key.postId },
+                                success: (fin) => {
+                                    for (const key2 of fin.data.data) {
+										
+										//请求评论用户信息
+										uni.request({
+											url:"http://localhost:8080/user/getUserInfo",
+											data:{userId:key2.userId},
+											success(key3) {
+												List.push({
+												    postId: key.postId,
+												    comment: key2.content,
+													nickname:key3.data.data.nickname,
+													avatar:key3.data.data.avatar,
+													date:key3.data.data.createdAt,
+													userId:key3.data.data.userId
+												});
+											}
+										})
+                                        
+                                    }
+                                    resolve();
+                                },
+                                fail: (err) => {
+                                    console.error(err);
+                                    resolve();
+                                }
+                            });
+                        });
+                        requests.push(requestPromise);
+                    }
+
+                    Promise.all(requests)
+                        .then(() => {
+                            console.log(List); 
+                            this.commentList = List; 
+                        })
+                        .catch((err) => {
+                            console.error('Error in Promise.all:', err);
+                        });
+                },
+                fail: (resf) => {
+                    console.error(resf);
+                }
+            });
+        },
+        fail: (res) => {
+            console.error(res);
+        }
+    });
+},
 	
 	methods: {
 		backtoinfo()
@@ -75,81 +115,38 @@ export default {
 			
 		},
 		
-		// 评论列表
-		getComment() {
-			this.commentList = [
-				{
-					id: 1,
-					name: '韩刚',
-					date: '08-29 13:58',
-					contentText: '评论了你：真棒！',
-					url: '../../../static/logo.png',
-				},
-				{
-					id: 2,
-					name: '叶旭航',
-					date: '12-25 18:58',
-					contentText: '回复：哈哈哈，你不仅聪明，长得也帅',
-					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-					replyList: [
-						{
-							name: '雷焱丹',
-							contentStr: '我们组长特别聪明，跟我一样'
-						}
-					]
-				},
-				{
-					id: 3,
-					name: '陈榕',
-					date: '01-25 13:58',
-					contentText: '评论了你：丹丹好棒！',
-					url: 'https://cdn.uviewui.com/uview/template/niannian.jpg',
-				},
-				{
-					id: 4,
-					name: '马逸民',
-					date: '03-25 13:58',
-					contentText: '回复：我也觉得他没你帅',
-					url: '../../../static/logo.png',
-					replyList: [
-						
-						{
-							name: '雷焱丹',
-							contentStr: '他长得都没我帅'
-						}
-					]
-				},
-				{
-					id: 5,
-					name: '黄靖杰',
-					date: '06-20 13:58',
-					contentText: '评论了你：好强啊',
-					url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-				},
-				{
-					id: 6,
-					name: '解吴雪',
-					date: '06-25 20:40',
-					contentText: '评论了你：棒棒！',
-					url: 'https://cdn.uviewui.com/uview/template/niannian.jpg',
-				}
-			];
-		},
 		gotouserpage(index)
 		{
-			uni.request({
-				url:"http://127.0.0.1:1234/user/getUserInfo",
-				data:index,
-				success: (res) => {
-					uni.setStorage({
-						data:res,
-						key:"userPost"
+			//跳转到用户界面，如果是本人就跳转的个人主页面
+			uni.getStorage({
+				key:"nowAccount",
+				success(account) {
+					uni.request({
+						url:"http://localhost:8080/user/getUserInfo",
+						data:{userId:index},
+						success: (res) => {
+							console.log(account);
+							if(account.data.data.userId!=res.data.data.userId){
+								uni.setStorage({
+									data:res.data.data,
+									key:"userPost",
+									success() {
+										uni.navigateTo({
+											url:"/pages/userPage"
+										})
+									}
+								})
+							}else{
+								uni.switchTab({
+									url:"/pages/me/mypage"
+								})
+							}
+							
+						}
 					})
 				}
 			})
-			uni.navigateTo({
-				url:"/pages/userPage"
-			})
+			
 		}
 	}
 };

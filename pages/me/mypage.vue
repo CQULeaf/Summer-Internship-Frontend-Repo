@@ -1,6 +1,6 @@
 <template>
-	<view >
-		<view v-if="logined" v-model="this.user" >
+	<view>
+		<view v-if="logined" v-model="this.user">
 			<view class="u-demo-wrap">
 				<view class="u-demo-area">
 					<u-toast ref="uToast"></u-toast>
@@ -41,17 +41,19 @@
 		<view v-else>
 			<u-navbar :is-back="false" title="　" :border-bottom="false">
 				<view class="u-flex u-row-right" style="width: 100%;">
-					<view class="camera u-flex u-row-center">
+					<!-- <view class="camera u-flex u-row-center">
 						<u-icon name="camera-fill" color="#000000" size="48"></u-icon>
-					</view>
+					</view> -->
 				</view>
 			</u-navbar>
-			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
-				<view class="u-m-r-10">
-					<u-avatar :src="pic" size="140"></u-avatar>
-				</view>
-				<view class="u-flex-1">
-					<view class="u-font-18 u-p-b-20">未登录</view>
+			<view class="myinfo">
+				<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
+					<view class="u-m-r-10">
+						<u-avatar src="/static/unlogin.svg" size="140"></u-avatar>
+					</view>
+					<view class="u-flex-1">
+						<view class="u-font-18 u-p-b-20">未登录</view>
+					</view>
 				</view>
 			</view>
 
@@ -89,12 +91,12 @@
 					{
 						name: '帖子',
 						type: 'post',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/ccPost/mypost'
+						api: 'http://localhost:4523/m1/5010181-4669608-default/ccPost/mypost'
 					},
 					{
 						name: '点赞',
 						type: 'liked',
-						api: 'http://127.0.0.1:4523/m1/5010181-4669608-default/follow/getFollowedPosts'
+						api: 'http://localhost:4523/m1/5010181-4669608-default/follow/getFollowedPosts'
 					},
 				],
 				pagecurrent: 0, //变量名：变量值
@@ -106,11 +108,11 @@
 				hasMore: true, // 是否还有更多数据
 				touchStartX: 0,
 				touchEndX: 0,
-				touchThreshold: 30 ,//处理滑动
-				
-				postList:[{
-					title:'',
-					
+				touchThreshold: 30, //处理滑动
+
+				postList: [{
+					title: '',
+
 				}]
 			};
 		},
@@ -172,7 +174,7 @@
 					console.log(this.user);
 					// //获取用户帖子信息
 					uni.request({
-						url:"http://127.0.0.1:1234/ccPost/mypost",
+						url: "http://localhost:8080/ccPost/mypost",
 						data: {
 							user_id: ret.data.data.userId
 						},
@@ -207,7 +209,7 @@
 				const filePath = path;
 
 				uni.uploadFile({
-					url: 'http://127.0.0.1:1234/user/updateAvatar',
+					url: 'http://localhost:8080/user/updateAvatar',
 					filePath: filePath,
 					name: 'file', // 对应后端接收文件的字段名
 					formData: {
@@ -301,6 +303,7 @@
 		margin-right: 50rpx;
 	}
 
+
 	.grid-text {
 		font-size: 32rpx;
 		margin-top: 4rpx;
@@ -315,7 +318,7 @@
 		width: 54px;
 		height: 44px;
 
-    :active {
+		:active {
 			background-color: #ededed;
 		}
 	}
@@ -327,7 +330,7 @@
 	.u-demo-wrap {
 		background-color: #ffd2d9;
 		padding: 5px;
-		
+
 	}
 
 	.u-avatar-demo {

@@ -111,7 +111,7 @@
 		methods: {
 			submit(){		
 				uni.request({
-					url:'http://127.0.0.1:1234/user/updateInfo',
+					url:'http://localhost:8080/user/updateInfo',
 					data:this.user,
 					method:"POST",
 					header:{

@@ -39,7 +39,7 @@
 					return
 				}
 				uni.request({
-					url:"http://127.0.0.1:8080/user/register",
+					url:"http://localhost:8080/user/register",
 					data:this.user,
 					method:'POST',
 					success: (res) => {
@@ -52,7 +52,7 @@
 						}
 						else
 						{
-							this.$u.toast("注册失败，请更换用户名哦")
+							this.$u.toast("注册失败，密码不一致或请更换用户名")
 						}
 					}
 				})
