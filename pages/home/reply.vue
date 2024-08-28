@@ -108,13 +108,16 @@
 			}, 1000);
 			uni.startPullDownRefresh();
 		},
+		
 
 		onPullDownRefresh() {
-			this.getComment()
-			setTimeout(function() {
-				uni.stopPullDownRefresh();
-			}, 1000);
-		},
+				this.getComment()
+				log('refresh');
+				setTimeout(function () {
+					uni.stopPullDownRefresh();
+				}, 1000);
+			},
+	
 
 		methods: {
 			// 发送信息(评论)

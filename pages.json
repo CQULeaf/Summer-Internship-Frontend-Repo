@@ -20,7 +20,8 @@
 		{
 			"path": "pages/home/reply",
 			"style": {
-			"navigationStyle": "custom"
+			"navigationStyle": "custom",
+			"enablePullDownRefresh": true
 			}
 		},
 		{
