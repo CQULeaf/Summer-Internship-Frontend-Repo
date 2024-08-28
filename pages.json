@@ -12,15 +12,15 @@
 		{
 			"path": "pages/home/homepage",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": true
 
 			}
 		},
 		{
 			"path": "pages/home/reply",
 			"style": {
-				"navigationBarTitleText": "评论",
-				"enablePullDownRefresh": true
+			"navigationStyle": "custom"
 			}
 		},
 		{
@@ -154,7 +154,8 @@
 		{
 			"path": "pages/corner/content",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -184,11 +185,6 @@
 		},
 		{
 			"path": "pages/info/infotalk",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		}, {
-			"path": "pages/home/commentpage",
 			"style": {
 				"navigationStyle": "custom"
 			}

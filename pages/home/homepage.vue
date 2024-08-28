@@ -112,12 +112,31 @@
 			uni.startPullDownRefresh();
 		},
 		onPullDownRefresh() {
-			console.log('refresh');
-			setTimeout(function() {
-				uni.stopPullDownRefresh();
-			}, 1000);
-		},
-
+				this.keyword='',
+				// 请求帖子数据
+				uni.request({
+					url:'http://localhost:1234/ccPost/getAllPosts',
+					success: (res) => {
+						this.postList=res.data.data
+						this.originalPostList = this.postList
+					}
+				})
+				//请求用户数据
+				uni.request({
+					url:'http://localhost:1234/user/getUserByNickname',
+					data:this.user,
+					success:(res)=>{
+						console.log(res)
+						this.user=res.data.data
+						this.originalPostList=this.user
+					}
+				})
+				console.log('refresh');
+				setTimeout(function () {
+					uni.stopPullDownRefresh();
+				}, 1000);
+			},
+	
 		onShow() {
 
 			this.keyword = '',
@@ -144,7 +163,7 @@
 					iconPath: "/static/newhomeg.png",
 					selectedIconPath: "/static/newhomep.png",
 					text: '家',
-					isDot: true,
+					
 					customIcon: false,
 					pagePath: '/pages/home/homepage'
 				},
@@ -152,7 +171,7 @@
 					iconPath: "/static/happygrey.png",
 					selectedIconPath: "/static/happierp.png",
 					text: '聚',
-					isDot: true,
+					
 					customIcon: false,
 					pagePath: '/pages/corner/corner'
 				},

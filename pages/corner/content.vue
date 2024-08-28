@@ -26,7 +26,7 @@
 			<!-- 左边里面是帖子而不是topic -->
 					<template v-slot:left="{leftList}">
 						<view class="demo-warter" v-for="(item, index) in leftList" :key="index" @click="goToPost(item)">
-							<u-lazy-load threshold="-450" border-radius="10" :image="item.cover" :index="index"></u-lazy-load>
+							<u-lazy-load v-if="item.cover!=null" threshold="-450" border-radius="10" :image="item.cover" :index="index"></u-lazy-load>
 							<view class="demo-title">
 								{{item.title}}
 							</view>
@@ -48,7 +48,7 @@
 					<!-- 右边 -->
 					<template v-slot:right="{rightList}">
 						<view class="demo-warter" v-for="(item, index) in rightList" :key="index" @click="goToPost(item)">
-							<u-lazy-load threshold="-450" border-radius="10" :image="item.cover" :index="index"></u-lazy-load>
+							<u-lazy-load v-if="item.cover!=null" threshold="-450" border-radius="10" :image="item.cover" :index="index"></u-lazy-load>
 							<view class="demo-title">
 								{{item.title}}
 							</view>
@@ -100,24 +100,48 @@
 		},
 		
 		onLoad() {
-			uni.getStorage({
-				key:'matchuser2',
-				success:(res) => {
-					this.topic=res.data
-					
-					uni.request({
-						url:'http://localhost:8080/ccPost/getPostsByTopicId',
-						data:res.data,
-						success:(suc) => {
-							//console.log(suc)
-							this.list=suc.data.data
-							this.addRandomData();
+					uni.getStorage({
+						key:'matchuser2',
+						success:(res) => {
+							this.topic=res.data
+							uni.request({
+								url:'http://localhost:8080/ccPost/getPostsByTopicId',
+								data:res.data,
+								success:(suc) => {
+									//console.log(suc)
+									this.list=suc.data.data
+									this.addRandomData();
+								}
+							})
 						}
 					})
-				}
-			})
-			
-		},
+					setTimeout(function () {
+						console.log('start pulldown');
+					}, 1000);
+					uni.startPullDownRefresh();
+				},
+		
+				onPullDownRefresh() {
+					uni.getStorage({
+						key:'matchuser2',
+						success:(res) => {
+							this.topic=res.data
+							uni.request({
+								url:'http://localhost:8080/ccPost/getPostsByTopicId',
+								data:res.data,
+								success:(suc) => {
+									//console.log(suc)
+									this.list=suc.data.data
+									this.addRandomData();
+								}
+							})
+						}
+					})
+					console.log('refresh');
+					setTimeout(function () {
+						uni.stopPullDownRefresh();
+					}, 1000);
+				},
 		onReachBottom() {
 			this.loadStatus = 'loading';
 			// 模拟数据加载

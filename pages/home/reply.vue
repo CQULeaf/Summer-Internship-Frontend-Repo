@@ -1,6 +1,8 @@
 <template>
-	
+
 	<view class="wrap">
+		<u-navbar :is-back="true" title="帖子" :background="background" :customBack="backtohome" height="55"  title-size=40>
+		</u-navbar>
 		<view class="comment">
 			<view class="top">
 				<view class="left" @click="gotoUserPage">
@@ -40,7 +42,7 @@
 								<view class="date">{{ item.createdAt }}</view>
 							</view>
 						</view>
-						
+
 					</view>
 					<view class="content">{{ item.content }}</view>
 				</view>
@@ -53,6 +55,12 @@
 	export default {
 		data() {
 			return {
+				background:
+				 {
+				
+					// 背景颜色
+				 	backgroundColor:"#ffc7cb"
+				},
 				user: {
 					userId: '',
 					avatar: '',
@@ -87,23 +95,23 @@
 		},
 		onLoad() {
 			this.getComment();
-			setTimeout(function () {
+			setTimeout(function() {
 				console.log('start pulldown');
 			}, 1000);
 			uni.startPullDownRefresh();
 		},
-		
+
 		onShow() {
 			this.getComment();
-			setTimeout(function () {
+			setTimeout(function() {
 				console.log('start pulldown');
 			}, 1000);
 			uni.startPullDownRefresh();
 		},
-		
+
 		onPullDownRefresh() {
 			this.getComment()
-			setTimeout(function () {
+			setTimeout(function() {
 				uni.stopPullDownRefresh();
 			}, 1000);
 		},
@@ -111,7 +119,7 @@
 		methods: {
 			// 发送信息(评论)
 			sendMessage() {
-				if(this.messageInput==''){
+				if (this.messageInput == '') {
 					this.$u.toast("请输入评论内容")
 					return
 				}
@@ -132,60 +140,69 @@
 						})
 					}
 				})
-				
-			},
 
+			},
+			backtohome() {
+				uni.switchTab({
+					url: "/pages/home/homepage"
+				})
+
+			},
 			// 获取所有的评论信息
 			getComment() {
-			    uni.getStorage({
-			        key: 'postData',
-			        success: (res) => {
-			            this.comment = res.data;
-			
-			            // 请求获得所有的回复数据
-			            uni.request({
-			                url: "http://localhost:8080/comment/getReply",
-			                data: res.data,
-			                success: (response) => {
-			                    this.commentList = response.data.data;
-			
-			                    // 收集所有用户信息请求的 promises
-			                    const userRequests = this.commentList.map((comment) => {
-			                        return new Promise((resolve) => {
-			                            uni.request({
-			                                url: "http://localhost:8080/user/getUserInfo",
-			                                data: comment,
-			                                success: (res2) => {
-			                                    comment.avatar = res2.data.data.avatar;
-			                                    comment.nickname = res2.data.data.nickname;
-			                                    comment.userId = res2.data.data.userId;
-			                                    resolve();
-			                                }
-			                            });
-			                        });
-			                    });
-			
-			                    // 等待所有用户信息请求完成
-			                    Promise.all(userRequests).then(() => {
-			                        console.log("All user info loaded");
-			                        // 此处可以更新视图或进行其他处理
-			                    });
-			                }
-			            });
-			        }
-			    });
-			
-			    uni.request({
-			        url: "http://localhost:8080/user/getUserInfo",
-			        data: this.comment,
-			        success: (res) => {
-			            this.user = res.data.data;
-			            uni.setStorage({
-			                key: "userPost",
-			                data: res.data.data
-			            });
-			        }
-			    });
+				uni.getStorage({
+					key: 'postData',
+					success: (res) => {
+						this.comment = res.data;
+
+						// 请求获得所有的回复数据
+						uni.request({
+							url: "http://localhost:8080/comment/getReply",
+							data: res.data,
+							success: (response) => {
+								this.commentList = response.data.data;
+
+								// 收集所有用户信息请求的 promises
+								const userRequests = this.commentList.map((comment) => {
+									return new Promise((resolve) => {
+										uni.request({
+											url: "http://localhost:8080/user/getUserInfo",
+											data: comment,
+											success: (res2) => {
+												comment.avatar = res2
+													.data.data.avatar;
+												comment.nickname = res2
+													.data.data
+													.nickname;
+												comment.userId = res2
+													.data.data.userId;
+												resolve();
+											}
+										});
+									});
+								});
+
+								// 等待所有用户信息请求完成
+								Promise.all(userRequests).then(() => {
+									console.log("All user info loaded");
+									// 此处可以更新视图或进行其他处理
+								});
+							}
+						});
+					}
+				});
+
+				uni.request({
+					url: "http://localhost:8080/user/getUserInfo",
+					data: this.comment,
+					success: (res) => {
+						this.user = res.data.data;
+						uni.setStorage({
+							key: "userPost",
+							data: res.data.data
+						});
+					}
+				});
 			},
 
 			//跳转到发帖人用户界面
@@ -244,9 +261,9 @@
 </script>
 
 <style lang="scss" scoped>
-page {
-	background-color: #f2f2f2;
-}
+	page {
+		background-color: #f2f2f2;
+	}
 
 
 	.input-container {
