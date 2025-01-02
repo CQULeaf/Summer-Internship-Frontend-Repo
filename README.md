@@ -29,3 +29,8 @@
 #### “讯”页面
 
 !["讯"页面](images/6.jpg)
+
+## 相关链接
+
+1. [项目后端部分](https://github.com/CQULeaf/Summer-Internship-backend-Repo)
+2. [项目后台管理部分](https://github.com/CQULeaf/Summer-Internship-Admin-Repo)
